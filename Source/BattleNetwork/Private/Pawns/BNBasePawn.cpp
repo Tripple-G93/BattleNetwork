@@ -2,6 +2,7 @@
 
 
 #include "Pawns/BNBasePawn.h"
+#include "Objects/BNUtilityStatics.h"
 #include "PaperFlipbookComponent.h"
 
 // Sets default values
@@ -15,24 +16,8 @@ ABNBasePawn::ABNBasePawn(const FObjectInitializer& ObjectInitializer) : Super(Ob
 
 void ABNBasePawn::UpdateAnimation(FGameplayTag NewStatus)
 {
-	ensure(FlipbookAnimationDataTable);
-
-	if (!CurrentFlipbookAnimationTableInfoRow || CurrentFlipbookAnimationTableInfoRow->AnimationGameplayTag != NewStatus)
-	{
-		TArray<FBNFlipbookAnimationTableInfoRow*> FlipbookAnimationTableRows;
-		FlipbookAnimationDataTable->GetAllRows("", FlipbookAnimationTableRows);
-
-		for (FBNFlipbookAnimationTableInfoRow* Entry : FlipbookAnimationTableRows)
-		{
-			if (NewStatus == Entry->AnimationGameplayTag)
-			{
-				CurrentFlipbookAnimationTableInfoRow = Entry;
-				PaperFlipbookComponent->SetFlipbook(Entry->PaperFlipbook);
-
-				break;
-			}
-		}
-	}
+	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
+		CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, NewStatus);
 }
 
 // Called when the game starts or when spawned

@@ -2,6 +2,7 @@
 
 
 #include "Actors/BNPanelActor.h"
+#include "Objects/BNUtilityStatics.h"
 #include "PaperFlipbookComponent.h"
 
 // Sets default values
@@ -15,23 +16,7 @@ ABNPanelActor::ABNPanelActor(const FObjectInitializer& ObjectInitializer) : Supe
 
 void ABNPanelActor::SetPanelStatus(FGameplayTag NewStatus)
 {
-	ensure(FlipbookAnimationDataTable);
-
-	if (!CurrentFlipbookAnimationTableInfoRow || CurrentFlipbookAnimationTableInfoRow->AnimationGameplayTag != NewStatus)
-	{
-		TArray<FBNFlipbookAnimationTableInfoRow*> FlipbookAnimationTableRows;
-		FlipbookAnimationDataTable->GetAllRows("", FlipbookAnimationTableRows);
-
-		for (FBNFlipbookAnimationTableInfoRow* Entry : FlipbookAnimationTableRows)
-		{
-			if (NewStatus == Entry->AnimationGameplayTag)
-			{
-				CurrentFlipbookAnimationTableInfoRow = Entry;
-				PaperFlipbookComponent->SetFlipbook(Entry->PaperFlipbook);
-
-				break;
-			}
-		}
-	}
+	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
+		CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, NewStatus);
 }
 

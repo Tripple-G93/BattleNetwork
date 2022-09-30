@@ -2,4 +2,26 @@
 
 
 #include "Objects/BNUtilityStatics.h"
+#include "PaperFlipbookComponent.h"
+#include "Tables/BNFlipbookAnimationTable.h"
 
+FBNFlipbookAnimationTableInfoRow* UBNUtilityStatics::UpdateAnimation(UDataTable* FlipbookAnimationDataTable,
+	FBNFlipbookAnimationTableInfoRow* CurrentFlipbookAnimationTableInfoRow, UPaperFlipbookComponent* PaperFlipbookComponent, FGameplayTag NewStatus )
+{
+	if (ensure(FlipbookAnimationDataTable) && (!CurrentFlipbookAnimationTableInfoRow || CurrentFlipbookAnimationTableInfoRow->AnimationGameplayTag != NewStatus))
+	{
+		TArray<FBNFlipbookAnimationTableInfoRow*> FlipbookAnimationTableRows;
+		FlipbookAnimationDataTable->GetAllRows("", FlipbookAnimationTableRows);
+
+		for (FBNFlipbookAnimationTableInfoRow* Entry : FlipbookAnimationTableRows)
+		{
+			if (NewStatus == Entry->AnimationGameplayTag)
+			{
+				PaperFlipbookComponent->SetFlipbook(Entry->PaperFlipbook);
+				return Entry;
+			}
+		}
+	}
+
+	return CurrentFlipbookAnimationTableInfoRow;
+}
