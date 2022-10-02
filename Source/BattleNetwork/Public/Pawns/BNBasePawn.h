@@ -4,14 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "AbilitySystemInterface.h"
 #include "Tables/BNFlipbookAnimationTable.h"
 #include "BNBasePawn.generated.h"
 
+class UAbilitySystemComponent;
+class UBNAbilitySystemComponent;
 class UDataTable;
 class UPaperFlipbookComponent;
 
 UCLASS()
-class BATTLENETWORK_API ABNBasePawn : public APawn
+class BATTLENETWORK_API ABNBasePawn : public APawn, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -22,25 +25,30 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UDataTable> FlipbookAnimationDataTable;
+
+	// Default abilities for this Character. These will be removed on Character death and regiven if Character respawns.
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GASShooter|Abilities")
+	TArray<TSubclassOf<class UGSGameplayAbility>> CharacterAbilities;
+
+	// Reference to the ASC. It will live on the PlayerState or here if the character doesn't have a PlayerState.
+	UPROPERTY()
+	UBNAbilitySystemComponent* AbilitySystemComponent;
 	
 	TObjectPtr<FBNFlipbookAnimationTableInfoRow> CurrentFlipbookAnimationTableInfoRow;
 	
-	
 public:
-	// Sets default values for this pawn's properties
+
 	ABNBasePawn(const FObjectInitializer& ObjectInitializer);
 
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	// RemoveCharacterAbilities
+
+	// AddCharacterAbilities In protected
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
 	void UpdateAnimation(FGameplayTag NewStatus);
 	
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	// Grant abilities on the Server. The Ability Specs will be replicated to the owning client.
+	virtual void AddCharacterAbilities();
 };

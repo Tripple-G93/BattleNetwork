@@ -3,6 +3,7 @@
 
 #include "Pawns/BNBasePawn.h"
 #include "Objects/BNUtilityStatics.h"
+#include "ActorComponents/BNAbilitySystemComponent.h"
 #include "PaperFlipbookComponent.h"
 
 // Sets default values
@@ -14,30 +15,35 @@ ABNBasePawn::ABNBasePawn(const FObjectInitializer& ObjectInitializer) : Super(Ob
 	PaperFlipbookComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("PaperFlipbookComponent"));
 }
 
+UAbilitySystemComponent* ABNBasePawn::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
 void ABNBasePawn::UpdateAnimation(FGameplayTag NewStatus)
 {
 	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
 		CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, NewStatus);
 }
 
-// Called when the game starts or when spawned
-void ABNBasePawn::BeginPlay()
+void ABNBasePawn::AddCharacterAbilities()
 {
-	Super::BeginPlay();
-	
+	// Grant abilities, but only on the server	
+	if (GetLocalRole() != ROLE_Authority || !IsValid(AbilitySystemComponent) || AbilitySystemComponent->bCharacterAbilitiesGiven)
+	{
+		return;
+	}
+
+	for (TSubclassOf<UBNGameplayAbility>& StartupAbility : CharacterAbilities)
+	{
+		AbilitySystemComponent->GiveAbility(
+			FGameplayAbilitySpec(StartupAbility, GetAbilityLevel(StartupAbility.GetDefaultObject()->AbilityID), static_cast<int32>(StartupAbility.GetDefaultObject()->AbilityInputID), this));
+	}
+
+	AbilitySystemComponent->bCharacterAbilitiesGiven = true;
 }
 
-// Called every frame
-void ABNBasePawn::Tick(float DeltaTime)
+UAbilitySystemComponent* ABNBasePawn::GetAbilitySystemComponent() const
 {
-	Super::Tick(DeltaTime);
-
+	return AbilitySystemComponent;
 }
-
-// Called to bind functionality to input
-void ABNBasePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
-
