@@ -16,7 +16,7 @@
 
 class UBNAbilitySystemComponent;
 class UGameplayEffect;
-class UGSTargetType; // TODO: Change to my own version of this
+class UBNTargetType;
 
 /**
  * Struct defining a list of gameplay effects, a tag, and targeting info
@@ -31,8 +31,8 @@ public:
 	//FBNGameplayEffectContainer(); TODO: Make defintion of this
 
 	/** Sets the way that targeting happens */
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = GameplayEffectContainer)
-	//TSubclassOf<UGSTargetType> TargetType; TODO: Create a class for this
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = GameplayEffectContainer)
+	TSubclassOf<UBNTargetType> TargetType; 
 
 	/** List of gameplay effects to apply to the targets */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = GameplayEffectContainer)
@@ -54,7 +54,7 @@ public:
 
 	/** List of gameplay effects to apply to the targets */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = GameplayEffectContainer)
-	TArray<FGameplayEffectSpecHandle> TargetGameplayEffectSpecs; // TODO: Create a class or header for this
+	TArray<FGameplayEffectSpecHandle> TargetGameplayEffectSpecs;
 
 	/** Returns true if this has any valid effect specs */
 	bool HasValidEffects() const;
