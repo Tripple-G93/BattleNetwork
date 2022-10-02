@@ -27,8 +27,8 @@ protected:
 	TObjectPtr<UDataTable> FlipbookAnimationDataTable;
 
 	// Default abilities for this Character. These will be removed on Character death and regiven if Character respawns.
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GASShooter|Abilities")
-	TArray<TSubclassOf<class UGSGameplayAbility>> CharacterAbilities;
+	//UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GASShooter|Abilities")
+	//TArray<TSubclassOf<class UGSGameplayAbility>> CharacterAbilities;
 
 	// Reference to the ASC. It will live on the PlayerState or here if the character doesn't have a PlayerState.
 	UPROPERTY()

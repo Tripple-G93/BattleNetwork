@@ -28,6 +28,7 @@ void ABNBasePawn::UpdateAnimation(FGameplayTag NewStatus)
 
 void ABNBasePawn::AddCharacterAbilities()
 {
+	/*
 	// Grant abilities, but only on the server	
 	if (GetLocalRole() != ROLE_Authority || !IsValid(AbilitySystemComponent) || AbilitySystemComponent->bCharacterAbilitiesGiven)
 	{
@@ -41,9 +42,5 @@ void ABNBasePawn::AddCharacterAbilities()
 	}
 
 	AbilitySystemComponent->bCharacterAbilitiesGiven = true;
-}
-
-UAbilitySystemComponent* ABNBasePawn::GetAbilitySystemComponent() const
-{
-	return AbilitySystemComponent;
+	*/
 }
