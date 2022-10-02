@@ -28,7 +28,7 @@ struct FBNGameplayEffectContainer
 	GENERATED_BODY()
 
 public:
-	//FBNGameplayEffectContainer(); TODO: Make defintion of this
+	FBNGameplayEffectContainer() {}
 
 	/** Sets the way that targeting happens */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = GameplayEffectContainer)
