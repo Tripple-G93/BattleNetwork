@@ -13,5 +13,15 @@ UCLASS()
 class BATTLENETWORK_API UBNAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
-	
+
+public:
+
+	bool bCharacterAbilitiesGiven = false;
+	bool bStartupEffectsApplied = false;
+
+protected:
+
+public:
+
+protected:
 };
