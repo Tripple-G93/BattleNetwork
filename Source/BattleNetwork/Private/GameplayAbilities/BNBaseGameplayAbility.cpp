@@ -16,15 +16,6 @@ UBNBaseGameplayAbility::UBNBaseGameplayAbility()
 	bActivateOnInput = true;
 	bSourceObjectMustEqualCurrentWeaponToActivate = false;
 	bCannotActivateWhileInteracting = true;
-
-	// UGSAbilitySystemGlobals hasn't initialized tags yet to set ActivationBlockedTags
-	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag("State.Dead"));
-	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag("State.KnockedDown"));
-
-	ActivationOwnedTags.AddTag(FGameplayTag::RequestGameplayTag("Ability.BlocksInteraction"));
-
-	InteractingTag = FGameplayTag::RequestGameplayTag("State.Interacting");
-	InteractingRemovalTag = FGameplayTag::RequestGameplayTag("State.InteractingRemoval");
 }
 
 void UBNBaseGameplayAbility::OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
