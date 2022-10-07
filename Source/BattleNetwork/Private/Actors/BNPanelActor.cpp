@@ -14,6 +14,16 @@ ABNPanelActor::ABNPanelActor(const FObjectInitializer& ObjectInitializer) : Supe
 	PaperFlipbookComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("PaperFlipbookComponent"));
 }
 
+void ABNPanelActor::SetEntityPawn(ABNEntityPawn* NewEntityPawn)
+{
+	EntityPawn = NewEntityPawn;
+}
+
+TObjectPtr<ABNEntityPawn> ABNPanelActor::GetEntityPawn()
+{
+	return EntityPawn;
+}
+
 void ABNPanelActor::SetPanelStatus(FGameplayTag NewStatus)
 {
 	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,

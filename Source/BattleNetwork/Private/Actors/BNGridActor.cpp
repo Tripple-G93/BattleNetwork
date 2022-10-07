@@ -9,8 +9,18 @@
 ABNGridActor::ABNGridActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
+	GridWidth = 6;
+	GridHeight = 3;
+
+	PanelSpacingWidth = 24;
+	PanelSpacingHeight = 40;
+	
+	IsPlayer1Spawned = false;
+	IsPlayer2Spawned = false;
+
+	PlayerSpawnOffset = 0;
 }
 
 // Called when the game starts or when spawned
@@ -57,6 +67,14 @@ void ABNGridActor::SpawnPanel(const int32 XIndex, const int32 YIndex)
 	}
 
 	Grid[XIndex].Add(NewPanelActor);
+}
+
+void ABNGridActor::SpawnPlayers(APlayerController* PlayerController)
+{
+	if(ensure(PlayerPawnSubclass) && (!IsPlayer1Spawned || !IsPlayer2Spawned))
+	{
+		
+	}
 }
 
 

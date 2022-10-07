@@ -19,15 +19,32 @@ class BATTLENETWORK_API ABNGameModeBase : public AGameModeBase
 protected:
 
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ABNGridActor> GridSubClassActor;
+	TSubclassOf<ABNGridActor> GridActorSubClass;
 
+	UPROPERTY(EditDefaultsOnly)
+	int MaxPlayersOnGrid;
+	
 	TObjectPtr<ABNGridActor> GridActor;
 
 	TArray<APlayerController*> PlayerControllers;
 public:
-	TArray<APlayerController*>& GetPlayerControllers();
+
+	ABNGameModeBase();
 
 	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 	
 	virtual void PostLogin(APlayerController* NewPlayer) override;
+
+	/*
+	 *	Getters
+	 */
+
+	int GetMaxPlayersOnGrid() const;
+	
+	TArray<APlayerController*>& GetPlayerControllers();
+	
+
+private:
+
+	void SpawnGrid();
 };

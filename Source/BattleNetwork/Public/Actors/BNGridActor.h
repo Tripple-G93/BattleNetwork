@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Pawns/BNPlayerPawn.h"
 #include "BNGridActor.generated.h"
 
 class ABNPanelActor;
+class ABNPlayerPawn;
 
 USTRUCT()
 struct FBNPannel2DArray {
@@ -38,6 +40,9 @@ protected:
 	TSubclassOf<ABNPanelActor> PanelActor;
 
 	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ABNPlayerPawn> PlayerPawnSubclass;
+
+	UPROPERTY(EditDefaultsOnly)
 	int32 GridWidth;
 
 	UPROPERTY(EditDefaultsOnly)
@@ -49,14 +54,20 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	int32 PanelSpacingHeight;
 
+	int32 PlayerSpawnOffset;
+
 	TArray<FBNPannel2DArray> Grid;
+
+	bool IsPlayer1Spawned;
+	bool IsPlayer2Spawned;
 	
 public:	
-	// Sets default values for this actor's properties
+
 	ABNGridActor();
 
+	void SpawnPlayers(APlayerController* PlayerController);
 protected:
-	// Called when the game starts or when spawned
+
 	virtual void BeginPlay() override;
 	
 	void CreateGrid();

@@ -7,6 +7,7 @@
 #include "Tables/BNFlipbookAnimationTable.h"
 #include "BNPanelActor.generated.h"
 
+class ABNEntityPawn;
 class UDataTable;
 class UPaperFlipbookComponent;
 
@@ -24,11 +25,25 @@ protected:
 	TObjectPtr<UDataTable> FlipbookAnimationDataTable;
 
 	TObjectPtr<FBNFlipbookAnimationTableInfoRow> CurrentFlipbookAnimationTableInfoRow;
+
+	TObjectPtr<ABNEntityPawn> EntityPawn;
 	
 public:	
 	// Sets default values for this actor's properties
 	ABNPanelActor(const FObjectInitializer& ObjectInitializer);
 
+	/*
+	 * SETTERS
+	 */
+
+	void SetEntityPawn(ABNEntityPawn* NewEntityPawn);
+	
+	/*
+	 * GETTERS
+	 */
+
+	TObjectPtr<ABNEntityPawn> GetEntityPawn();
+	
 protected:
 
 public:	
