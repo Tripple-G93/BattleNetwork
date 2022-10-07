@@ -9,6 +9,8 @@
 
 class ABNPanelActor;
 class ABNPlayerPawn;
+class UCameraComponent;
+class USceneComponent;
 
 USTRUCT()
 struct FBNPannel2DArray {
@@ -42,6 +44,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ABNPlayerPawn> PlayerPawnSubclass;
 
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UCameraComponent> CameraComponent;
+
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USceneComponent> SceneComponent;
+	
 	UPROPERTY(EditDefaultsOnly)
 	int32 GridWidth;
 
@@ -53,7 +61,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	int32 PanelSpacingHeight;
-
+	
 	int32 PlayerSpawnOffset;
 
 	TArray<FBNPannel2DArray> Grid;
@@ -63,7 +71,7 @@ protected:
 	
 public:	
 
-	ABNGridActor();
+	ABNGridActor(const FObjectInitializer& ObjectInitializer);
 
 	UFUNCTION(Server, Reliable)
 	void SpawnPlayers(APlayerController* PlayerController);

@@ -8,6 +8,7 @@
 
 class UDataTable;
 class UPaperFlipbookComponent;
+class USceneComponent;
 
 UCLASS()
 class BATTLENETWORK_API ABNEntityPawn : public APawn
@@ -16,22 +17,22 @@ class BATTLENETWORK_API ABNEntityPawn : public APawn
 
 protected:
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UDataTable> FlipbookAnimationDataTable;
+	
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPaperFlipbookComponent> PaperFlipbookComponent;
 
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UDataTable> FlipbookAnimationDataTable;
-public:
-	// Sets default values for this pawn's properties
-	ABNEntityPawn(const FObjectInitializer& ObjectInitializer);
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USceneComponent> SceneComponent;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+public:
+	
+	ABNEntityPawn(const FObjectInitializer& ObjectInitializer);
 	
 protected:
-	// Called when the game starts or when spawned
+
 	virtual void BeginPlay() override;
-
-
 
 };

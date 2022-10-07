@@ -6,15 +6,12 @@
 #include "ActorComponents/BNAbilitySystemComponent.h"
 #include "GameplayAbilities/BNBaseGameplayAbility.h"
 #include "Objects/BNUtilityStatics.h"
-#include "PaperFlipbookComponent.h"
 
 // Sets default values
 ABNBasePawn::ABNBasePawn(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	PaperFlipbookComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("PaperFlipbookComponent"));
 }
 
 UAbilitySystemComponent* ABNBasePawn::GetAbilitySystemComponent() const
@@ -78,13 +75,6 @@ float ABNBasePawn::GetMaxHealth() const
 	}
 	
 	return 0.0f;
-}
-
-
-void ABNBasePawn::UpdateAnimation(FGameplayTag NewStatus)
-{
-	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
-		CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, NewStatus);
 }
 
 void ABNBasePawn::AddCharacterAbilities()

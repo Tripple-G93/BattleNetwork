@@ -3,14 +3,22 @@
 
 #include "Actors/BNGridActor.h"
 #include "Actors/BNPanelActor.h"
+#include "Camera/CameraComponent.h"
+#include "Components/SceneComponent.h"
 #include "Engine/World.h"
 
 // Sets default values
-ABNGridActor::ABNGridActor()
+ABNGridActor::ABNGridActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	SceneComponent = ObjectInitializer.CreateDefaultSubobject<USceneComponent>(this, TEXT("SceneComponent"));
+	SetRootComponent(SceneComponent);
+	
+	CameraComponent = ObjectInitializer.CreateDefaultSubobject<UCameraComponent>(this, TEXT("CameraComponent"));
+	CameraComponent->SetupAttachment(SceneComponent);
+	
 	GridWidth = 6;
 	GridHeight = 3;
 
@@ -38,6 +46,7 @@ void ABNGridActor::SpawnPlayers_Implementation(APlayerController* PlayerControll
 
 		ABNPlayerPawn* Player = GetWorld()->SpawnActor<ABNPlayerPawn>(PlayerPawnSubclass, Location, Rotation, SpawnParameters);
 		PlayerController->Possess(Player);
+		PlayerController->SetViewTarget(this);
 		Panel->SetEntityPawn(Player);
 	}
 }
