@@ -16,6 +16,8 @@ void ABNGameModeBase::InitGame(const FString& MapName, const FString& Options, F
 	Super::InitGame(MapName, Options, ErrorMessage);
 
 	SpawnGrid();
+	
+	GridActor->CreateGrid();
 }
 
 void ABNGameModeBase::PostLogin(APlayerController* NewPlayer)
@@ -23,6 +25,8 @@ void ABNGameModeBase::PostLogin(APlayerController* NewPlayer)
 	Super::PostLogin(NewPlayer);
 
 	PlayerControllers.Add(NewPlayer);
+
+	GridActor->SpawnPlayers(NewPlayer);
 }
 
 int ABNGameModeBase::GetMaxPlayersOnGrid() const

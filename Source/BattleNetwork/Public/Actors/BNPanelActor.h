@@ -24,13 +24,16 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UDataTable> FlipbookAnimationDataTable;
 
-	TObjectPtr<FBNFlipbookAnimationTableInfoRow> CurrentFlipbookAnimationTableInfoRow;
-
+	UPROPERTY(Replicated)
 	TObjectPtr<ABNEntityPawn> EntityPawn;
+	
+	TObjectPtr<FBNFlipbookAnimationTableInfoRow> CurrentFlipbookAnimationTableInfoRow;
 	
 public:	
 	// Sets default values for this actor's properties
 	ABNPanelActor(const FObjectInitializer& ObjectInitializer);
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	/*
 	 * SETTERS

@@ -37,7 +37,7 @@ class BATTLENETWORK_API ABNGridActor : public AActor
 protected:
 
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ABNPanelActor> PanelActor;
+	TSubclassOf<ABNPanelActor> PanelActorSubclass;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ABNPlayerPawn> PlayerPawnSubclass;
@@ -65,12 +65,14 @@ public:
 
 	ABNGridActor();
 
+	UFUNCTION(Server, Reliable)
 	void SpawnPlayers(APlayerController* PlayerController);
+
+	void CreateGrid();
 protected:
 
 	virtual void BeginPlay() override;
 	
-	void CreateGrid();
 	void SpawnPanel(const int32 XIndex, const int32 YIndex);
 
 };

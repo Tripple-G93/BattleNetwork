@@ -23,17 +23,34 @@ ABNGridActor::ABNGridActor()
 	PlayerSpawnOffset = 0;
 }
 
+void ABNGridActor::SpawnPlayers_Implementation(APlayerController* PlayerController)
+{
+	if(ensure(PlayerPawnSubclass) && (!IsPlayer1Spawned || !IsPlayer2Spawned))
+	{
+		const int32 CenterX = GridWidth  / 4;
+		const int32 CenterY = GridHeight / 2;
+
+		ABNPanelActor* Panel = Grid[CenterX][CenterY];
+		const FVector Location = Panel->GetActorLocation();
+		const FRotator Rotation;
+		FActorSpawnParameters SpawnParameters;
+		SpawnParameters.Owner = this;
+
+		ABNPlayerPawn* Player = GetWorld()->SpawnActor<ABNPlayerPawn>(PlayerPawnSubclass, Location, Rotation, SpawnParameters);
+		PlayerController->Possess(Player);
+		Panel->SetEntityPawn(Player);
+	}
+}
+
 // Called when the game starts or when spawned
 void ABNGridActor::BeginPlay()
 {
 	Super::BeginPlay();
-
-	CreateGrid();
 }
 
 void ABNGridActor::CreateGrid()
 {
-	if (ensure(PanelActor))
+	if (ensure(PanelActorSubclass))
 	{
 		for (int32 XIndex = 0; XIndex < GridHeight; ++XIndex)
 		{
@@ -48,13 +65,13 @@ void ABNGridActor::CreateGrid()
 
 void ABNGridActor::SpawnPanel(const int32 XIndex, const int32 YIndex)
 {
-	const FVector Location(XIndex * PanelSpacingWidth, YIndex * PanelSpacingHeight, 10);
+	const FVector Location(XIndex * PanelSpacingWidth, YIndex * PanelSpacingHeight, 0);
 	const FRotator Rotation;
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.Owner = this;
 	UWorld* World = GetWorld();
 
-	ABNPanelActor* NewPanelActor = World->SpawnActor<ABNPanelActor>(PanelActor, Location, Rotation, SpawnParameters);
+	ABNPanelActor* NewPanelActor = World->SpawnActor<ABNPanelActor>(PanelActorSubclass, Location, Rotation, SpawnParameters);
 	if (YIndex < GridWidth / 2)
 	{
 		static FGameplayTag PanelRedOriginalTag = FGameplayTag::RequestGameplayTag("Panel.Red.Original");
@@ -68,14 +85,5 @@ void ABNGridActor::SpawnPanel(const int32 XIndex, const int32 YIndex)
 
 	Grid[XIndex].Add(NewPanelActor);
 }
-
-void ABNGridActor::SpawnPlayers(APlayerController* PlayerController)
-{
-	if(ensure(PlayerPawnSubclass) && (!IsPlayer1Spawned || !IsPlayer2Spawned))
-	{
-		
-	}
-}
-
 
 
