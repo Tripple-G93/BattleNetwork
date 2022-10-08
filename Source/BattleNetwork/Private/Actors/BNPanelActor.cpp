@@ -20,6 +20,8 @@ ABNPanelActor::ABNPanelActor(const FObjectInitializer& ObjectInitializer) : Supe
 	
 	PaperFlipbookComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("PaperFlipbookComponent"));
 	PaperFlipbookComponent->SetupAttachment(SceneComponent);
+	PaperFlipbookComponent->bReplicatePhysicsToAutonomousProxy = false;
+	PaperFlipbookComponent->SetIsReplicated(true);
 }
 
 void ABNPanelActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

@@ -13,6 +13,8 @@ ABNGridActor::ABNGridActor(const FObjectInitializer& ObjectInitializer) : Super(
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	bReplicates = true; 
+	
 	SceneComponent = ObjectInitializer.CreateDefaultSubobject<USceneComponent>(this, TEXT("SceneComponent"));
 	SetRootComponent(SceneComponent);
 	
@@ -48,7 +50,7 @@ void ABNGridActor::SpawnPlayers_Implementation(APlayerController* PlayerControll
 		{
 			CenterX = GridWidth - CenterX - 1;
 			CenterY = GridHeight - CenterY - 1;
-			Rotation.Yaw = 270;
+			Rotation.Yaw = 180;
 			IsPlayer2Spawned = true;
 		}
 
