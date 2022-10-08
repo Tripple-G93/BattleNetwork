@@ -26,7 +26,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USceneComponent> SceneComponent;
 
-
 public:
 	
 	ABNEntityPawn(const FObjectInitializer& ObjectInitializer);

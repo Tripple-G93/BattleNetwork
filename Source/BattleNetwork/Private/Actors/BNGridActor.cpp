@@ -35,12 +35,25 @@ void ABNGridActor::SpawnPlayers_Implementation(APlayerController* PlayerControll
 {
 	if(ensure(PlayerPawnSubclass) && (!IsPlayer1Spawned || !IsPlayer2Spawned))
 	{
-		const int32 CenterX = GridWidth  / 4;
-		const int32 CenterY = GridHeight / 2;
+		int32 CenterX = GridWidth  / 4;
+		int32 CenterY = GridHeight / 2;
+		FRotator Rotation;
+		
+		if(!IsPlayer1Spawned)
+		{
+			// Add the gameplay tag here for the player?
+			IsPlayer1Spawned = true;
+		}
+		else
+		{
+			CenterX = GridWidth - CenterX - 1;
+			CenterY = GridHeight - CenterY - 1;
+			Rotation.Yaw = 270;
+			IsPlayer2Spawned = true;
+		}
 
 		ABNPanelActor* Panel = Grid[CenterX][CenterY];
 		const FVector Location = Panel->GetActorLocation();
-		const FRotator Rotation;
 		FActorSpawnParameters SpawnParameters;
 		SpawnParameters.Owner = this;
 
@@ -61,10 +74,11 @@ void ABNGridActor::CreateGrid()
 {
 	if (ensure(PanelActorSubclass))
 	{
-		for (int32 XIndex = 0; XIndex < GridHeight; ++XIndex)
+		// TODO BN: Did the grid init wrong swaping the width and height need to check if this works
+		for (int32 XIndex = 0; XIndex < GridWidth; ++XIndex)
 		{
 			Grid.Add(FBNPannel2DArray());
-			for (int32 YIndex = 0; YIndex < GridWidth; ++YIndex)
+			for (int32 YIndex = 0; YIndex < GridHeight; ++YIndex)
 			{
 				SpawnPanel(XIndex, YIndex);
 			}
