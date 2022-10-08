@@ -2,6 +2,7 @@
 
 
 #include "Actors/BNPanelActor.h"
+#include "Components/SceneComponent.h"
 #include "Objects/BNUtilityStatics.h"
 #include "PaperFlipbookComponent.h"
 #include "Net/UnrealNetwork.h"
@@ -13,8 +14,12 @@ ABNPanelActor::ABNPanelActor(const FObjectInitializer& ObjectInitializer) : Supe
 	PrimaryActorTick.bCanEverTick = false;
 
 	bReplicates = true;
+
+	SceneComponent = ObjectInitializer.CreateDefaultSubobject<USceneComponent>(this, TEXT("SceneComponent"));
+	SetRootComponent(SceneComponent);
 	
 	PaperFlipbookComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("PaperFlipbookComponent"));
+	PaperFlipbookComponent->SetupAttachment(SceneComponent);
 }
 
 void ABNPanelActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

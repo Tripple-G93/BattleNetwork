@@ -10,6 +10,7 @@
 class ABNEntityPawn;
 class UDataTable;
 class UPaperFlipbookComponent;
+class USceneComponent;
 
 UCLASS()
 class BATTLENETWORK_API ABNPanelActor : public AActor
@@ -20,6 +21,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UPaperFlipbookComponent> PaperFlipbookComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USceneComponent> SceneComponent;
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UDataTable> FlipbookAnimationDataTable;

@@ -74,7 +74,6 @@ void ABNGridActor::CreateGrid()
 {
 	if (ensure(PanelActorSubclass))
 	{
-		// TODO BN: Did the grid init wrong swaping the width and height need to check if this works
 		for (int32 XIndex = 0; XIndex < GridWidth; ++XIndex)
 		{
 			Grid.Add(FBNPannel2DArray());
@@ -95,7 +94,7 @@ void ABNGridActor::SpawnPanel(const int32 XIndex, const int32 YIndex)
 	UWorld* World = GetWorld();
 
 	ABNPanelActor* NewPanelActor = World->SpawnActor<ABNPanelActor>(PanelActorSubclass, Location, Rotation, SpawnParameters);
-	if (YIndex < GridWidth / 2)
+	if (XIndex < GridWidth / 2)
 	{
 		static FGameplayTag PanelRedOriginalTag = FGameplayTag::RequestGameplayTag("Panel.Red.Original");
 		NewPanelActor->SetPanelStatus(PanelRedOriginalTag);
