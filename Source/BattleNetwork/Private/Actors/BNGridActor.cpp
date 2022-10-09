@@ -33,26 +33,13 @@ ABNGridActor::ABNGridActor(const FObjectInitializer& ObjectInitializer) : Super(
 	PlayerSpawnOffset = 0;
 }
 
-void ABNGridActor::SpawnPlayers_Implementation(APlayerController* PlayerController)
+void ABNGridActor::SpawnPlayer1_Implementation(APlayerController* PlayerController)
 {
-	if(ensure(PlayerPawnSubclass) && (!IsPlayer1Spawned || !IsPlayer2Spawned))
+	if(ensure(PlayerPawnSubclass))
 	{
-		int32 CenterX = GridWidth  / 4;
-		int32 CenterY = GridHeight / 2;
-		FRotator Rotation;
-		
-		if(!IsPlayer1Spawned)
-		{
-			// Add the gameplay tag here for the player?
-			IsPlayer1Spawned = true;
-		}
-		else
-		{
-			CenterX = GridWidth - CenterX - 1;
-			CenterY = GridHeight - CenterY - 1;
-			Rotation.Yaw = 180;
-			IsPlayer2Spawned = true;
-		}
+		const int32 CenterX = GridWidth  / 4;
+		const int32 CenterY = GridHeight / 2;
+		const FRotator Rotation;
 
 		ABNPanelActor* Panel = Grid[CenterX][CenterY];
 		const FVector Location = Panel->GetActorLocation();
@@ -60,23 +47,36 @@ void ABNGridActor::SpawnPlayers_Implementation(APlayerController* PlayerControll
 		SpawnParameters.Owner = this;
 
 		ABNPlayerPawn* Player = GetWorld()->SpawnActor<ABNPlayerPawn>(PlayerPawnSubclass, Location, Rotation, SpawnParameters);
-
-		if(IsPlayer2Spawned)
-		{
-			Player->FlipEntity();
-		}
-		
 		PlayerController->Possess(Player);
 		PlayerController->SetViewTarget(this);
 		Panel->SetEntityPawn(Player);
-		
 	}
 }
 
-// Called when the game starts or when spawned
-void ABNGridActor::BeginPlay()
+void ABNGridActor::SpawnPlayer2_Implementation(APlayerController* PlayerController)
 {
-	Super::BeginPlay();
+	if(ensure(PlayerPawnSubclass))
+	{
+		int32 CenterX = GridWidth  / 4;
+		CenterX = GridWidth - CenterX - 1;
+		
+		int32 CenterY = GridHeight / 2;
+		CenterY = GridHeight - CenterY - 1;
+		
+		FRotator Rotation;
+		Rotation.Yaw = 180;
+
+		ABNPanelActor* Panel = Grid[CenterX][CenterY];
+		const FVector Location = Panel->GetActorLocation();
+		FActorSpawnParameters SpawnParameters;
+		SpawnParameters.Owner = this;
+
+		ABNPlayerPawn* Player = GetWorld()->SpawnActor<ABNPlayerPawn>(PlayerPawnSubclass, Location, Rotation, SpawnParameters);
+		Player->FlipEntity();
+		PlayerController->Possess(Player);
+		PlayerController->SetViewTarget(this);
+		Panel->SetEntityPawn(Player);
+	}
 }
 
 void ABNGridActor::CreateGrid()

@@ -74,12 +74,14 @@ public:
 	ABNGridActor(const FObjectInitializer& ObjectInitializer);
 
 	UFUNCTION(Server, Reliable)
-	void SpawnPlayers(APlayerController* PlayerController);
+	void SpawnPlayer1(APlayerController* PlayerController);
+
+	UFUNCTION(Server, Reliable)
+	void SpawnPlayer2(APlayerController* PlayerController);
 
 	void CreateGrid();
+	
 protected:
-
-	virtual void BeginPlay() override;
 	
 	void SpawnPanel(const int32 XIndex, const int32 YIndex);
 

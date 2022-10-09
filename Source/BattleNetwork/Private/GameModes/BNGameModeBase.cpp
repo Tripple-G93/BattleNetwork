@@ -26,7 +26,14 @@ void ABNGameModeBase::PostLogin(APlayerController* NewPlayer)
 
 	PlayerControllers.Add(NewPlayer);
 
-	GridActor->SpawnPlayers(NewPlayer);
+	if(PlayerControllers.Num() == 1)
+	{
+		GridActor->SpawnPlayer1(NewPlayer);
+	}
+	else if(PlayerControllers.Num() == 2)
+	{
+		GridActor->SpawnPlayer2(NewPlayer);
+	}
 }
 
 int ABNGameModeBase::GetMaxPlayersOnGrid() const
