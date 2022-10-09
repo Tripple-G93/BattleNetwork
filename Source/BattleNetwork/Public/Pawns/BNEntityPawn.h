@@ -29,6 +29,8 @@ protected:
 public:
 	
 	ABNEntityPawn(const FObjectInitializer& ObjectInitializer);
+
+	void FlipEntity() const;
 	
 protected:
 

@@ -60,9 +60,16 @@ void ABNGridActor::SpawnPlayers_Implementation(APlayerController* PlayerControll
 		SpawnParameters.Owner = this;
 
 		ABNPlayerPawn* Player = GetWorld()->SpawnActor<ABNPlayerPawn>(PlayerPawnSubclass, Location, Rotation, SpawnParameters);
+
+		if(IsPlayer2Spawned)
+		{
+			Player->FlipEntity();
+		}
+		
 		PlayerController->Possess(Player);
 		PlayerController->SetViewTarget(this);
 		Panel->SetEntityPawn(Player);
+		
 	}
 }
 
