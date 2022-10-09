@@ -26,9 +26,6 @@ ABNGridActor::ABNGridActor(const FObjectInitializer& ObjectInitializer) : Super(
 
 	PanelSpacingWidth = 24;
 	PanelSpacingHeight = 40;
-	
-	IsPlayer1Spawned = false;
-	IsPlayer2Spawned = false;
 
 	PlayerSpawnOffset = 0;
 }
