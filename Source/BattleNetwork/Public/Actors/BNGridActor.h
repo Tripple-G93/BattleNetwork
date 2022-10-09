@@ -65,9 +65,6 @@ protected:
 	int32 PlayerSpawnOffset;
 
 	TArray<FBNPannel2DArray> Grid;
-
-	bool IsPlayer1Spawned;
-	bool IsPlayer2Spawned;
 	
 public:	
 
