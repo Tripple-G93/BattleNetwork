@@ -6,24 +6,34 @@
 #include "GameFramework/Pawn.h"
 #include "BNEntityPawn.generated.h"
 
+class UDataTable;
+class UPaperFlipbookComponent;
+class USceneComponent;
+
 UCLASS()
 class BATTLENETWORK_API ABNEntityPawn : public APawn
 {
 	GENERATED_BODY()
 
-public:
-	// Sets default values for this pawn's properties
-	ABNEntityPawn();
-
 protected:
-	// Called when the game starts or when spawned
+
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UDataTable> FlipbookAnimationDataTable;
+	
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UPaperFlipbookComponent> PaperFlipbookComponent;
+
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USceneComponent> SceneComponent;
+
+public:
+	
+	ABNEntityPawn(const FObjectInitializer& ObjectInitializer);
+
+	void FlipEntity() const;
+	
+protected:
+
 	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 };

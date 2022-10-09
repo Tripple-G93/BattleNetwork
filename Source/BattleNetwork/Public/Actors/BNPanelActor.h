@@ -7,8 +7,10 @@
 #include "Tables/BNFlipbookAnimationTable.h"
 #include "BNPanelActor.generated.h"
 
+class ABNEntityPawn;
 class UDataTable;
 class UPaperFlipbookComponent;
+class USceneComponent;
 
 UCLASS()
 class BATTLENETWORK_API ABNPanelActor : public AActor
@@ -20,15 +22,35 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UPaperFlipbookComponent> PaperFlipbookComponent;
 
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USceneComponent> SceneComponent;
+
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UDataTable> FlipbookAnimationDataTable;
 
+	UPROPERTY(Replicated)
+	TObjectPtr<ABNEntityPawn> EntityPawn;
+	
 	TObjectPtr<FBNFlipbookAnimationTableInfoRow> CurrentFlipbookAnimationTableInfoRow;
 	
 public:	
 	// Sets default values for this actor's properties
 	ABNPanelActor(const FObjectInitializer& ObjectInitializer);
 
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	/*
+	 * SETTERS
+	 */
+
+	void SetEntityPawn(ABNEntityPawn* NewEntityPawn);
+	
+	/*
+	 * GETTERS
+	 */
+
+	TObjectPtr<ABNEntityPawn> GetEntityPawn();
+	
 protected:
 
 public:	

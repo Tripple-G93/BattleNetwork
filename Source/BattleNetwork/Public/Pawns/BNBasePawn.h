@@ -13,9 +13,7 @@ class UAbilitySystemComponent;
 class UBNAbilitySystemComponent;
 class UBNBaseAttributeSet;
 class UBNBaseGameplayAbility;
-class UDataTable;
 class UGameplayEffect;
-class UPaperFlipbookComponent;
 
 UCLASS()
 class BATTLENETWORK_API ABNBasePawn : public APawn, public IAbilitySystemInterface
@@ -23,13 +21,7 @@ class BATTLENETWORK_API ABNBasePawn : public APawn, public IAbilitySystemInterfa
 	GENERATED_BODY()
 
 protected:
-
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UPaperFlipbookComponent> PaperFlipbookComponent;
-
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UDataTable> FlipbookAnimationDataTable;
-
+	
 	// Default abilities for this Character. These will be removed on Character death and regiven if Character respawns.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GAS|Abilities")
 	TArray<TSubclassOf<UBNBaseGameplayAbility>> CharacterAbilities;
@@ -80,8 +72,6 @@ public:
 	float GetMaxHealth() const;
 
 protected:
-
-	void UpdateAnimation(FGameplayTag NewStatus);
 	
 	// Grant abilities on the Server. The Ability Specs will be replicated to the owning client.
 	virtual void AddCharacterAbilities();
