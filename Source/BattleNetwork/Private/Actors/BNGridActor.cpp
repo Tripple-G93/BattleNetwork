@@ -2,6 +2,7 @@
 
 
 #include "Actors/BNGridActor.h"
+#include "AbilitySystemComponent.h"
 #include "Actors/BNPanelActor.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SceneComponent.h"
@@ -47,6 +48,7 @@ void ABNGridActor::SpawnPlayer1_Implementation(APlayerController* PlayerControll
 		PlayerController->Possess(Player);
 		PlayerController->SetViewTarget(this);
 		Panel->SetEntityPawn(Player);
+		Player->GetAbilitySystemComponent()->AddReplicatedLooseGameplayTag(FGameplayTag::RequestGameplayTag("Red.Player1"));
 	}
 }
 
@@ -69,10 +71,11 @@ void ABNGridActor::SpawnPlayer2_Implementation(APlayerController* PlayerControll
 		SpawnParameters.Owner = this;
 
 		ABNPlayerPawn* Player = GetWorld()->SpawnActor<ABNPlayerPawn>(PlayerPawnSubclass, Location, Rotation, SpawnParameters);
-		Player->FlipEntity();
 		PlayerController->Possess(Player);
 		PlayerController->SetViewTarget(this);
 		Panel->SetEntityPawn(Player);
+		Player->GetAbilitySystemComponent()->AddReplicatedLooseGameplayTag(FGameplayTag::RequestGameplayTag("Blue.Player1"));
+		Player->FlipEntity();
 	}
 }
 
