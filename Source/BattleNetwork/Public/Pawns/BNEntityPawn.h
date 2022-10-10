@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
+#include "Pawns/BNBasePawn.h"
 #include "BNEntityPawn.generated.h"
 
 class UDataTable;
@@ -11,7 +11,7 @@ class UPaperFlipbookComponent;
 class USceneComponent;
 
 UCLASS()
-class BATTLENETWORK_API ABNEntityPawn : public APawn
+class BATTLENETWORK_API ABNEntityPawn : public ABNBasePawn
 {
 	GENERATED_BODY()
 
