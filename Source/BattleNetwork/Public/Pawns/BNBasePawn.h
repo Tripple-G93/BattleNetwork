@@ -80,8 +80,10 @@ protected:
 	// so that we don't have to wait. The Server's replication to the Client won't matter since
 	// the values should be the same.
 	virtual void InitializeAttributes();
-
+	
 	virtual void AddStartupEffects();
+
+	void InitializePlayerGameplayAbilitySystem();
 
 	/**
 	* Setters for Attributes. Only use these in special cases like Respawning, otherwise use a GE to change Attributes.

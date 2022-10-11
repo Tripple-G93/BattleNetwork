@@ -3,6 +3,9 @@
 
 #include "Pawns/BNPlayerPawn.h"
 
+#include "PlayerStates/BNPlayerState.h"
+#include "ActorComponents/BNAbilitySystemComponent.h"
+
 // Sets default values
 ABNPlayerPawn::ABNPlayerPawn(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -11,11 +14,11 @@ ABNPlayerPawn::ABNPlayerPawn(const FObjectInitializer& ObjectInitializer) : Supe
 
 }
 
-// Called when the game starts or when spawned
-void ABNPlayerPawn::BeginPlay()
+void ABNPlayerPawn::PossessedBy(AController* NewController)
 {
-	Super::BeginPlay();
-	
+	Super::PossessedBy(NewController);
+
+	InitializePlayerGameplayAbilitySystem();
 }
 
 // Called to bind functionality to input
@@ -23,5 +26,13 @@ void ABNPlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+// Client only
+void ABNPlayerPawn::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	InitializePlayerGameplayAbilitySystem();
 }
 

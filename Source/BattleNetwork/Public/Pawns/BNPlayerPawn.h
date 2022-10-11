@@ -13,11 +13,13 @@ class BATTLENETWORK_API ABNPlayerPawn : public ABNEntityPawn
 
 public:
 	ABNPlayerPawn(const FObjectInitializer& ObjectInitializer);
+
+	virtual void PossessedBy(AController* NewController);
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+
+	virtual void OnRep_PlayerState() override;
 
 };
