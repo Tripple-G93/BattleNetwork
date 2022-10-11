@@ -6,6 +6,7 @@
 #include "ActorComponents/BNAbilitySystemComponent.h"
 #include "GameplayAbilities/BNBaseGameplayAbility.h"
 #include "Objects/BNUtilityStatics.h"
+#include "PlayerStates/BNPlayerState.h"
 
 // Sets default values
 ABNBasePawn::ABNBasePawn(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -138,4 +139,39 @@ void ABNBasePawn::AddStartupEffects()
 	}
 
 	AbilitySystemComponent->bStartupEffectsApplied = true;
+}
+
+void ABNBasePawn::InitializePlayerGameplayAbilitySystem()
+{
+	ABNPlayerState* BNPlayerState = GetPlayerState<ABNPlayerState>();
+	if(ensure(BNPlayerState))
+	{
+		// Set the ASC on the Server. Clients do this in OnRep_PlayerState()
+		AbilitySystemComponent = Cast<UBNAbilitySystemComponent>(BNPlayerState->GetAbilitySystemComponent());
+
+		// AI won't have PlayerControllers so we can init again here just to be sure. No harm in initing twice for heroes that have PlayerControllers.
+		BNPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(BNPlayerState, this);
+
+		// Set the AttributeSetBase for convenience attribute functions
+		AttributeSetBase = BNPlayerState->GetAttributeSetBase();
+
+		// If we handle players disconnecting and rejoining in the future, we'll have to change this so that possession from rejoining doesn't reset attributes.
+		// For now assume possession = spawn/respawn.
+		InitializeAttributes();
+
+		AddStartupEffects();
+
+		AddCharacterAbilities();
+
+		/*
+		if (AbilitySystemComponent->GetTagCount(DeadTag) > 0)
+		{
+			// Set Health/Mana/Stamina to their max. This is only necessary for *Respawn*.
+			SetHealth(GetMaxHealth());
+			SetMana(GetMaxMana());
+			SetStamina(GetMaxStamina());
+			SetShield(GetMaxShield());
+		}
+		*/
+	}
 }
