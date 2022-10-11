@@ -57,6 +57,9 @@ protected:
 	int32 GridHeight;
 
 	UPROPERTY(EditDefaultsOnly)
+	int32 GridDividerIndex;
+	
+	UPROPERTY(EditDefaultsOnly)
 	int32 PanelSpacingWidth;
 
 	UPROPERTY(EditDefaultsOnly)

@@ -25,6 +25,8 @@ ABNGridActor::ABNGridActor(const FObjectInitializer& ObjectInitializer) : Super(
 	GridWidth = 6;
 	GridHeight = 3;
 
+	GridDividerIndex = 2;
+
 	PanelSpacingWidth = 24;
 	PanelSpacingHeight = 40;
 
@@ -35,7 +37,7 @@ void ABNGridActor::SpawnPlayer1_Implementation(APlayerController* PlayerControll
 {
 	if(ensure(PlayerPawnSubclass))
 	{
-		const int32 CenterX = GridWidth  / 4;
+		const int32 CenterX = 0;
 		const int32 CenterY = GridHeight / 2;
 		const FRotator Rotation;
 
@@ -56,9 +58,7 @@ void ABNGridActor::SpawnPlayer2_Implementation(APlayerController* PlayerControll
 {
 	if(ensure(PlayerPawnSubclass))
 	{
-		int32 CenterX = GridWidth  / 4;
-		CenterX = GridWidth - CenterX - 1;
-		
+		const int32 CenterX = GridWidth - 1;
 		int32 CenterY = GridHeight / 2;
 		CenterY = GridHeight - CenterY - 1;
 		
@@ -103,7 +103,7 @@ void ABNGridActor::SpawnPanel(const int32 XIndex, const int32 YIndex)
 	UWorld* World = GetWorld();
 
 	ABNPanelActor* NewPanelActor = World->SpawnActor<ABNPanelActor>(PanelActorSubclass, Location, Rotation, SpawnParameters);
-	if (XIndex < GridWidth / 2)
+	if (XIndex <= GridDividerIndex)
 	{
 		static FGameplayTag PanelRedOriginalTag = FGameplayTag::RequestGameplayTag("Panel.Red.Original");
 		NewPanelActor->SetPanelStatus(PanelRedOriginalTag);
