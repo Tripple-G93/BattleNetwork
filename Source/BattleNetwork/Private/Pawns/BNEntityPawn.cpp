@@ -128,6 +128,14 @@ void ABNEntityPawn::AttemptToMoveVertically(float Value)
 			MoveEntityUpRPC();
 		}
 	}
+	else if(Value < 0)
+	{
+		if(MoveEntityDownRPC_Validate())
+		{
+			MoveEntityDownRPC_Implementation();
+			MoveEntityDownRPC();
+		}
+	}
 }
 
 /*
@@ -162,4 +170,14 @@ void ABNEntityPawn::MoveEntityUpRPC_Implementation()
 bool ABNEntityPawn::MoveEntityUpRPC_Validate()
 {
 	return GridActorReference->CanEntityMoveUp(this);
+}
+
+void ABNEntityPawn::MoveEntityDownRPC_Implementation()
+{
+	GridActorReference->MoveEntityToNewPanel(this, XIndex, YIndex + 1);
+}
+
+bool ABNEntityPawn::MoveEntityDownRPC_Validate()
+{
+	return GridActorReference->CanEntityMoveDown(this);
 }

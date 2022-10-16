@@ -85,4 +85,7 @@ protected:
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void MoveEntityUpRPC();
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void MoveEntityDownRPC();
 };
