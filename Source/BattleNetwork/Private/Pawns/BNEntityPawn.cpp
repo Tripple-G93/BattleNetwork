@@ -20,6 +20,8 @@ ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Supe
 	PaperFlipbookComponent->SetupAttachment(SceneComponent);
 	PaperFlipbookComponent->bReplicatePhysicsToAutonomousProxy = false;
 	PaperFlipbookComponent->SetIsReplicated(true);
+
+	bCanNotMove = false;
 }
 
 void ABNEntityPawn::FlipEntity() const
@@ -100,42 +102,65 @@ void ABNEntityPawn::BeginPlay()
 
 void ABNEntityPawn::AttemptToMoveHorizontally(const float Value)
 {
-	if(Value < 0)
+	if(!bCanNotMove)
 	{
-		if(MoveEntityLeftRPC_Validate())
+		if(Value < 0)
 		{
-			MoveEntityLeftRPC_Implementation();
-			MoveEntityLeftRPC();
+			if(MoveEntityLeftRPC_Validate())
+			{
+				DisableEntityMovement();
+				MoveEntityLeftRPC_Implementation();
+				MoveEntityLeftRPC();
+			}
 		}
-	}
-	else if(Value > 0)
-	{
-		if(MoveEntityRightRPC_Validate())
+		else if(Value > 0)
 		{
-			MoveEntityRightRPC_Implementation();
-			MoveEntityRightRPC();
+			if(MoveEntityRightRPC_Validate())
+			{
+				DisableEntityMovement();
+				MoveEntityRightRPC_Implementation();
+				MoveEntityRightRPC();
+			}
 		}
 	}
 }
 
 void ABNEntityPawn::AttemptToMoveVertically(float Value)
 {
-	if(Value > 0)
+	if(!bCanNotMove)
 	{
-		if(MoveEntityUpRPC_Validate())
+		if(Value > 0)
 		{
-			MoveEntityUpRPC_Implementation();
-			MoveEntityUpRPC();
+			if(MoveEntityUpRPC_Validate())
+			{
+				DisableEntityMovement();
+				MoveEntityUpRPC_Implementation();
+				MoveEntityUpRPC();
+			}
+		}
+		else if(Value < 0)
+		{
+			if(MoveEntityDownRPC_Validate())
+			{
+				DisableEntityMovement();
+				MoveEntityDownRPC_Implementation();
+				MoveEntityDownRPC();
+			}
 		}
 	}
-	else if(Value < 0)
-	{
-		if(MoveEntityDownRPC_Validate())
-		{
-			MoveEntityDownRPC_Implementation();
-			MoveEntityDownRPC();
-		}
-	}
+}
+
+void ABNEntityPawn::DisableEntityMovement()
+{
+	bCanNotMove = true;
+	// TODO BN: Right now the value is hard coded and will need to be changed to the speed attribute once that is set up
+	GetWorldTimerManager().SetTimer(EnableEntityMovementTimerHandler, this, &ABNEntityPawn::EnableEntityMovement, 1.0f);
+}
+
+void ABNEntityPawn::EnableEntityMovement()
+{
+	bCanNotMove = false;
+	GetWorldTimerManager().ClearTimer(EnableEntityMovementTimerHandler);
 }
 
 /*

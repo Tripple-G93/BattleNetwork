@@ -39,6 +39,10 @@ protected:
 	UPROPERTY(Replicated)
 	FGameplayTag TeamTag;
 
+	FTimerHandle EnableEntityMovementTimerHandler;
+	
+	bool bCanNotMove;
+
 public:
 
 	ABNEntityPawn(const FObjectInitializer& ObjectInitializer);
@@ -72,6 +76,9 @@ protected:
 
 	void AttemptToMoveHorizontally(const float Value);
 	void AttemptToMoveVertically(float Value);
+
+	void DisableEntityMovement();
+	void EnableEntityMovement();
 
 	/*
 	 * Server
