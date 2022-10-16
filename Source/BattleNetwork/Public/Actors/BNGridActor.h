@@ -84,6 +84,8 @@ public:
 
 	bool CanEntityMoveRight(const ABNEntityPawn* EntityPawn);
 
+	bool CanEntityMoveUp(const ABNEntityPawn* EntityPawn);
+
 	void MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXIndex, int32 NewYIndex);
 
 	/*

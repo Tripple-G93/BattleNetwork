@@ -140,6 +140,14 @@ bool ABNGridActor::CanEntityMoveRight(const ABNEntityPawn* EntityPawn)
 	}
 }
 
+bool ABNGridActor::CanEntityMoveUp(const ABNEntityPawn* EntityPawn)
+{
+	const int32 XIndex = EntityPawn->GetXIndexPosition();
+	const int32 YIndex = EntityPawn->GetYIndexPosition();
+	
+	return YIndex > 0 && Grid[XIndex][YIndex - 1]->GetEntityPawn() == nullptr;
+}
+
 void ABNGridActor::MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXIndex, int32 NewYIndex)
 {
 	const int32 OldXIndex = EntityPawn->GetXIndexPosition();

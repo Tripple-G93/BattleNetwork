@@ -120,8 +120,14 @@ void ABNEntityPawn::AttemptToMoveHorizontally(const float Value)
 
 void ABNEntityPawn::AttemptToMoveVertically(float Value)
 {
-	// TODO BN: Add code to be able to move the entity vertically 
-
+	if(Value > 0)
+	{
+		if(MoveEntityUpRPC_Validate())
+		{
+			MoveEntityUpRPC_Implementation();
+			MoveEntityUpRPC();
+		}
+	}
 }
 
 /*
@@ -148,3 +154,12 @@ bool ABNEntityPawn::MoveEntityRightRPC_Validate()
 	return GridActorReference->CanEntityMoveRight(this);
 }
 
+void ABNEntityPawn::MoveEntityUpRPC_Implementation()
+{
+	GridActorReference->MoveEntityToNewPanel(this, XIndex, YIndex - 1);
+}
+
+bool ABNEntityPawn::MoveEntityUpRPC_Validate()
+{
+	return GridActorReference->CanEntityMoveUp(this);
+}
