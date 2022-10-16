@@ -115,22 +115,29 @@ bool ABNGridActor::CanEntityMoveLeft(const ABNEntityPawn* EntityPawn)
 	const int32 XIndex = EntityPawn->GetXIndexPosition();
 	const int32 YIndex = EntityPawn->GetYIndexPosition();
 	
-	UAbilitySystemComponent* AbilitySystemComponent = EntityPawn->GetAbilitySystemComponent();
 	if(EntityPawn->GetTeamTag() == FGameplayTag::RequestGameplayTag(FName("Team1")))
 	{
 		return XIndex > 0 && Grid[XIndex - 1][YIndex]->GetEntityPawn() == nullptr;
 	}
 	else
 	{
-		return XIndex > GridDividerIndex + 1 && Grid[XIndex - 1][YIndex]->GetEntityPawn() == nullptr ;
+		return XIndex > GridDividerIndex + 1 && Grid[XIndex - 1][YIndex]->GetEntityPawn() == nullptr;
 	}
 }
 
-bool ABNGridActor::CanEntityMoveRight(ABNEntityPawn* EntityPawn)
+bool ABNGridActor::CanEntityMoveRight(const ABNEntityPawn* EntityPawn)
 {
-	// TODO BN: Add logic to check if they can move at that index
-	
-	return false;
+	const int32 XIndex = EntityPawn->GetXIndexPosition();
+	const int32 YIndex = EntityPawn->GetYIndexPosition();
+
+	if(EntityPawn->GetTeamTag() == FGameplayTag::RequestGameplayTag(FName("Team1")))
+	{
+		return XIndex < GridDividerIndex && Grid[XIndex + 1][YIndex]->GetEntityPawn() == nullptr;
+	}
+	else
+	{
+		return XIndex < GridWidth - 2 && Grid[XIndex + 1][YIndex]->GetEntityPawn() == nullptr;
+	}
 }
 
 void ABNGridActor::MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXIndex, int32 NewYIndex)

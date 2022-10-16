@@ -100,30 +100,22 @@ void ABNEntityPawn::BeginPlay()
 
 void ABNEntityPawn::AttemptToMoveHorizontally(const float Value)
 {
-	// TODO BN: Implement the right 
-	
 	if(Value < 0)
 	{
 		if(MoveEntityLeftRPC_Validate())
 		{
-			if(IsLocallyControlled())
-			{
-				MoveEntityLeftRPC_Implementation();
-			}
-
+			MoveEntityLeftRPC_Implementation();
 			MoveEntityLeftRPC();
 		}
 	}
 	else if(Value > 0)
 	{
-		ABNGridActor* GridActor = GetOwner<ABNGridActor>();
-		if(GridActor->CanEntityMoveRight(this))
+		if(MoveEntityRightRPC_Validate())
 		{
-			//GridActor->MoveEntityToNewPanel(this);
-			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Move Right"));
+			MoveEntityRightRPC_Implementation();
+			MoveEntityRightRPC();
 		}
 	}
-
 }
 
 void ABNEntityPawn::AttemptToMoveVertically(float Value)
@@ -131,7 +123,6 @@ void ABNEntityPawn::AttemptToMoveVertically(float Value)
 	// TODO BN: Add code to be able to move the entity vertically 
 
 }
-
 
 /*
  * Server RPC
@@ -147,4 +138,13 @@ bool ABNEntityPawn::MoveEntityLeftRPC_Validate()
 	return GridActorReference->CanEntityMoveLeft(this);
 }
 
+void ABNEntityPawn::MoveEntityRightRPC_Implementation()
+{
+	GridActorReference->MoveEntityToNewPanel(this, XIndex + 1, YIndex);
+}
+
+bool ABNEntityPawn::MoveEntityRightRPC_Validate()
+{
+	return GridActorReference->CanEntityMoveRight(this);
+}
 

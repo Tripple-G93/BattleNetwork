@@ -79,4 +79,7 @@ protected:
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void MoveEntityLeftRPC();
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void MoveEntityRightRPC();
 };

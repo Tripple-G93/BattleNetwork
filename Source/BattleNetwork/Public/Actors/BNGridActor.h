@@ -82,7 +82,7 @@ public:
 
 	bool CanEntityMoveLeft(const ABNEntityPawn* EntityPawn);
 
-	bool CanEntityMoveRight(ABNEntityPawn* EntityPawn);
+	bool CanEntityMoveRight(const ABNEntityPawn* EntityPawn);
 
 	void MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXIndex, int32 NewYIndex);
 
