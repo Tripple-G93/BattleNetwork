@@ -6,6 +6,7 @@
 #include "Pawns/BNBasePawn.h"
 #include "BNEntityPawn.generated.h"
 
+class ABNGridActor;
 class UDataTable;
 class UPaperFlipbookComponent;
 class USceneComponent;
@@ -16,7 +17,7 @@ class BATTLENETWORK_API ABNEntityPawn : public ABNBasePawn
 	GENERATED_BODY()
 
 protected:
-
+	
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UDataTable> FlipbookAnimationDataTable;
 	
@@ -26,14 +27,56 @@ protected:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USceneComponent> SceneComponent;
 
-public:
+	UPROPERTY(Replicated)
+	TObjectPtr<ABNGridActor> GridActorReference;
 	
+	UPROPERTY(Replicated)
+	int32 XIndex;
+
+	UPROPERTY(Replicated)
+	int32 YIndex;
+
+	UPROPERTY(Replicated)
+	FGameplayTag TeamTag;
+
+public:
+
 	ABNEntityPawn(const FObjectInitializer& ObjectInitializer);
 
 	void FlipEntity() const;
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
+	/*
+	 * Setters
+	 */
+
+	void SetGridActorReference(ABNGridActor* GridActor);
+	
+	void SetTeamTag(FGameplayTag NewTeamTag);
+	
+	void SetNewXIndexPosition(const int32 NewXIndex);
+	void SetNewYIndexPosition(const int32 NewYIndex);
+
+	/*
+	 * Getters
+	 */
+	int32 GetXIndexPosition() const;
+	int32 GetYIndexPosition() const;
+
+	FGameplayTag GetTeamTag() const;
+
 protected:
 
 	virtual void BeginPlay() override;
 
+	void AttemptToMoveHorizontally(const float Value);
+	void AttemptToMoveVertically(float Value);
+
+	/*
+	 * Server
+	 */
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void MoveEntityLeftRPC();
 };

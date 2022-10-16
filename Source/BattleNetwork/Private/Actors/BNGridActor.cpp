@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/SceneComponent.h"
 #include "Engine/World.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 ABNGridActor::ABNGridActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -33,8 +34,16 @@ ABNGridActor::ABNGridActor(const FObjectInitializer& ObjectInitializer) : Super(
 	PlayerSpawnOffset = 0;
 }
 
+void ABNGridActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ABNGridActor, Grid);
+}
+
 void ABNGridActor::SpawnPlayer1_Implementation(APlayerController* PlayerController)
 {
+	// TODO BN: When you actually handle player spawning be sure to unify the similarity between the spawn player functions
 	if(ensure(PlayerPawnSubclass))
 	{
 		const int32 CenterX = 0;
@@ -44,18 +53,22 @@ void ABNGridActor::SpawnPlayer1_Implementation(APlayerController* PlayerControll
 		ABNPanelActor* Panel = Grid[CenterX][CenterY];
 		const FVector Location = Panel->GetActorLocation();
 		FActorSpawnParameters SpawnParameters;
-		SpawnParameters.Owner = this;
+		SpawnParameters.Owner = PlayerController;
 
 		ABNPlayerPawn* Player = GetWorld()->SpawnActor<ABNPlayerPawn>(PlayerPawnSubclass, Location, Rotation, SpawnParameters);
 		PlayerController->Possess(Player);
 		PlayerController->SetViewTarget(this);
 		Panel->SetEntityPawn(Player);
-		Player->GetAbilitySystemComponent()->AddReplicatedLooseGameplayTag(FGameplayTag::RequestGameplayTag("Red.Player1"));
+		Player->SetTeamTag(FGameplayTag::RequestGameplayTag("Team1"));
+		Player->SetGridActorReference(this);
+		Player->SetNewXIndexPosition(CenterX);
+		Player->SetNewYIndexPosition(CenterY);
 	}
 }
 
 void ABNGridActor::SpawnPlayer2_Implementation(APlayerController* PlayerController)
 {
+	// TODO BN: When you actually handle player spawning be sure to unify the similarity between the spawn player functions
 	if(ensure(PlayerPawnSubclass))
 	{
 		const int32 CenterX = GridWidth - 1;
@@ -68,14 +81,17 @@ void ABNGridActor::SpawnPlayer2_Implementation(APlayerController* PlayerControll
 		ABNPanelActor* Panel = Grid[CenterX][CenterY];
 		const FVector Location = Panel->GetActorLocation();
 		FActorSpawnParameters SpawnParameters;
-		SpawnParameters.Owner = this;
+		SpawnParameters.Owner = PlayerController;
 
 		ABNPlayerPawn* Player = GetWorld()->SpawnActor<ABNPlayerPawn>(PlayerPawnSubclass, Location, Rotation, SpawnParameters);
 		PlayerController->Possess(Player);
 		PlayerController->SetViewTarget(this);
 		Panel->SetEntityPawn(Player);
-		Player->GetAbilitySystemComponent()->AddReplicatedLooseGameplayTag(FGameplayTag::RequestGameplayTag("Blue.Player1"));
 		Player->FlipEntity();
+		Player->SetTeamTag(FGameplayTag::RequestGameplayTag("Team2"));
+		Player->SetGridActorReference(this);
+		Player->SetNewXIndexPosition(CenterX);
+		Player->SetNewYIndexPosition(CenterY);
 	}
 }
 
@@ -92,6 +108,44 @@ void ABNGridActor::CreateGrid()
 			}
 		}
 	}
+}
+
+bool ABNGridActor::CanEntityMoveLeft(const ABNEntityPawn* EntityPawn)
+{
+	const int32 XIndex = EntityPawn->GetXIndexPosition();
+	const int32 YIndex = EntityPawn->GetYIndexPosition();
+	
+	UAbilitySystemComponent* AbilitySystemComponent = EntityPawn->GetAbilitySystemComponent();
+	if(EntityPawn->GetTeamTag() == FGameplayTag::RequestGameplayTag(FName("Team1")))
+	{
+		return XIndex > 0 && Grid[XIndex - 1][YIndex]->GetEntityPawn() == nullptr;
+	}
+	else
+	{
+		return XIndex > GridDividerIndex + 1 && Grid[XIndex - 1][YIndex]->GetEntityPawn() == nullptr ;
+	}
+}
+
+bool ABNGridActor::CanEntityMoveRight(ABNEntityPawn* EntityPawn)
+{
+	// TODO BN: Add logic to check if they can move at that index
+	
+	return false;
+}
+
+void ABNGridActor::MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXIndex, int32 NewYIndex)
+{
+	const int32 OldXIndex = EntityPawn->GetXIndexPosition();
+	const int32 OldYIndex = EntityPawn->GetYIndexPosition();
+	Grid[OldXIndex][OldYIndex]->SetEntityPawn(nullptr);
+	
+	ABNPanelActor* PanelActor = Grid[NewXIndex][NewYIndex];
+	PanelActor->SetEntityPawn(EntityPawn);
+	
+	const FVector NewLocation = PanelActor->GetActorLocation();
+	EntityPawn->SetActorLocation(NewLocation);
+	EntityPawn->SetNewXIndexPosition(NewXIndex);
+	EntityPawn->SetNewYIndexPosition(NewYIndex);
 }
 
 void ABNGridActor::SpawnPanel(const int32 XIndex, const int32 YIndex)

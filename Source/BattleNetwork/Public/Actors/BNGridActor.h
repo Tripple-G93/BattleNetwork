@@ -7,6 +7,7 @@
 #include "Pawns/BNPlayerPawn.h"
 #include "BNGridActor.generated.h"
 
+class ABNEntityPawn;
 class ABNPanelActor;
 class ABNPlayerPawn;
 class UCameraComponent;
@@ -18,6 +19,7 @@ struct FBNPannel2DArray {
 
 public:
 
+	UPROPERTY()
 	TArray<ABNPanelActor*> PannelArray;
 
 	ABNPanelActor* operator[] (int32 index)
@@ -49,6 +51,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USceneComponent> SceneComponent;
+
+	UPROPERTY(Replicated)
+	TArray<FBNPannel2DArray> Grid;
 	
 	UPROPERTY(EditDefaultsOnly)
 	int32 GridWidth;
@@ -66,20 +71,30 @@ protected:
 	int32 PanelSpacingHeight;
 	
 	int32 PlayerSpawnOffset;
-
-	TArray<FBNPannel2DArray> Grid;
 	
 public:	
 
 	ABNGridActor(const FObjectInitializer& ObjectInitializer);
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	void CreateGrid();
+
+	bool CanEntityMoveLeft(const ABNEntityPawn* EntityPawn);
+
+	bool CanEntityMoveRight(ABNEntityPawn* EntityPawn);
+
+	void MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXIndex, int32 NewYIndex);
+
+	/*
+     * Server Calls
+     */
+	
 	UFUNCTION(Server, Reliable)
 	void SpawnPlayer1(APlayerController* PlayerController);
 
 	UFUNCTION(Server, Reliable)
 	void SpawnPlayer2(APlayerController* PlayerController);
-
-	void CreateGrid();
 	
 protected:
 	

@@ -37,7 +37,7 @@ public:
 	// Sets default values for this actor's properties
 	ABNPanelActor(const FObjectInitializer& ObjectInitializer);
 
-	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	/*
 	 * SETTERS

@@ -26,6 +26,9 @@ void ABNPlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	InputComponent->BindAxis("Move_Horizontal", this, &ABNPlayerPawn::AttemptToMoveHorizontally);
+	InputComponent->BindAxis("Move_Verticle", this, &ABNPlayerPawn::AttemptToMoveVertically);
+
 }
 
 // Client only
