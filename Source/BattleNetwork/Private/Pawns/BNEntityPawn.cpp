@@ -104,7 +104,7 @@ void ABNEntityPawn::DisableEntityMovement()
 {
 	bCanNotMove = true;
 	// TODO BN: Right now the value is hard coded and will need to be changed to the speed attribute once that is set up
-	GetWorldTimerManager().SetTimer(EnableEntityMovementTimerHandler, this, &ABNEntityPawn::EnableEntityMovement, 1.0f);
+	GetWorldTimerManager().SetTimer(EnableEntityMovementTimerHandler, this, &ABNEntityPawn::EnableEntityMovement, 0.5f);
 }
 
 void ABNEntityPawn::EnableEntityMovement()
