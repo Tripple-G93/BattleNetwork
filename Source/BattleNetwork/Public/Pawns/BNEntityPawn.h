@@ -74,9 +74,6 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	void AttemptToMoveHorizontally(const float Value);
-	void AttemptToMoveVertically(float Value);
-
 	void DisableEntityMovement();
 	void EnableEntityMovement();
 

@@ -100,56 +100,6 @@ void ABNEntityPawn::BeginPlay()
 	
 }
 
-void ABNEntityPawn::AttemptToMoveHorizontally(const float Value)
-{
-	if(!bCanNotMove)
-	{
-		if(Value < 0)
-		{
-			if(MoveEntityLeftRPC_Validate())
-			{
-				DisableEntityMovement();
-				MoveEntityLeftRPC_Implementation();
-				MoveEntityLeftRPC();
-			}
-		}
-		else if(Value > 0)
-		{
-			if(MoveEntityRightRPC_Validate())
-			{
-				DisableEntityMovement();
-				MoveEntityRightRPC_Implementation();
-				MoveEntityRightRPC();
-			}
-		}
-	}
-}
-
-void ABNEntityPawn::AttemptToMoveVertically(float Value)
-{
-	if(!bCanNotMove)
-	{
-		if(Value > 0)
-		{
-			if(MoveEntityUpRPC_Validate())
-			{
-				DisableEntityMovement();
-				MoveEntityUpRPC_Implementation();
-				MoveEntityUpRPC();
-			}
-		}
-		else if(Value < 0)
-		{
-			if(MoveEntityDownRPC_Validate())
-			{
-				DisableEntityMovement();
-				MoveEntityDownRPC_Implementation();
-				MoveEntityDownRPC();
-			}
-		}
-	}
-}
-
 void ABNEntityPawn::DisableEntityMovement()
 {
 	bCanNotMove = true;
