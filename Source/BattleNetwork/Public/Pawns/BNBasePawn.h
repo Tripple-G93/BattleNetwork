@@ -72,7 +72,7 @@ public:
 	float GetMaxHealth() const;
 
 protected:
-	
+
 	// Grant abilities on the Server. The Ability Specs will be replicated to the owning client.
 	virtual void AddCharacterAbilities();
 
