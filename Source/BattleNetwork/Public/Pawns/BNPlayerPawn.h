@@ -20,6 +20,9 @@ public:
 
 protected:
 
+	void AttemptToMovePlayerEntityHorizontally(const float Value);
+	void AttemptToMovePlayerEntityVertically(const float Value);
+	
 	virtual void OnRep_PlayerState() override;
 
 };

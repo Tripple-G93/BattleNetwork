@@ -21,7 +21,7 @@ class BATTLENETWORK_API ABNBasePawn : public APawn, public IAbilitySystemInterfa
 	GENERATED_BODY()
 
 protected:
-	
+
 	// Default abilities for this Character. These will be removed on Character death and regiven if Character respawns.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GAS|Abilities")
 	TArray<TSubclassOf<UBNBaseGameplayAbility>> CharacterAbilities;
@@ -72,7 +72,7 @@ public:
 	float GetMaxHealth() const;
 
 protected:
-	
+
 	// Grant abilities on the Server. The Ability Specs will be replicated to the owning client.
 	virtual void AddCharacterAbilities();
 
