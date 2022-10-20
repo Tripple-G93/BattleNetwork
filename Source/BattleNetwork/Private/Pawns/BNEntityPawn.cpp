@@ -130,6 +130,8 @@ void ABNEntityPawn::UpdateToIdleAnimation()
  * Server RPC
  */
 
+
+
 void ABNEntityPawn::MoveEntityLeftRPC_Implementation()
 {
 	bCanMove = false;
