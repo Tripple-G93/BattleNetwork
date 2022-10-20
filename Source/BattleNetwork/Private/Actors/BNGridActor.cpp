@@ -136,7 +136,7 @@ bool ABNGridActor::CanEntityMoveRight(const ABNEntityPawn* EntityPawn)
 	}
 	else
 	{
-		return XIndex < GridWidth - 2 && Grid[XIndex + 1][YIndex]->GetEntityPawn() == nullptr;
+		return XIndex < GridWidth - 1 && Grid[XIndex + 1][YIndex]->GetEntityPawn() == nullptr;
 	}
 }
 

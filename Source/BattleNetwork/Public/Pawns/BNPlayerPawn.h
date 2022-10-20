@@ -25,4 +25,6 @@ protected:
 	
 	virtual void OnRep_PlayerState() override;
 
+	bool bIsMoving;
+	
 };

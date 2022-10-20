@@ -39,9 +39,7 @@ protected:
 	UPROPERTY(Replicated)
 	FGameplayTag TeamTag;
 
-	FTimerHandle EnableEntityMovementTimerHandler;
-	
-	bool bCanNotMove;
+	bool bCanMove;
 
 public:
 
@@ -74,8 +72,11 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	void DisableEntityMovement();
-	void EnableEntityMovement();
+	UFUNCTION()
+	void MoveEntity();
+
+	UFUNCTION()
+	void UpdateToIdleAnimation();
 
 	/*
 	 * Server

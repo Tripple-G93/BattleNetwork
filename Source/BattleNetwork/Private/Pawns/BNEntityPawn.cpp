@@ -3,9 +3,12 @@
 
 #include "Pawns/BNEntityPawn.h"
 
+#include "AbilitySystemComponent.h"
+#include "ActorComponents/BNAbilitySystemComponent.h"
 #include "Actors/BNGridActor.h"
-#include "PaperFlipbookComponent.h"
 #include "Components/SceneComponent.h"
+#include "Objects/BNUtilityStatics.h"
+#include "PaperFlipbookComponent.h"
 #include "Net/UnrealNetwork.h"
 
 ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -21,7 +24,7 @@ ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Supe
 	PaperFlipbookComponent->bReplicatePhysicsToAutonomousProxy = false;
 	PaperFlipbookComponent->SetIsReplicated(true);
 
-	bCanNotMove = false;
+	bCanMove = true;
 }
 
 void ABNEntityPawn::FlipEntity() const
@@ -100,17 +103,27 @@ void ABNEntityPawn::BeginPlay()
 	
 }
 
-void ABNEntityPawn::DisableEntityMovement()
+void ABNEntityPawn::MoveEntity()
 {
-	bCanNotMove = true;
-	// TODO BN: Right now the value is hard coded and will need to be changed to the speed attribute once that is set up
-	GetWorldTimerManager().SetTimer(EnableEntityMovementTimerHandler, this, &ABNEntityPawn::EnableEntityMovement, 0.5f);
+	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::MoveEntity);
+
+	if(AbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Entity.Move.Left"))))
+	{
+		GridActorReference->MoveEntityToNewPanel(this, XIndex - 1, YIndex);
+		AbilitySystemComponent->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Entity.Move.Left")));
+	}
 }
 
-void ABNEntityPawn::EnableEntityMovement()
+void ABNEntityPawn::UpdateToIdleAnimation()
 {
-	bCanNotMove = false;
-	GetWorldTimerManager().ClearTimer(EnableEntityMovementTimerHandler);
+	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::UpdateToIdleAnimation);
+	
+	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
+	CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, FGameplayTag::RequestGameplayTag(FName("Entity.Idle")));
+	PaperFlipbookComponent->SetFlipbook(CurrentFlipbookAnimationTableInfoRow->PaperFlipbook);
+	PaperFlipbookComponent->PlayFromStart();
+
+	bCanMove = true;
 }
 
 /*
@@ -119,7 +132,19 @@ void ABNEntityPawn::EnableEntityMovement()
 
 void ABNEntityPawn::MoveEntityLeftRPC_Implementation()
 {
-	GridActorReference->MoveEntityToNewPanel(this, XIndex - 1, YIndex);
+	bCanMove = false;
+	
+	GetAbilitySystemComponent()->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Entity.Move.Left")));
+
+	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
+	CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, FGameplayTag::RequestGameplayTag(FName("Entity.Move")));
+
+	PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::MoveEntity);
+	PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::UpdateToIdleAnimation);
+	
+	PaperFlipbookComponent->SetFlipbook(CurrentFlipbookAnimationTableInfoRow->PaperFlipbook);
+	PaperFlipbookComponent->SetLooping(false);
+	PaperFlipbookComponent->PlayFromStart();
 }
 
 bool ABNEntityPawn::MoveEntityLeftRPC_Validate()
