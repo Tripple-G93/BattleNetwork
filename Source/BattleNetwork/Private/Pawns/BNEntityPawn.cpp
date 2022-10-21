@@ -41,8 +41,7 @@ void ABNEntityPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 
 	DOREPLIFETIME(ABNEntityPawn, TeamTag);
 	DOREPLIFETIME(ABNEntityPawn, GridActorReference);
-	DOREPLIFETIME(ABNEntityPawn, XIndex);
-	DOREPLIFETIME(ABNEntityPawn, YIndex);
+	DOREPLIFETIME(ABNEntityPawn, ServerGridLocation);
 }
 
 /*
@@ -59,37 +58,33 @@ void ABNEntityPawn::SetTeamTag(FGameplayTag NewTeamTag)
 	TeamTag = NewTeamTag;
 }
 
-void ABNEntityPawn::SetNewXIndexPosition(const int32 NewXIndex)
+void ABNEntityPawn::SetClientGridLocation(FBNGridLocation NewClientGridLocation)
 {
-	XIndex = NewXIndex;
+	ClientGridLocation = NewClientGridLocation;
 }
 
-void ABNEntityPawn::SetNewYIndexPosition(const int32 NewYIndex)
+void ABNEntityPawn::SetServerGridLocation(FBNGridLocation NewServerGridLocation)
 {
-	YIndex = NewYIndex;
+	ServerGridLocation = NewServerGridLocation;
 }
-
-/*
- * End Setters
- */
 
 /*
  * Getters
  */
 
-int32 ABNEntityPawn::GetXIndexPosition() const
-{
-	return XIndex;
-}
-
-int32 ABNEntityPawn::GetYIndexPosition() const
-{
-	return YIndex;
-}
-
 FGameplayTag ABNEntityPawn::GetTeamTag() const
 {
 	return TeamTag;
+}
+
+FBNGridLocation ABNEntityPawn::GetClientGridLocation() const
+{
+	return ClientGridLocation;
+}
+
+FBNGridLocation ABNEntityPawn::GetServerGridLocation() const
+{
+	return ServerGridLocation;
 }
 
 /*
@@ -109,8 +104,15 @@ void ABNEntityPawn::MoveEntity()
 
 	if(AbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Entity.Move.Left"))))
 	{
-		GridActorReference->MoveEntityToNewPanel(this, XIndex - 1, YIndex);
 		AbilitySystemComponent->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Entity.Move.Left")));
+		if(IsLocallyControlled())
+		{
+			GridActorReference->MoveEntityToNewPanel(this, ClientGridLocation.XIndex - 1, ClientGridLocation.YIndex);
+		}
+		else
+		{
+			GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex - 1, ServerGridLocation.YIndex);
+		}
 	}
 }
 
@@ -129,8 +131,6 @@ void ABNEntityPawn::UpdateToIdleAnimation()
 /*
  * Server RPC
  */
-
-
 
 void ABNEntityPawn::MoveEntityLeftRPC_Implementation()
 {
@@ -156,7 +156,7 @@ bool ABNEntityPawn::MoveEntityLeftRPC_Validate()
 
 void ABNEntityPawn::MoveEntityRightRPC_Implementation()
 {
-	GridActorReference->MoveEntityToNewPanel(this, XIndex + 1, YIndex);
+	//GridActorReference->MoveEntityToNewPanel(this, XIndex + 1, YIndex);
 }
 
 bool ABNEntityPawn::MoveEntityRightRPC_Validate()
@@ -166,7 +166,7 @@ bool ABNEntityPawn::MoveEntityRightRPC_Validate()
 
 void ABNEntityPawn::MoveEntityUpRPC_Implementation()
 {
-	GridActorReference->MoveEntityToNewPanel(this, XIndex, YIndex - 1);
+	//GridActorReference->MoveEntityToNewPanel(this, XIndex, YIndex - 1);
 }
 
 bool ABNEntityPawn::MoveEntityUpRPC_Validate()
@@ -176,10 +176,19 @@ bool ABNEntityPawn::MoveEntityUpRPC_Validate()
 
 void ABNEntityPawn::MoveEntityDownRPC_Implementation()
 {
-	GridActorReference->MoveEntityToNewPanel(this, XIndex, YIndex + 1);
+	//GridActorReference->MoveEntityToNewPanel(this, XIndex, YIndex + 1);
 }
 
 bool ABNEntityPawn::MoveEntityDownRPC_Validate()
 {
 	return GridActorReference->CanEntityMoveDown(this);
+}
+
+/*
+ * REP_Notify
+ */
+
+void ABNEntityPawn::OnRep_UpdateClientLocation()
+{
+	ClientGridLocation = ServerGridLocation;
 }

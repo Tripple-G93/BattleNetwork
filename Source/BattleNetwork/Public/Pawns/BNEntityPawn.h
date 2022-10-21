@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Pawns/BNBasePawn.h"
+#include "Structs/BNStructs.h"
 #include "BNEntityPawn.generated.h"
 
 class ABNGridActor;
@@ -30,15 +31,14 @@ protected:
 	UPROPERTY(Replicated)
 	TObjectPtr<ABNGridActor> GridActorReference;
 	
-	UPROPERTY(Replicated)
-	int32 XIndex;
-
-	UPROPERTY(Replicated)
-	int32 YIndex;
+	UPROPERTY(ReplicatedUsing = OnRep_UpdateClientLocation)
+	FBNGridLocation ServerGridLocation;
 
 	UPROPERTY(Replicated)
 	FGameplayTag TeamTag;
 
+	FBNGridLocation ClientGridLocation;
+	
 	bool bCanMove;
 
 public:
@@ -56,17 +56,21 @@ public:
 	void SetGridActorReference(ABNGridActor* GridActor);
 	
 	void SetTeamTag(FGameplayTag NewTeamTag);
-	
-	void SetNewXIndexPosition(const int32 NewXIndex);
-	void SetNewYIndexPosition(const int32 NewYIndex);
+
+	// Only call this on client
+	void SetClientGridLocation(FBNGridLocation NewClientGridLocation);
+
+	// Only call this on Server
+	void SetServerGridLocation(FBNGridLocation NewServerGridLocation);
 
 	/*
 	 * Getters
 	 */
-	int32 GetXIndexPosition() const;
-	int32 GetYIndexPosition() const;
 
 	FGameplayTag GetTeamTag() const;
+
+	FBNGridLocation GetClientGridLocation() const;
+	FBNGridLocation GetServerGridLocation() const;
 
 protected:
 
@@ -93,4 +97,11 @@ protected:
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void MoveEntityDownRPC();
+
+	/*
+	 * OnRep_Notify
+	 */
+
+	UFUNCTION()
+	void OnRep_UpdateClientLocation();
 };

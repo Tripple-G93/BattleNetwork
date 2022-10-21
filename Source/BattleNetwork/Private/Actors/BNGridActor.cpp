@@ -61,8 +61,7 @@ void ABNGridActor::SpawnPlayer1_Implementation(APlayerController* PlayerControll
 		Panel->SetEntityPawn(Player);
 		Player->SetTeamTag(FGameplayTag::RequestGameplayTag("Team1"));
 		Player->SetGridActorReference(this);
-		Player->SetNewXIndexPosition(CenterX);
-		Player->SetNewYIndexPosition(CenterY);
+		Player->SetServerGridLocation(FBNGridLocation(CenterX, CenterY));
 	}
 }
 
@@ -90,8 +89,7 @@ void ABNGridActor::SpawnPlayer2_Implementation(APlayerController* PlayerControll
 		Player->FlipEntity();
 		Player->SetTeamTag(FGameplayTag::RequestGameplayTag("Team2"));
 		Player->SetGridActorReference(this);
-		Player->SetNewXIndexPosition(CenterX);
-		Player->SetNewYIndexPosition(CenterY);
+		Player->SetServerGridLocation(FBNGridLocation(CenterX, CenterY));
 	}
 }
 
@@ -112,8 +110,18 @@ void ABNGridActor::CreateGrid()
 
 bool ABNGridActor::CanEntityMoveLeft(const ABNEntityPawn* EntityPawn)
 {
-	const int32 XIndex = EntityPawn->GetXIndexPosition();
-	const int32 YIndex = EntityPawn->GetYIndexPosition();
+	FBNGridLocation GridLocation;
+	if(EntityPawn->IsLocallyControlled())
+	{
+		GridLocation = EntityPawn->GetClientGridLocation();
+	}
+	else
+	{
+		GridLocation = EntityPawn->GetServerGridLocation();
+	}
+	
+	const int32 XIndex = GridLocation.XIndex;
+	const int32 YIndex = GridLocation.YIndex;
 	
 	if(EntityPawn->GetTeamTag() == FGameplayTag::RequestGameplayTag(FName("Team1")))
 	{
@@ -127,8 +135,18 @@ bool ABNGridActor::CanEntityMoveLeft(const ABNEntityPawn* EntityPawn)
 
 bool ABNGridActor::CanEntityMoveRight(const ABNEntityPawn* EntityPawn)
 {
-	const int32 XIndex = EntityPawn->GetXIndexPosition();
-	const int32 YIndex = EntityPawn->GetYIndexPosition();
+	FBNGridLocation GridLocation;
+	if(EntityPawn->IsLocallyControlled())
+	{
+		GridLocation = EntityPawn->GetClientGridLocation();
+	}
+	else
+	{
+		GridLocation = EntityPawn->GetServerGridLocation();
+	}
+	
+	const int32 XIndex = GridLocation.XIndex;
+	const int32 YIndex = GridLocation.YIndex;
 
 	if(EntityPawn->GetTeamTag() == FGameplayTag::RequestGameplayTag(FName("Team1")))
 	{
@@ -142,24 +160,54 @@ bool ABNGridActor::CanEntityMoveRight(const ABNEntityPawn* EntityPawn)
 
 bool ABNGridActor::CanEntityMoveUp(const ABNEntityPawn* EntityPawn)
 {
-	const int32 XIndex = EntityPawn->GetXIndexPosition();
-	const int32 YIndex = EntityPawn->GetYIndexPosition();
+	FBNGridLocation GridLocation;
+	if(EntityPawn->IsLocallyControlled())
+	{
+		GridLocation = EntityPawn->GetClientGridLocation();
+	}
+	else
+	{
+		GridLocation = EntityPawn->GetServerGridLocation();
+	}
+	
+	const int32 XIndex = GridLocation.XIndex;
+	const int32 YIndex = GridLocation.YIndex;
 	
 	return YIndex > 0 && Grid[XIndex][YIndex - 1]->GetEntityPawn() == nullptr;
 }
 
 bool ABNGridActor::CanEntityMoveDown(const ABNEntityPawn* EntityPawn)
 {
-	const int32 XIndex = EntityPawn->GetXIndexPosition();
-	const int32 YIndex = EntityPawn->GetYIndexPosition();
+	FBNGridLocation GridLocation;
+	if(EntityPawn->IsLocallyControlled())
+	{
+		GridLocation = EntityPawn->GetClientGridLocation();
+	}
+	else
+	{
+		GridLocation = EntityPawn->GetServerGridLocation();
+	}
+	
+	const int32 XIndex = GridLocation.XIndex;
+	const int32 YIndex = GridLocation.YIndex;
 
 	return YIndex < GridHeight - 1 && Grid[XIndex][YIndex + 1]->GetEntityPawn() == nullptr;
 }
 
 void ABNGridActor::MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXIndex, int32 NewYIndex)
 {
-	const int32 OldXIndex = EntityPawn->GetXIndexPosition();
-	const int32 OldYIndex = EntityPawn->GetYIndexPosition();
+	FBNGridLocation GridLocation;
+	if(EntityPawn->IsLocallyControlled())
+	{
+		GridLocation = EntityPawn->GetClientGridLocation();
+	}
+	else
+	{
+		GridLocation = EntityPawn->GetServerGridLocation();
+	}
+	
+	const int32 OldXIndex = GridLocation.XIndex;
+	const int32 OldYIndex = GridLocation.YIndex;
 	Grid[OldXIndex][OldYIndex]->SetEntityPawn(nullptr);
 	
 	ABNPanelActor* PanelActor = Grid[NewXIndex][NewYIndex];
@@ -167,8 +215,15 @@ void ABNGridActor::MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXInd
 	
 	const FVector NewLocation = PanelActor->GetActorLocation();
 	EntityPawn->SetActorLocation(NewLocation);
-	EntityPawn->SetNewXIndexPosition(NewXIndex);
-	EntityPawn->SetNewYIndexPosition(NewYIndex);
+
+	if(EntityPawn->IsLocallyControlled())
+	{
+		EntityPawn->SetClientGridLocation(FBNGridLocation(NewXIndex, NewYIndex));
+	}
+	else
+	{
+		EntityPawn->SetServerGridLocation(FBNGridLocation(NewXIndex, NewYIndex));
+	}
 }
 
 void ABNGridActor::SpawnPanel(const int32 XIndex, const int32 YIndex)
