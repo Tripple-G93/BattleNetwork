@@ -24,4 +24,6 @@ public:
 
 	UPROPERTY()
 	int32 YIndex;
+	
+	bool operator!=(const FBNGridLocation& FbnGridLocation) const;
 };

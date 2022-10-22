@@ -110,15 +110,7 @@ void ABNGridActor::CreateGrid()
 
 bool ABNGridActor::CanEntityMoveLeft(const ABNEntityPawn* EntityPawn)
 {
-	FBNGridLocation GridLocation;
-	if(EntityPawn->IsLocallyControlled())
-	{
-		GridLocation = EntityPawn->GetClientGridLocation();
-	}
-	else
-	{
-		GridLocation = EntityPawn->GetServerGridLocation();
-	}
+	const FBNGridLocation GridLocation = EntityPawn->GetServerGridLocation();
 	
 	const int32 XIndex = GridLocation.XIndex;
 	const int32 YIndex = GridLocation.YIndex;
@@ -135,15 +127,7 @@ bool ABNGridActor::CanEntityMoveLeft(const ABNEntityPawn* EntityPawn)
 
 bool ABNGridActor::CanEntityMoveRight(const ABNEntityPawn* EntityPawn)
 {
-	FBNGridLocation GridLocation;
-	if(EntityPawn->IsLocallyControlled())
-	{
-		GridLocation = EntityPawn->GetClientGridLocation();
-	}
-	else
-	{
-		GridLocation = EntityPawn->GetServerGridLocation();
-	}
+	const FBNGridLocation GridLocation = EntityPawn->GetServerGridLocation();
 	
 	const int32 XIndex = GridLocation.XIndex;
 	const int32 YIndex = GridLocation.YIndex;
@@ -160,15 +144,7 @@ bool ABNGridActor::CanEntityMoveRight(const ABNEntityPawn* EntityPawn)
 
 bool ABNGridActor::CanEntityMoveUp(const ABNEntityPawn* EntityPawn)
 {
-	FBNGridLocation GridLocation;
-	if(EntityPawn->IsLocallyControlled())
-	{
-		GridLocation = EntityPawn->GetClientGridLocation();
-	}
-	else
-	{
-		GridLocation = EntityPawn->GetServerGridLocation();
-	}
+	const FBNGridLocation GridLocation = EntityPawn->GetServerGridLocation();
 	
 	const int32 XIndex = GridLocation.XIndex;
 	const int32 YIndex = GridLocation.YIndex;
@@ -178,15 +154,7 @@ bool ABNGridActor::CanEntityMoveUp(const ABNEntityPawn* EntityPawn)
 
 bool ABNGridActor::CanEntityMoveDown(const ABNEntityPawn* EntityPawn)
 {
-	FBNGridLocation GridLocation;
-	if(EntityPawn->IsLocallyControlled())
-	{
-		GridLocation = EntityPawn->GetClientGridLocation();
-	}
-	else
-	{
-		GridLocation = EntityPawn->GetServerGridLocation();
-	}
+	const FBNGridLocation GridLocation = EntityPawn->GetServerGridLocation();
 	
 	const int32 XIndex = GridLocation.XIndex;
 	const int32 YIndex = GridLocation.YIndex;
@@ -196,15 +164,7 @@ bool ABNGridActor::CanEntityMoveDown(const ABNEntityPawn* EntityPawn)
 
 void ABNGridActor::MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXIndex, int32 NewYIndex)
 {
-	FBNGridLocation GridLocation;
-	if(EntityPawn->IsLocallyControlled())
-	{
-		GridLocation = EntityPawn->GetClientGridLocation();
-	}
-	else
-	{
-		GridLocation = EntityPawn->GetServerGridLocation();
-	}
+	const FBNGridLocation GridLocation = EntityPawn->GetServerGridLocation();
 	
 	const int32 OldXIndex = GridLocation.XIndex;
 	const int32 OldYIndex = GridLocation.YIndex;
@@ -215,15 +175,8 @@ void ABNGridActor::MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXInd
 	
 	const FVector NewLocation = PanelActor->GetActorLocation();
 	EntityPawn->SetActorLocation(NewLocation);
-
-	if(EntityPawn->IsLocallyControlled())
-	{
-		EntityPawn->SetClientGridLocation(FBNGridLocation(NewXIndex, NewYIndex));
-	}
-	else
-	{
-		EntityPawn->SetServerGridLocation(FBNGridLocation(NewXIndex, NewYIndex));
-	}
+	
+	EntityPawn->SetServerGridLocation(FBNGridLocation(NewXIndex, NewYIndex));
 }
 
 void ABNGridActor::SpawnPanel(const int32 XIndex, const int32 YIndex)

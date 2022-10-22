@@ -39,7 +39,7 @@ void ABNPlayerPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
 		{
 			if(MoveEntityLeftRPC_Validate())
 			{
-				MoveEntityLeftRPC_Implementation();
+				//MoveEntityLeftRPC_Implementation();
 				MoveEntityLeftRPC(); 
 			}
 		}

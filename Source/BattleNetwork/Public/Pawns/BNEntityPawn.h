@@ -37,8 +37,7 @@ protected:
 	UPROPERTY(Replicated)
 	FGameplayTag TeamTag;
 
-	FBNGridLocation ClientGridLocation;
-	
+	UPROPERTY()
 	bool bCanMove;
 
 public:
@@ -56,11 +55,7 @@ public:
 	void SetGridActorReference(ABNGridActor* GridActor);
 	
 	void SetTeamTag(FGameplayTag NewTeamTag);
-
-	// Only call this on client
-	void SetClientGridLocation(FBNGridLocation NewClientGridLocation);
-
-	// Only call this on Server
+	
 	void SetServerGridLocation(FBNGridLocation NewServerGridLocation);
 
 	/*
@@ -68,8 +63,7 @@ public:
 	 */
 
 	FGameplayTag GetTeamTag() const;
-
-	FBNGridLocation GetClientGridLocation() const;
+	
 	FBNGridLocation GetServerGridLocation() const;
 
 protected:
@@ -97,7 +91,7 @@ protected:
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void MoveEntityDownRPC();
-
+	
 	/*
 	 * OnRep_Notify
 	 */
