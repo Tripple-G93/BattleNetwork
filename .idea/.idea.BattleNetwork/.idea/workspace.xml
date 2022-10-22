@@ -155,7 +155,7 @@
       <option name="presentableId" value="Default" />
       <updated>1666306239230</updated>
       <workItem from="1666306247178" duration="5505000" />
-      <workItem from="1666395406341" duration="10372000" />
+      <workItem from="1666395406341" duration="10978000" />
     </task>
     <servers />
   </component>
@@ -177,5 +177,16 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Source/BattleNetwork/Private/Pawns/BNEntityPawn.cpp</url>
+          <line>169</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

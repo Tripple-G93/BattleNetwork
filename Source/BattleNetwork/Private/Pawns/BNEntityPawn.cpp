@@ -110,18 +110,25 @@ void ABNEntityPawn::MoveEntity()
 	
 }
 
-void ABNEntityPawn::CallMoveEntityLeftRPC()
+void ABNEntityPawn::ClientCallMoveEntityLeftRPC()
 {
-	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::CallMoveEntityLeftRPC);
+	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityLeftRPC);
 
 	MoveEntityLeftRPC();
 }
 
-void ABNEntityPawn::CallMoveEntityRightRPC()
+void ABNEntityPawn::ClientCallMoveEntityRightRPC()
 {
-	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ABNEntityPawn::CallMoveEntityRightRPC);
+	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityRightRPC);
 
 	MoveEntityRightRPC();
+}
+
+void ABNEntityPawn::ClientCallMoveEntityUpRPC()
+{
+	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityUpRPC);
+
+	MoveEntityUpRPC();
 }
 
 /*
@@ -160,7 +167,7 @@ bool ABNEntityPawn::MoveEntityRightRPC_Validate()
 
 void ABNEntityPawn::MoveEntityUpRPC_Implementation()
 {
-	//GridActorReference->MoveEntityToNewPanel(this, XIndex, YIndex - 1);
+	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex, ServerGridLocation.YIndex - 1);
 }
 
 bool ABNEntityPawn::MoveEntityUpRPC_Validate()

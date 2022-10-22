@@ -43,7 +43,7 @@ void ABNPlayerPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
 				bCanMove = false;
 				UpdateMoveAnimationRPC();
 				UpdateMoveAnimationRPC_Implementation();
-				PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::CallMoveEntityLeftRPC);
+				PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityLeftRPC);
 			}
 		}
 		else if(Value > 0)
@@ -53,7 +53,7 @@ void ABNPlayerPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
 				bCanMove = false;
 				UpdateMoveAnimationRPC();
 				UpdateMoveAnimationRPC_Implementation();
-				PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::CallMoveEntityRightRPC);
+				PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityRightRPC);
 			}
 		}
 	}
@@ -67,8 +67,10 @@ void ABNPlayerPawn::AttemptToMovePlayerEntityVertically(const float Value)
 		{
 			if(MoveEntityUpRPC_Validate())
 			{
-				MoveEntityUpRPC_Implementation();
-				MoveEntityUpRPC();
+				bCanMove = false;
+				UpdateMoveAnimationRPC();
+				UpdateMoveAnimationRPC_Implementation();
+				PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityUpRPC);
 			}
 		}
 		else if(Value < 0)

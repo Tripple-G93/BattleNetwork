@@ -77,10 +77,13 @@ protected:
 	void MoveEntity();
 
 	UFUNCTION()
-	void CallMoveEntityLeftRPC();
+	void ClientCallMoveEntityLeftRPC();
 
 	UFUNCTION()
-	void CallMoveEntityRightRPC();
+	void ClientCallMoveEntityRightRPC();
+
+	UFUNCTION()
+	void ClientCallMoveEntityUpRPC();
 
 	/*
 	 * Server
