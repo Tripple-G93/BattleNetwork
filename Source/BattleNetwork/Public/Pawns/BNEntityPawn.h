@@ -71,13 +71,16 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION()
+	void UpdateAnimation();
+	
+	UFUNCTION()
 	void MoveEntity();
 
 	UFUNCTION()
 	void CallMoveEntityLeftRPC();
 
 	UFUNCTION()
-	void UpdateAnimation();
+	void CallMoveEntityRightRPC();
 
 	/*
 	 * Server
