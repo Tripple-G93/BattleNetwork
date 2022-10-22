@@ -85,6 +85,9 @@ protected:
 	UFUNCTION()
 	void ClientCallMoveEntityUpRPC();
 
+	UFUNCTION()
+	void ClientCallMoveEntityDownRPC();
+
 	/*
 	 * Server
 	 */

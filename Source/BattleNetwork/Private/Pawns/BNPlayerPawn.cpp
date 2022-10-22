@@ -77,8 +77,10 @@ void ABNPlayerPawn::AttemptToMovePlayerEntityVertically(const float Value)
 		{
 			if(MoveEntityDownRPC_Validate())
 			{
-				MoveEntityDownRPC_Implementation();
-				MoveEntityDownRPC();
+				bCanMove = false;
+				UpdateMoveAnimationRPC();
+				UpdateMoveAnimationRPC_Implementation();
+				PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityDownRPC);
 			}
 		}
 	}

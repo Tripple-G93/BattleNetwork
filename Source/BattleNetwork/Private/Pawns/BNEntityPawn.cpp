@@ -131,6 +131,13 @@ void ABNEntityPawn::ClientCallMoveEntityUpRPC()
 	MoveEntityUpRPC();
 }
 
+void ABNEntityPawn::ClientCallMoveEntityDownRPC()
+{
+	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityDownRPC);
+
+	MoveEntityDownRPC();
+}
+
 /*
  * Server RPC
  */
@@ -177,7 +184,7 @@ bool ABNEntityPawn::MoveEntityUpRPC_Validate()
 
 void ABNEntityPawn::MoveEntityDownRPC_Implementation()
 {
-	//GridActorReference->MoveEntityToNewPanel(this, XIndex, YIndex + 1);
+	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex, ServerGridLocation.YIndex + 1);
 }
 
 bool ABNEntityPawn::MoveEntityDownRPC_Validate()
