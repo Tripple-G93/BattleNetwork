@@ -177,6 +177,10 @@ bool ABNEntityPawn::MoveEntityDownRPC_Validate()
 
 void ABNEntityPawn::OnRep_UpdateClientLocation()
 {
-	// Set the new grid location
+	// TODO BN: This check exist because of spawning and replication issues at the beginning of the game remove when fixed
+	if(GridActorReference)
+	{
+		GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex, ServerGridLocation.YIndex);
+	}
 	bCanMove = true;
 }

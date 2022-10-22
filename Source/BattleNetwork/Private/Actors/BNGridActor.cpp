@@ -164,19 +164,23 @@ bool ABNGridActor::CanEntityMoveDown(const ABNEntityPawn* EntityPawn)
 
 void ABNGridActor::MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXIndex, int32 NewYIndex)
 {
-	const FBNGridLocation GridLocation = EntityPawn->GetServerGridLocation();
-	
-	const int32 OldXIndex = GridLocation.XIndex;
-	const int32 OldYIndex = GridLocation.YIndex;
-	Grid[OldXIndex][OldYIndex]->SetEntityPawn(nullptr);
-	
+	// TODO BN: This check exist because of spawning and replication issues at the beginning of the game remove when fixed
 	ABNPanelActor* PanelActor = Grid[NewXIndex][NewYIndex];
-	PanelActor->SetEntityPawn(EntityPawn);
+	if(PanelActor)
+	{
+		const FBNGridLocation GridLocation = EntityPawn->GetServerGridLocation();
 	
-	const FVector NewLocation = PanelActor->GetActorLocation();
-	EntityPawn->SetActorLocation(NewLocation);
+		const int32 OldXIndex = GridLocation.XIndex;
+		const int32 OldYIndex = GridLocation.YIndex;
+		Grid[OldXIndex][OldYIndex]->SetEntityPawn(nullptr);
 	
-	EntityPawn->SetServerGridLocation(FBNGridLocation(NewXIndex, NewYIndex));
+		PanelActor->SetEntityPawn(EntityPawn);
+	
+		const FVector NewLocation = PanelActor->GetActorLocation();
+		EntityPawn->SetActorLocation(NewLocation);
+	
+		EntityPawn->SetServerGridLocation(FBNGridLocation(NewXIndex, NewYIndex));
+	}
 }
 
 void ABNGridActor::SpawnPanel(const int32 XIndex, const int32 YIndex)

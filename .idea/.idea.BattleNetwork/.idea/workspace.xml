@@ -8,8 +8,7 @@
     <list default="true" id="3a52d9cf-7bf8-4d2a-aa80-642cf49081c1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BattleNetwork/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BattleNetwork/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Private/Actors/BNGridActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Private/Actors/BNGridActor.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Private/GameModes/BNGameModeBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Private/GameModes/BNGameModeBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Public/Actors/BNGridActor.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Public/Actors/BNGridActor.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Private/Pawns/BNEntityPawn.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Private/Pawns/BNEntityPawn.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +154,7 @@
       <option name="presentableId" value="Default" />
       <updated>1666306239230</updated>
       <workItem from="1666306247178" duration="5505000" />
-      <workItem from="1666395406341" duration="5394000" />
+      <workItem from="1666395406341" duration="5914000" />
     </task>
     <servers />
   </component>
@@ -177,16 +176,5 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Source/BattleNetwork/Private/GameModes/BNGameModeBase.cpp</url>
-          <line>15</line>
-          <option name="timeStamp" value="18" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
