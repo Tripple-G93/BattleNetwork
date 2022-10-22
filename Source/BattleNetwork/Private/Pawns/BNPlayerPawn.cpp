@@ -3,6 +3,7 @@
 
 #include "Pawns/BNPlayerPawn.h"
 
+#include "PaperFlipbookComponent.h"
 #include "ActorComponents/BNAbilitySystemComponent.h"
 #include "PlayerStates/BNPlayerState.h"
 
@@ -39,8 +40,10 @@ void ABNPlayerPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
 		{
 			if(MoveEntityLeftRPC_Validate())
 			{
-				//MoveEntityLeftRPC_Implementation();
-				MoveEntityLeftRPC(); 
+				bCanMove = false;
+				UpdateMoveAnimationRPC();
+				UpdateMoveAnimationRPC_Implementation();
+				PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::CallMoveEntityLeftRPC);
 			}
 		}
 		else if(Value > 0)

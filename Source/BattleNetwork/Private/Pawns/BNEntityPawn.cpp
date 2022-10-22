@@ -85,7 +85,8 @@ FBNGridLocation ABNEntityPawn::GetServerGridLocation() const
 void ABNEntityPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::UpdateAnimation);
 }
 
 void ABNEntityPawn::MoveEntity()
@@ -98,42 +99,42 @@ void ABNEntityPawn::MoveEntity()
 
 		GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex - 1, ServerGridLocation.YIndex);
 	}
-
-	UpdateToIdleAnimation();
+	
 }
 
-void ABNEntityPawn::UpdateToIdleAnimation()
+void ABNEntityPawn::CallMoveEntityLeftRPC()
+{
+	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::CallMoveEntityLeftRPC);
+
+	MoveEntityLeftRPC();
+}
+
+void ABNEntityPawn::UpdateAnimation()
 {
 	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
-	CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, FGameplayTag::RequestGameplayTag(FName("Entity.Idle")));
+CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, FGameplayTag::RequestGameplayTag(FName("Entity.Idle")));
 	PaperFlipbookComponent->SetFlipbook(CurrentFlipbookAnimationTableInfoRow->PaperFlipbook);
-	PaperFlipbookComponent->SetLooping(true);
+	PaperFlipbookComponent->SetLooping(CurrentFlipbookAnimationTableInfoRow->bDoesLoop);
 	PaperFlipbookComponent->PlayFromStart();
-
-	bCanMove = true;
 }
 
 /*
  * Server RPC
  */
 
+void ABNEntityPawn::UpdateMoveAnimationRPC_Implementation()
+{
+	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
+	CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, FGameplayTag::RequestGameplayTag(FName("Entity.Move")));
+	
+	PaperFlipbookComponent->SetFlipbook(CurrentFlipbookAnimationTableInfoRow->PaperFlipbook);
+	PaperFlipbookComponent->SetLooping(CurrentFlipbookAnimationTableInfoRow->bDoesLoop);
+	PaperFlipbookComponent->PlayFromStart();	
+}
+
 void ABNEntityPawn::MoveEntityLeftRPC_Implementation()
 {
-	if(bCanMove)
-	{
-		bCanMove = false;
-		
-		GetAbilitySystemComponent()->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Entity.Move.Left")));
-
-		CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
-		CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, FGameplayTag::RequestGameplayTag(FName("Entity.Move")));
-
-		PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::MoveEntity);
-	
-		PaperFlipbookComponent->SetFlipbook(CurrentFlipbookAnimationTableInfoRow->PaperFlipbook);
-		PaperFlipbookComponent->SetLooping(false);
-		PaperFlipbookComponent->PlayFromStart();
-	}
+	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex - 1, ServerGridLocation.YIndex);
 }
 
 bool ABNEntityPawn::MoveEntityLeftRPC_Validate()

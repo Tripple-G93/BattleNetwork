@@ -7,8 +7,11 @@
   <component name="ChangeListManager">
     <list default="true" id="3a52d9cf-7bf8-4d2a-aa80-642cf49081c1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BattleNetwork/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BattleNetwork/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Private/Actors/BNGridActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Private/Actors/BNGridActor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BattleNetwork/Miscellaneous/DT_MegaManAnimation.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleNetwork/Miscellaneous/DT_MegaManAnimation.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Private/Pawns/BNEntityPawn.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Private/Pawns/BNEntityPawn.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Private/Pawns/BNPlayerPawn.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Private/Pawns/BNPlayerPawn.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Public/Pawns/BNEntityPawn.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Public/Pawns/BNEntityPawn.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Public/Tables/BNFlipbookAnimationTable.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Public/Tables/BNFlipbookAnimationTable.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -154,7 +157,7 @@
       <option name="presentableId" value="Default" />
       <updated>1666306239230</updated>
       <workItem from="1666306247178" duration="5505000" />
-      <workItem from="1666395406341" duration="5914000" />
+      <workItem from="1666395406341" duration="7727000" />
     </task>
     <servers />
   </component>

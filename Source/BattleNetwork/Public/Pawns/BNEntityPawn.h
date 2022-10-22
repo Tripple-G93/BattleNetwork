@@ -74,12 +74,18 @@ protected:
 	void MoveEntity();
 
 	UFUNCTION()
-	void UpdateToIdleAnimation();
+	void CallMoveEntityLeftRPC();
+
+	UFUNCTION()
+	void UpdateAnimation();
 
 	/*
 	 * Server
 	 */
 
+	UFUNCTION(Server, Unreliable)
+	void UpdateMoveAnimationRPC();
+	
 	UFUNCTION(Server, Reliable, WithValidation)
 	void MoveEntityLeftRPC();
 
