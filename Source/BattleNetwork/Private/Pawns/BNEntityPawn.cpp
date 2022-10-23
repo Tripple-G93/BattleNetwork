@@ -97,19 +97,6 @@ CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, FGameplayTag::Requ
 	PaperFlipbookComponent->PlayFromStart();
 }
 
-void ABNEntityPawn::MoveEntity()
-{
-	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::MoveEntity);
-
-	if(AbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Entity.Move.Left"))))
-	{
-		AbilitySystemComponent->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Entity.Move.Left")));
-
-		GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex - 1, ServerGridLocation.YIndex);
-	}
-	
-}
-
 void ABNEntityPawn::ClientCallMoveEntityLeftRPC()
 {
 	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityLeftRPC);

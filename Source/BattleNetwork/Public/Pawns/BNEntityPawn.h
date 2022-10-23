@@ -72,9 +72,6 @@ protected:
 
 	UFUNCTION()
 	void UpdateAnimation();
-	
-	UFUNCTION()
-	void MoveEntity();
 
 	UFUNCTION()
 	void ClientCallMoveEntityLeftRPC();
