@@ -3,9 +3,12 @@
 
 #include "Pawns/BNEntityPawn.h"
 
+#include "AbilitySystemComponent.h"
+#include "ActorComponents/BNAbilitySystemComponent.h"
 #include "Actors/BNGridActor.h"
-#include "PaperFlipbookComponent.h"
 #include "Components/SceneComponent.h"
+#include "Objects/BNUtilityStatics.h"
+#include "PaperFlipbookComponent.h"
 #include "Net/UnrealNetwork.h"
 
 ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -21,7 +24,7 @@ ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Supe
 	PaperFlipbookComponent->bReplicatePhysicsToAutonomousProxy = false;
 	PaperFlipbookComponent->SetIsReplicated(true);
 
-	bCanNotMove = false;
+	bCanMove = true;
 }
 
 void ABNEntityPawn::FlipEntity() const
@@ -38,8 +41,7 @@ void ABNEntityPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 
 	DOREPLIFETIME(ABNEntityPawn, TeamTag);
 	DOREPLIFETIME(ABNEntityPawn, GridActorReference);
-	DOREPLIFETIME(ABNEntityPawn, XIndex);
-	DOREPLIFETIME(ABNEntityPawn, YIndex);
+	DOREPLIFETIME(ABNEntityPawn, ServerGridLocation);
 }
 
 /*
@@ -56,70 +58,90 @@ void ABNEntityPawn::SetTeamTag(FGameplayTag NewTeamTag)
 	TeamTag = NewTeamTag;
 }
 
-void ABNEntityPawn::SetNewXIndexPosition(const int32 NewXIndex)
+void ABNEntityPawn::SetServerGridLocation(FBNGridLocation NewServerGridLocation)
 {
-	XIndex = NewXIndex;
+	ServerGridLocation = NewServerGridLocation;
 }
-
-void ABNEntityPawn::SetNewYIndexPosition(const int32 NewYIndex)
-{
-	YIndex = NewYIndex;
-}
-
-/*
- * End Setters
- */
 
 /*
  * Getters
  */
-
-int32 ABNEntityPawn::GetXIndexPosition() const
-{
-	return XIndex;
-}
-
-int32 ABNEntityPawn::GetYIndexPosition() const
-{
-	return YIndex;
-}
 
 FGameplayTag ABNEntityPawn::GetTeamTag() const
 {
 	return TeamTag;
 }
 
+FBNGridLocation ABNEntityPawn::GetServerGridLocation() const
+{
+	return ServerGridLocation;
+}
+
 /*
  * End Getters
  */
 
-// Called when the game starts or when spawned
 void ABNEntityPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::UpdateAnimation);
 }
 
-void ABNEntityPawn::DisableEntityMovement()
+void ABNEntityPawn::UpdateAnimation()
 {
-	bCanNotMove = true;
-	// TODO BN: Right now the value is hard coded and will need to be changed to the speed attribute once that is set up
-	GetWorldTimerManager().SetTimer(EnableEntityMovementTimerHandler, this, &ABNEntityPawn::EnableEntityMovement, 0.5f);
+	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
+CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, FGameplayTag::RequestGameplayTag(FName("Entity.Idle")));
+	PaperFlipbookComponent->SetFlipbook(CurrentFlipbookAnimationTableInfoRow->PaperFlipbook);
+	PaperFlipbookComponent->SetLooping(CurrentFlipbookAnimationTableInfoRow->bDoesLoop);
+	PaperFlipbookComponent->PlayFromStart();
 }
 
-void ABNEntityPawn::EnableEntityMovement()
+void ABNEntityPawn::ClientCallMoveEntityLeftRPC()
 {
-	bCanNotMove = false;
-	GetWorldTimerManager().ClearTimer(EnableEntityMovementTimerHandler);
+	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityLeftRPC);
+
+	MoveEntityLeftRPC();
+}
+
+void ABNEntityPawn::ClientCallMoveEntityRightRPC()
+{
+	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityRightRPC);
+
+	MoveEntityRightRPC();
+}
+
+void ABNEntityPawn::ClientCallMoveEntityUpRPC()
+{
+	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityUpRPC);
+
+	MoveEntityUpRPC();
+}
+
+void ABNEntityPawn::ClientCallMoveEntityDownRPC()
+{
+	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityDownRPC);
+
+	MoveEntityDownRPC();
 }
 
 /*
  * Server RPC
  */
 
+void ABNEntityPawn::UpdateMoveAnimationRPC_Implementation()
+{
+	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
+	CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, FGameplayTag::RequestGameplayTag(FName("Entity.Move")));
+	
+	PaperFlipbookComponent->SetFlipbook(CurrentFlipbookAnimationTableInfoRow->PaperFlipbook);
+	PaperFlipbookComponent->SetLooping(CurrentFlipbookAnimationTableInfoRow->bDoesLoop);
+	PaperFlipbookComponent->PlayFromStart();	
+}
+
 void ABNEntityPawn::MoveEntityLeftRPC_Implementation()
 {
-	GridActorReference->MoveEntityToNewPanel(this, XIndex - 1, YIndex);
+	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex - 1, ServerGridLocation.YIndex);
 }
 
 bool ABNEntityPawn::MoveEntityLeftRPC_Validate()
@@ -129,7 +151,7 @@ bool ABNEntityPawn::MoveEntityLeftRPC_Validate()
 
 void ABNEntityPawn::MoveEntityRightRPC_Implementation()
 {
-	GridActorReference->MoveEntityToNewPanel(this, XIndex + 1, YIndex);
+	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex + 1, ServerGridLocation.YIndex);
 }
 
 bool ABNEntityPawn::MoveEntityRightRPC_Validate()
@@ -139,7 +161,7 @@ bool ABNEntityPawn::MoveEntityRightRPC_Validate()
 
 void ABNEntityPawn::MoveEntityUpRPC_Implementation()
 {
-	GridActorReference->MoveEntityToNewPanel(this, XIndex, YIndex - 1);
+	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex, ServerGridLocation.YIndex - 1);
 }
 
 bool ABNEntityPawn::MoveEntityUpRPC_Validate()
@@ -149,10 +171,24 @@ bool ABNEntityPawn::MoveEntityUpRPC_Validate()
 
 void ABNEntityPawn::MoveEntityDownRPC_Implementation()
 {
-	GridActorReference->MoveEntityToNewPanel(this, XIndex, YIndex + 1);
+	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex, ServerGridLocation.YIndex + 1);
 }
 
 bool ABNEntityPawn::MoveEntityDownRPC_Validate()
 {
 	return GridActorReference->CanEntityMoveDown(this);
+}
+
+/*
+ * REP_Notify
+ */
+
+void ABNEntityPawn::OnRep_UpdateClientLocation()
+{
+	// TODO BN: This check exist because of spawning and replication issues at the beginning of the game remove when fixed
+	if(GridActorReference)
+	{
+		GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex, ServerGridLocation.YIndex);
+	}
+	bCanMove = true;
 }

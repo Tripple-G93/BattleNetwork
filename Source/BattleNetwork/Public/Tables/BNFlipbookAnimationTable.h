@@ -22,6 +22,9 @@ struct FBNFlipbookAnimationTableInfoRow : public FTableRowBase
 	TObjectPtr<UPaperFlipbook> PaperFlipbook;
 
 	UPROPERTY(EditDefaultsOnly)
+	bool bDoesLoop;
+
+	UPROPERTY(EditDefaultsOnly)
 	FGameplayTag AnimationGameplayTag;
 
 	UPROPERTY(EditDefaultsOnly)

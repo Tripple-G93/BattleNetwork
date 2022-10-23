@@ -3,8 +3,9 @@
 
 #include "Pawns/BNPlayerPawn.h"
 
-#include "PlayerStates/BNPlayerState.h"
+#include "PaperFlipbookComponent.h"
 #include "ActorComponents/BNAbilitySystemComponent.h"
+#include "PlayerStates/BNPlayerState.h"
 
 // Sets default values
 ABNPlayerPawn::ABNPlayerPawn(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -33,24 +34,26 @@ void ABNPlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void ABNPlayerPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
 {
-	if(!bCanNotMove)
+	if(bCanMove)
 	{
 		if(Value < 0)
 		{
 			if(MoveEntityLeftRPC_Validate())
 			{
-				DisableEntityMovement();
-				MoveEntityLeftRPC_Implementation();
-				MoveEntityLeftRPC();
+				bCanMove = false;
+				UpdateMoveAnimationRPC();
+				UpdateMoveAnimationRPC_Implementation();
+				PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityLeftRPC);
 			}
 		}
 		else if(Value > 0)
 		{
 			if(MoveEntityRightRPC_Validate())
 			{
-				DisableEntityMovement();
-				MoveEntityRightRPC_Implementation();
-				MoveEntityRightRPC();
+				bCanMove = false;
+				UpdateMoveAnimationRPC();
+				UpdateMoveAnimationRPC_Implementation();
+				PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityRightRPC);
 			}
 		}
 	}
@@ -58,24 +61,26 @@ void ABNPlayerPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
 
 void ABNPlayerPawn::AttemptToMovePlayerEntityVertically(const float Value)
 {
-	if(!bCanNotMove)
+	if(bCanMove)
 	{
 		if(Value > 0)
 		{
 			if(MoveEntityUpRPC_Validate())
 			{
-				DisableEntityMovement();
-				MoveEntityUpRPC_Implementation();
-				MoveEntityUpRPC();
+				bCanMove = false;
+				UpdateMoveAnimationRPC();
+				UpdateMoveAnimationRPC_Implementation();
+				PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityUpRPC);
 			}
 		}
 		else if(Value < 0)
 		{
 			if(MoveEntityDownRPC_Validate())
 			{
-				DisableEntityMovement();
-				MoveEntityDownRPC_Implementation();
-				MoveEntityDownRPC();
+				bCanMove = false;
+				UpdateMoveAnimationRPC();
+				UpdateMoveAnimationRPC_Implementation();
+				PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityDownRPC);
 			}
 		}
 	}
@@ -88,4 +93,3 @@ void ABNPlayerPawn::OnRep_PlayerState()
 
 	InitializePlayerGameplayAbilitySystem();
 }
-

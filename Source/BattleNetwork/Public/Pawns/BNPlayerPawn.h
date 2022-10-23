@@ -14,7 +14,7 @@ class BATTLENETWORK_API ABNPlayerPawn : public ABNEntityPawn
 public:
 	ABNPlayerPawn(const FObjectInitializer& ObjectInitializer);
 
-	virtual void PossessedBy(AController* NewController);
+	virtual void PossessedBy(AController* NewController) override;
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Pawns/BNBasePawn.h"
+#include "Structs/BNStructs.h"
 #include "BNEntityPawn.generated.h"
 
 class ABNGridActor;
@@ -30,18 +31,14 @@ protected:
 	UPROPERTY(Replicated)
 	TObjectPtr<ABNGridActor> GridActorReference;
 	
-	UPROPERTY(Replicated)
-	int32 XIndex;
-
-	UPROPERTY(Replicated)
-	int32 YIndex;
+	UPROPERTY(ReplicatedUsing = OnRep_UpdateClientLocation)
+	FBNGridLocation ServerGridLocation;
 
 	UPROPERTY(Replicated)
 	FGameplayTag TeamTag;
 
-	FTimerHandle EnableEntityMovementTimerHandler;
-	
-	bool bCanNotMove;
+	UPROPERTY()
+	bool bCanMove;
 
 public:
 
@@ -59,28 +56,42 @@ public:
 	
 	void SetTeamTag(FGameplayTag NewTeamTag);
 	
-	void SetNewXIndexPosition(const int32 NewXIndex);
-	void SetNewYIndexPosition(const int32 NewYIndex);
+	void SetServerGridLocation(FBNGridLocation NewServerGridLocation);
 
 	/*
 	 * Getters
 	 */
-	int32 GetXIndexPosition() const;
-	int32 GetYIndexPosition() const;
 
 	FGameplayTag GetTeamTag() const;
+	
+	FBNGridLocation GetServerGridLocation() const;
 
 protected:
 
 	virtual void BeginPlay() override;
 
-	void DisableEntityMovement();
-	void EnableEntityMovement();
+	UFUNCTION()
+	void UpdateAnimation();
+
+	UFUNCTION()
+	void ClientCallMoveEntityLeftRPC();
+
+	UFUNCTION()
+	void ClientCallMoveEntityRightRPC();
+
+	UFUNCTION()
+	void ClientCallMoveEntityUpRPC();
+
+	UFUNCTION()
+	void ClientCallMoveEntityDownRPC();
 
 	/*
 	 * Server
 	 */
 
+	UFUNCTION(Server, Unreliable)
+	void UpdateMoveAnimationRPC();
+	
 	UFUNCTION(Server, Reliable, WithValidation)
 	void MoveEntityLeftRPC();
 
@@ -92,4 +103,11 @@ protected:
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void MoveEntityDownRPC();
+	
+	/*
+	 * OnRep_Notify
+	 */
+
+	UFUNCTION()
+	void OnRep_UpdateClientLocation();
 };
