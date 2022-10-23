@@ -24,5 +24,5 @@ protected:
 	void AttemptToMovePlayerEntityVertically(const float Value);
 	
 	virtual void OnRep_PlayerState() override;
-	
+
 };

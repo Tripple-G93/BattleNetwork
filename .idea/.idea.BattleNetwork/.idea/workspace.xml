@@ -6,7 +6,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3a52d9cf-7bf8-4d2a-aa80-642cf49081c1" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.BattleNetwork/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BattleNetwork/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Public/Pawns/BNPlayerPawn.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Public/Pawns/BNPlayerPawn.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -154,7 +153,7 @@
       <updated>1666306239230</updated>
       <workItem from="1666306247178" duration="5505000" />
       <workItem from="1666395406341" duration="11799000" />
-      <workItem from="1666537648736" duration="710000" />
+      <workItem from="1666537648736" duration="831000" />
     </task>
     <servers />
   </component>
