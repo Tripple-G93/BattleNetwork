@@ -14,7 +14,7 @@ class BATTLENETWORK_API ABNPlayerPawn : public ABNEntityPawn
 public:
 	ABNPlayerPawn(const FObjectInitializer& ObjectInitializer);
 
-	virtual void PossessedBy(AController* NewController);
+	virtual void PossessedBy(AController* NewController) override;
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -24,7 +24,5 @@ protected:
 	void AttemptToMovePlayerEntityVertically(const float Value);
 	
 	virtual void OnRep_PlayerState() override;
-
-	bool bIsMoving;
 	
 };
