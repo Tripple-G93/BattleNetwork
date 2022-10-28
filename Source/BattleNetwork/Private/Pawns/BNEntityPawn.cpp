@@ -88,6 +88,14 @@ void ABNEntityPawn::BeginPlay()
 	PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::UpdateAnimation);
 }
 
+void ABNEntityPawn::EnableMovementIfStandaloneMode()
+{
+	if(GetLocalRole() == ROLE_Authority)
+	{
+		bCanMove = true;
+	}
+}
+
 void ABNEntityPawn::UpdateAnimation()
 {
 	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
@@ -142,6 +150,8 @@ void ABNEntityPawn::UpdateMoveAnimationRPC_Implementation()
 void ABNEntityPawn::MoveEntityLeftRPC_Implementation()
 {
 	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex - 1, ServerGridLocation.YIndex);
+
+	EnableMovementIfStandaloneMode();
 }
 
 bool ABNEntityPawn::MoveEntityLeftRPC_Validate()
@@ -152,6 +162,8 @@ bool ABNEntityPawn::MoveEntityLeftRPC_Validate()
 void ABNEntityPawn::MoveEntityRightRPC_Implementation()
 {
 	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex + 1, ServerGridLocation.YIndex);
+
+	EnableMovementIfStandaloneMode();
 }
 
 bool ABNEntityPawn::MoveEntityRightRPC_Validate()
@@ -162,6 +174,8 @@ bool ABNEntityPawn::MoveEntityRightRPC_Validate()
 void ABNEntityPawn::MoveEntityUpRPC_Implementation()
 {
 	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex, ServerGridLocation.YIndex - 1);
+
+	EnableMovementIfStandaloneMode();
 }
 
 bool ABNEntityPawn::MoveEntityUpRPC_Validate()
@@ -172,6 +186,8 @@ bool ABNEntityPawn::MoveEntityUpRPC_Validate()
 void ABNEntityPawn::MoveEntityDownRPC_Implementation()
 {
 	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex, ServerGridLocation.YIndex + 1);
+
+	EnableMovementIfStandaloneMode();
 }
 
 bool ABNEntityPawn::MoveEntityDownRPC_Validate()

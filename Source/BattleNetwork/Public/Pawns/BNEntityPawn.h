@@ -70,6 +70,8 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	void EnableMovementIfStandaloneMode();
+
 	UFUNCTION()
 	void UpdateAnimation();
 
