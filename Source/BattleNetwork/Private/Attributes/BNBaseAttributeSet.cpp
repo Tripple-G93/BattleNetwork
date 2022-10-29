@@ -187,6 +187,7 @@ void UBNBaseAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UBNBaseAttributeSet, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UBNBaseAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UBNBaseAttributeSet, SpeedPercentRate, COND_None, REPNOTIFY_Always);
 }
 
 void UBNBaseAttributeSet::AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute,
@@ -212,4 +213,9 @@ void UBNBaseAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth)
 void UBNBaseAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UBNBaseAttributeSet, MaxHealth, OldMaxHealth);
+}
+
+void UBNBaseAttributeSet::OnRep_SpeedPercentRate(const FGameplayAttributeData& OldSpeedPercentRate)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UBNBaseAttributeSet, MaxHealth, SpeedPercentRate);
 }

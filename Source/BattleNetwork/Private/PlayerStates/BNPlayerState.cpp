@@ -37,25 +37,14 @@ UBNBaseAttributeSet* ABNPlayerState::GetAttributeSetBase() const
 	return BaseAttributeSet;
 }
 
-float ABNPlayerState::GetHealth() const
-{
-	return BaseAttributeSet->GetHealth();
-}
-
-float ABNPlayerState::GetMaxHealth() const
-{
-	return BaseAttributeSet->GetMaxHealth();
-}
-
 void ABNPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
 
 	if (AbilitySystemComponent)
 	{
-		// Attribute change callbacks
+		// Attribute change callbacks Example
 		HealthChangedDelegateHandle = AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(BaseAttributeSet->GetHealthAttribute()).AddUObject(this, &ABNPlayerState::HealthChanged);
-
 	}
 }
 
