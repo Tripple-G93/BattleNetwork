@@ -7,10 +7,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3a52d9cf-7bf8-4d2a-aa80-642cf49081c1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BattleNetwork/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BattleNetwork/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Private/Attributes/BNBaseAttributeSet.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Private/Attributes/BNBaseAttributeSet.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Private/PlayerStates/BNPlayerState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Private/PlayerStates/BNPlayerState.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Public/Attributes/BNBaseAttributeSet.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Public/Attributes/BNBaseAttributeSet.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Public/PlayerStates/BNPlayerState.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Public/PlayerStates/BNPlayerState.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BattleNetwork/Blueprints/Pawns/BP_BNPlayerPawn.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleNetwork/Blueprints/Pawns/BP_BNPlayerPawn.uasset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,7 +158,8 @@
       <workItem from="1666562649372" duration="1598000" />
       <workItem from="1666918411259" duration="3096000" />
       <workItem from="1667001465203" duration="646000" />
-      <workItem from="1667050608200" duration="760000" />
+      <workItem from="1667050608200" duration="1597000" />
+      <workItem from="1667147081600" duration="1837000" />
     </task>
     <servers />
   </component>
@@ -183,5 +181,12 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="CppProject">
+        <watch expression="this-&gt;ABNEntityPawn" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>
