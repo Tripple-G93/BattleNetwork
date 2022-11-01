@@ -7,7 +7,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3a52d9cf-7bf8-4d2a-aa80-642cf49081c1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BattleNetwork/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BattleNetwork/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BattleNetwork/Blueprints/Pawns/BP_BNPlayerPawn.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleNetwork/Blueprints/Pawns/BP_BNPlayerPawn.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BattleNetwork.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/BattleNetwork.uproject" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,7 +159,12 @@
       <workItem from="1666918411259" duration="3096000" />
       <workItem from="1667001465203" duration="646000" />
       <workItem from="1667050608200" duration="1597000" />
-      <workItem from="1667147081600" duration="1837000" />
+      <workItem from="1667147081600" duration="3842000" />
+      <workItem from="1667151245898" duration="2771000" />
+      <workItem from="1667160660566" duration="836000" />
+      <workItem from="1667173690308" duration="905000" />
+      <workItem from="1667174657028" duration="2914000" />
+      <workItem from="1667339444578" duration="356000" />
     </task>
     <servers />
   </component>
