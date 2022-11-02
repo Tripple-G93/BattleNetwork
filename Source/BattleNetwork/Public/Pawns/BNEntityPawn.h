@@ -8,6 +8,7 @@
 #include "BNEntityPawn.generated.h"
 
 class ABNGridActor;
+class UBNEntityWidgetSceneComponent;
 class UDataTable;
 class UPaperFlipbookComponent;
 class USceneComponent;
@@ -19,14 +20,17 @@ class BATTLENETWORK_API ABNEntityPawn : public ABNBasePawn
 
 protected:
 	
-	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UDataTable> FlipbookAnimationDataTable;
 	
-	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UPaperFlipbookComponent> PaperFlipbookComponent;
 
-	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> SceneComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UBNEntityWidgetSceneComponent> EntityWidgetSceneComponent;
 
 	UPROPERTY(Replicated)
 	TObjectPtr<ABNGridActor> GridActorReference;

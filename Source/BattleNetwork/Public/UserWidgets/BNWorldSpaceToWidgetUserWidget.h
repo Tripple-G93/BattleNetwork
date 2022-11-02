@@ -18,9 +18,6 @@ class BATTLENETWORK_API UBNWorldSpaceToWidgetUserWidget : public UUserWidget
 
 protected:
 
-	//UPROPERTY(meta = (BindWidget))
-	//TObjectPtr<UCanvas> ParentSizeBox;
-
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 public:
