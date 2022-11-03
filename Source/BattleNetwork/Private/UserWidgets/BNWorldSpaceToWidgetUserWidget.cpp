@@ -10,39 +10,37 @@ void UBNWorldSpaceToWidgetUserWidget::NativeTick(const FGeometry& MyGeometry, fl
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 
-	RemoveFromParentIfNotValid();
-
-	SetScreenPositionFromWorldSpace();
+	if(ensure(AttachedSceneComponent) && ensure(AttachedActor))
+	{
+		SetScreenPositionFromWorldSpace();
+	}
 }
 
-void UBNWorldSpaceToWidgetUserWidget::RemoveFromParentIfNotValid()
+void UBNWorldSpaceToWidgetUserWidget::SetAttachedActor(AActor* OwningActor)
 {
-	if (!IsValid(AttachedActor))
-	{
-		RemoveFromParent();
+	AttachedActor = OwningActor;
+}
 
-		UE_LOG(LogTemp, Warning, TEXT("AttachedActor no longer valid, removing Health Widget."));
-		return;
-	}
+void UBNWorldSpaceToWidgetUserWidget::SetAttachedComponent(USceneComponent* SceneComponent)
+{
+	AttachedSceneComponent = SceneComponent;
 }
 
 void UBNWorldSpaceToWidgetUserWidget::SetScreenPositionFromWorldSpace()
 {
 	FVector2D ScreenPosition;
-	bool bIsOnScreen = UGameplayStatics::ProjectWorldToScreen(GetOwningPlayer(), AttachedActor->GetActorLocation() + WorldOffset, ScreenPosition);
+	FVector Widget3DLocation =  AttachedActor->GetActorLocation() + AttachedSceneComponent->GetRelativeLocation();
+	bool bIsOnScreen = UGameplayStatics::ProjectWorldToScreen(GetOwningPlayer(), Widget3DLocation + WorldOffset, ScreenPosition);
 
 	if (bIsOnScreen)
 	{
 		const float Scale = UWidgetLayoutLibrary::GetViewportScale(this);
-
 		ScreenPosition /= Scale;
 
-		//ParentSizeBox->
-		//if (ParentSizeBox)
-		{
-			//ParentSizeBox->SetRenderTranslation(ScreenPosition);
-			SetRenderTranslation(ScreenPosition);
-		}
+		FVector2d OverlaySize = Overlay->GetDesiredSize();
+		ScreenPosition.X -= OverlaySize.X / 2;
+		
+		SetRenderTranslation(ScreenPosition);
 	}
 
 	UpdateVisibility(bIsOnScreen);

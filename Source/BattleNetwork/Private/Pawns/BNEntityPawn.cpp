@@ -31,12 +31,15 @@ ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Supe
 	bCanMove = true;
 }
 
-void ABNEntityPawn::FlipEntity() const
+void ABNEntityPawn::FlipEntity()
 {
 	FVector LocationOffset = PaperFlipbookComponent->GetRelativeLocation();
 	LocationOffset.Y *= -1;
-
 	PaperFlipbookComponent->SetRelativeLocation(LocationOffset);
+
+	LocationOffset = EntityWidgetSceneComponent->GetRelativeLocation();
+	LocationOffset.X *= -1;
+	EntityWidgetSceneComponent->SetRelativeLocation(LocationOffset);
 }
 
 void ABNEntityPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -89,6 +92,11 @@ void ABNEntityPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if(TeamTag == FGameplayTag::RequestGameplayTag("Team2"))
+	{
+		FlipEntity();
+	}
+	
 	PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::UpdateAnimation);
 }
 

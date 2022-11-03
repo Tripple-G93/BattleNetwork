@@ -48,7 +48,7 @@ public:
 
 	ABNEntityPawn(const FObjectInitializer& ObjectInitializer);
 
-	void FlipEntity() const;
+	void FlipEntity();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	

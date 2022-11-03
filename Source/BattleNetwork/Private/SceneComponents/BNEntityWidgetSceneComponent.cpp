@@ -12,8 +12,6 @@ UBNEntityWidgetSceneComponent::UBNEntityWidgetSceneComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-
-
 }
 
 
@@ -23,7 +21,6 @@ void UBNEntityWidgetSceneComponent::BeginPlay()
 	Super::BeginPlay();
 
 	InitializeEntityUserWidget();
-	
 }
 
 void UBNEntityWidgetSceneComponent::InitializeEntityUserWidget()
@@ -33,7 +30,8 @@ void UBNEntityWidgetSceneComponent::InitializeEntityUserWidget()
 		ensure(EntityUserWidget == nullptr);
 
 		EntityUserWidget = CreateWidget<UBNEntityUserWidget>(GetWorld(), EntityUserWidgetClass);
-		EntityUserWidget->AttachedActor = GetOwner();
+		EntityUserWidget->SetAttachedActor(GetOwner());		
+		EntityUserWidget->SetAttachedComponent(this);
 		EntityUserWidget->AddToViewport();
 
 		// TODO BN: We want to initialize the widget function here or by the widget class itself
