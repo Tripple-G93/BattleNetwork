@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/SceneComponent.h"
 #include "Engine/World.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Net/UnrealNetwork.h"
 
 // Sets default values
@@ -19,9 +20,12 @@ ABNGridActor::ABNGridActor(const FObjectInitializer& ObjectInitializer) : Super(
 	
 	SceneComponent = ObjectInitializer.CreateDefaultSubobject<USceneComponent>(this, TEXT("SceneComponent"));
 	SetRootComponent(SceneComponent);
+
+	SpringArmComponent = ObjectInitializer.CreateDefaultSubobject<USpringArmComponent>(this, TEXT("SpringArmComponent"));
+	SpringArmComponent->SetupAttachment(SceneComponent);
 	
 	CameraComponent = ObjectInitializer.CreateDefaultSubobject<UCameraComponent>(this, TEXT("CameraComponent"));
-	CameraComponent->SetupAttachment(SceneComponent);
+	CameraComponent->SetupAttachment(SpringArmComponent);
 	
 	GridWidth = 6;
 	GridHeight = 3;
@@ -86,7 +90,7 @@ void ABNGridActor::SpawnPlayer2_Implementation(APlayerController* PlayerControll
 		PlayerController->Possess(Player);
 		PlayerController->SetViewTarget(this);
 		Panel->SetEntityPawn(Player);
-		Player->FlipEntity();
+		//Player->FlipEntity();
 		Player->SetTeamTag(FGameplayTag::RequestGameplayTag("Team2"));
 		Player->SetGridActorReference(this);
 		Player->SetServerGridLocation(FBNGridLocation(CenterX, CenterY));
@@ -149,7 +153,7 @@ bool ABNGridActor::CanEntityMoveUp(const ABNEntityPawn* EntityPawn)
 	const int32 XIndex = GridLocation.XIndex;
 	const int32 YIndex = GridLocation.YIndex;
 	
-	return YIndex > 0 && Grid[XIndex][YIndex - 1]->GetEntityPawn() == nullptr;
+	return YIndex < GridHeight - 1 && Grid[XIndex][YIndex + 1]->GetEntityPawn() == nullptr; 
 }
 
 bool ABNGridActor::CanEntityMoveDown(const ABNEntityPawn* EntityPawn)
@@ -159,7 +163,7 @@ bool ABNGridActor::CanEntityMoveDown(const ABNEntityPawn* EntityPawn)
 	const int32 XIndex = GridLocation.XIndex;
 	const int32 YIndex = GridLocation.YIndex;
 
-	return YIndex < GridHeight - 1 && Grid[XIndex][YIndex + 1]->GetEntityPawn() == nullptr;
+	return YIndex > 0 && Grid[XIndex][YIndex - 1]->GetEntityPawn() == nullptr;
 }
 
 void ABNGridActor::MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXIndex, int32 NewYIndex)
@@ -185,7 +189,7 @@ void ABNGridActor::MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXInd
 
 void ABNGridActor::SpawnPanel(const int32 XIndex, const int32 YIndex)
 {
-	const FVector Location(XIndex * PanelSpacingWidth, YIndex * PanelSpacingHeight, 0);
+	const FVector Location(XIndex * PanelSpacingWidth, 0, YIndex * PanelSpacingHeight);
 	const FRotator Rotation;
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.Owner = this;

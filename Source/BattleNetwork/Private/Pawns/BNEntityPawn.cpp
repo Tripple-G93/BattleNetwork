@@ -177,7 +177,7 @@ bool ABNEntityPawn::MoveEntityRightRPC_Validate()
 
 void ABNEntityPawn::MoveEntityUpRPC_Implementation()
 {
-	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex, ServerGridLocation.YIndex - 1);
+	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex, ServerGridLocation.YIndex + 1);
 
 	EnableMovementIfStandaloneMode();
 }
@@ -189,7 +189,7 @@ bool ABNEntityPawn::MoveEntityUpRPC_Validate()
 
 void ABNEntityPawn::MoveEntityDownRPC_Implementation()
 {
-	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex, ServerGridLocation.YIndex + 1);
+	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex, ServerGridLocation.YIndex - 1);
 
 	EnableMovementIfStandaloneMode();
 }

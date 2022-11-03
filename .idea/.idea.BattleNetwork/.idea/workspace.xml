@@ -7,7 +7,15 @@
   <component name="ChangeListManager">
     <list default="true" id="3a52d9cf-7bf8-4d2a-aa80-642cf49081c1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BattleNetwork/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BattleNetwork/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BattleNetwork/Blueprints/Actors/BP_BNGridActor.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleNetwork/Blueprints/Actors/BP_BNGridActor.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BattleNetwork/Blueprints/Actors/BP_BNPanelActor.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleNetwork/Blueprints/Actors/BP_BNPanelActor.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BattleNetwork/Blueprints/Pawns/BP_BNPlayerPawn.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleNetwork/Blueprints/Pawns/BP_BNPlayerPawn.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BattleNetwork/Sprites/MegaMan/T_MegaMan.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleNetwork/Sprites/MegaMan/T_MegaMan.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BattleNetwork/Sprites/Miscellaneous/Panels.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BattleNetwork/Sprites/Miscellaneous/Panels.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Private/Actors/BNGridActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Private/Actors/BNGridActor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Private/Pawns/BNEntityPawn.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Private/Pawns/BNEntityPawn.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Public/Actors/BNGridActor.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Public/Actors/BNGridActor.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,6 +174,8 @@
       <workItem from="1667174657028" duration="2914000" />
       <workItem from="1667339444578" duration="5979000" />
       <workItem from="1667400728053" duration="2254000" />
+      <workItem from="1667437018115" duration="1530000" />
+      <workItem from="1667490194714" duration="2200000" />
     </task>
     <servers />
   </component>
