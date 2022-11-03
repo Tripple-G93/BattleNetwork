@@ -12,6 +12,7 @@ class ABNPanelActor;
 class ABNPlayerPawn;
 class UCameraComponent;
 class USceneComponent;
+class USpringArmComponent;
 
 USTRUCT()
 struct FBNPannel2DArray {
@@ -51,6 +52,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USceneComponent> SceneComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USpringArmComponent> SpringArmComponent;
 
 	UPROPERTY(Replicated)
 	TArray<FBNPannel2DArray> Grid;

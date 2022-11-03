@@ -44,6 +44,10 @@ public:
 	FGameplayAttributeData Damage;
 	ATTRIBUTE_ACCESSORS(UBNBaseAttributeSet, Damage)
 
+	UPROPERTY(BlueprintReadOnly, Category = "Rates", ReplicatedUsing = OnRep_SpeedPercentRate)
+	FGameplayAttributeData SpeedPercentRate;
+	ATTRIBUTE_ACCESSORS(UBNBaseAttributeSet, SpeedPercentRate)
+	
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -63,4 +67,7 @@ protected:
 
 	UFUNCTION()
 	virtual void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth);
+
+	UFUNCTION()
+	virtual void OnRep_SpeedPercentRate(const FGameplayAttributeData& OldSpeedPercentRate);
 };

@@ -10,6 +10,7 @@
 #include "Objects/BNUtilityStatics.h"
 #include "PaperFlipbookComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "SceneComponents/BNEntityWidgetSceneComponent.h"
 
 ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -24,6 +25,9 @@ ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Supe
 	PaperFlipbookComponent->bReplicatePhysicsToAutonomousProxy = false;
 	PaperFlipbookComponent->SetIsReplicated(true);
 
+	EntityWidgetSceneComponent = ObjectInitializer.CreateDefaultSubobject<UBNEntityWidgetSceneComponent>(this, TEXT("EntityWidgetSceneComponent"));
+	EntityWidgetSceneComponent->SetupAttachment(PaperFlipbookComponent);
+	
 	bCanMove = true;
 }
 
@@ -173,7 +177,7 @@ bool ABNEntityPawn::MoveEntityRightRPC_Validate()
 
 void ABNEntityPawn::MoveEntityUpRPC_Implementation()
 {
-	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex, ServerGridLocation.YIndex - 1);
+	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex, ServerGridLocation.YIndex + 1);
 
 	EnableMovementIfStandaloneMode();
 }
@@ -185,7 +189,7 @@ bool ABNEntityPawn::MoveEntityUpRPC_Validate()
 
 void ABNEntityPawn::MoveEntityDownRPC_Implementation()
 {
-	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex, ServerGridLocation.YIndex + 1);
+	GridActorReference->MoveEntityToNewPanel(this, ServerGridLocation.XIndex, ServerGridLocation.YIndex - 1);
 
 	EnableMovementIfStandaloneMode();
 }

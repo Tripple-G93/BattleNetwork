@@ -7,8 +7,7 @@
   <component name="ChangeListManager">
     <list default="true" id="3a52d9cf-7bf8-4d2a-aa80-642cf49081c1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BattleNetwork/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BattleNetwork/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Private/Pawns/BNEntityPawn.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Private/Pawns/BNEntityPawn.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Public/Pawns/BNEntityPawn.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Public/Pawns/BNEntityPawn.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/BattleNetwork/Private/Actors/BNGridActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/BattleNetwork/Private/Actors/BNGridActor.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,6 +156,18 @@
       <workItem from="1666395406341" duration="11799000" />
       <workItem from="1666537648736" duration="831000" />
       <workItem from="1666562649372" duration="1598000" />
+      <workItem from="1666918411259" duration="3096000" />
+      <workItem from="1667001465203" duration="646000" />
+      <workItem from="1667050608200" duration="1597000" />
+      <workItem from="1667147081600" duration="3842000" />
+      <workItem from="1667151245898" duration="2771000" />
+      <workItem from="1667160660566" duration="836000" />
+      <workItem from="1667173690308" duration="905000" />
+      <workItem from="1667174657028" duration="2914000" />
+      <workItem from="1667339444578" duration="5979000" />
+      <workItem from="1667400728053" duration="2254000" />
+      <workItem from="1667437018115" duration="1530000" />
+      <workItem from="1667490194714" duration="3474000" />
     </task>
     <servers />
   </component>
@@ -178,5 +189,12 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="CppProject">
+        <watch expression="this-&gt;ABNEntityPawn" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

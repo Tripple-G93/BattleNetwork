@@ -44,16 +44,6 @@ public:
 
 	UBNBaseAttributeSet* GetAttributeSetBase() const;
 
-	/**
-* Getters for attributes from GDAttributeSetBase. Returns Current Value unless otherwise specified.
-*/
-
-	UFUNCTION(BlueprintCallable, Category = "GASShooter|GSPlayerState|Attributes")
-	float GetHealth() const;
-
-	UFUNCTION(BlueprintCallable, Category = "GASShooter|GSPlayerState|Attributes")
-	float GetMaxHealth() const;
-
 protected:
 
 	// Called when the game starts or when spawned
