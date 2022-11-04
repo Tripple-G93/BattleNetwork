@@ -86,14 +86,5 @@ protected:
 	virtual void AddStartupEffects();
 
 	void InitializePlayerGameplayAbilitySystem();
-
-	/**
-	* Setters for Attributes. Only use these in special cases like Respawning, otherwise use a GE to change Attributes.
-	* These change the Attribute's Base Value.
-	*/
-
-	//virtual void SetHealth(float Health);
-	//virtual void SetMana(float Mana);
-	//virtual void SetStamina(float Stamina);
-	//virtual void SetShield(float Shield);
+	
 };

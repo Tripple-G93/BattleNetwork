@@ -167,16 +167,5 @@ void ABNBasePawn::InitializePlayerGameplayAbilitySystem()
 		AddStartupEffects();
 
 		AddCharacterAbilities();
-
-		/*
-		if (AbilitySystemComponent->GetTagCount(DeadTag) > 0)
-		{
-			// Set Health/Mana/Stamina to their max. This is only necessary for *Respawn*.
-			SetHealth(GetMaxHealth());
-			SetMana(GetMaxMana());
-			SetStamina(GetMaxStamina());
-			SetShield(GetMaxShield());
-		}
-		*/
 	}
 }

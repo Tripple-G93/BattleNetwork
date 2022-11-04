@@ -14,13 +14,6 @@ UBNEntityWidgetSceneComponent::UBNEntityWidgetSceneComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-
-// Called when the game starts
-void UBNEntityWidgetSceneComponent::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
 void UBNEntityWidgetSceneComponent::InitializeEntityUserWidget()
 {
 	if(ensure(EntityUserWidgetClass))
