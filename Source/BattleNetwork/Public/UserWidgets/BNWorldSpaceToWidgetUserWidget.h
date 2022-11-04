@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/Overlay.h"
 #include "BNWorldSpaceToWidgetUserWidget.generated.h"
 
-class UCanvas;
+class UOverlay;
+class USceneComponent;
 
 /**
  * 
@@ -18,21 +20,27 @@ class BATTLENETWORK_API UBNWorldSpaceToWidgetUserWidget : public UUserWidget
 
 protected:
 
-	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UOverlay> Overlay;
 
-public:
-
-	UPROPERTY(EditAnywhere, Category = "UI")
+	UPROPERTY(EditAnywhere, Category = "BN|UI")
 	FVector WorldOffset;
 
-	UPROPERTY(BlueprintReadWrite, Category = "UI", meta = (ExposeOnSpawn=true))
+	UPROPERTY(BlueprintReadWrite, Category = "BN|UI", meta = (ExposeOnSpawn=true))
 	TObjectPtr<AActor> AttachedActor;
+	
+	UPROPERTY(BlueprintReadWrite, Category = "BN|UI", meta = (ExposeOnSpawn=true))
+	TObjectPtr<USceneComponent> AttachedSceneComponent;
+	
+public:
 
+	void SetAttachedActor(AActor* OwningActor);
+	
+	void SetAttachedComponent(USceneComponent* SceneComponent);
+	
 protected:
 
-	void RemoveFromParentIfNotValid();
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 	void SetScreenPositionFromWorldSpace();
-
-	void UpdateVisibility(const bool bIsOnScreen);
 };

@@ -23,13 +23,9 @@ protected:
 	TSubclassOf<UUserWidget> EntityUserWidgetClass;
 
 public:	
-	// Sets default values for this component's properties
+
 	UBNEntityWidgetSceneComponent();
-
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
+	
 	void InitializeEntityUserWidget();
 
 };

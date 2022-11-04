@@ -90,7 +90,6 @@ void ABNGridActor::SpawnPlayer2_Implementation(APlayerController* PlayerControll
 		PlayerController->Possess(Player);
 		PlayerController->SetViewTarget(this);
 		Panel->SetEntityPawn(Player);
-		Player->FlipEntity();
 		Player->SetTeamTag(FGameplayTag::RequestGameplayTag("Team2"));
 		Player->SetGridActorReference(this);
 		Player->SetServerGridLocation(FBNGridLocation(CenterX, CenterY));

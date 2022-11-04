@@ -20,6 +20,11 @@ UAbilitySystemComponent* ABNBasePawn::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
+UBNBaseAttributeSet* ABNBasePawn::GetBaseAttributeSet() const
+{
+	return AttributeSetBase;
+}
+
 int32 ABNBasePawn::GetAbilityLevel(EGSAbilityInputID AbilityID) const
 {
 	// TODO BN: This is suppose to do something?
@@ -162,16 +167,5 @@ void ABNBasePawn::InitializePlayerGameplayAbilitySystem()
 		AddStartupEffects();
 
 		AddCharacterAbilities();
-
-		/*
-		if (AbilitySystemComponent->GetTagCount(DeadTag) > 0)
-		{
-			// Set Health/Mana/Stamina to their max. This is only necessary for *Respawn*.
-			SetHealth(GetMaxHealth());
-			SetMana(GetMaxMana());
-			SetStamina(GetMaxStamina());
-			SetShield(GetMaxShield());
-		}
-		*/
 	}
 }
