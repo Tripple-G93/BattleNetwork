@@ -42,15 +42,5 @@ void UBNWorldSpaceToWidgetUserWidget::SetScreenPositionFromWorldSpace()
 		
 		SetRenderTranslation(ScreenPosition);
 	}
-
-	UpdateVisibility(bIsOnScreen);
-}
-
-void UBNWorldSpaceToWidgetUserWidget::UpdateVisibility(const bool bIsOnScreen)
-{
-	//if (ParentSizeBox)
-	{
-		//ParentSizeBox->SetVisibility(bIsOnScreen ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Collapsed);
-	}
 }
 

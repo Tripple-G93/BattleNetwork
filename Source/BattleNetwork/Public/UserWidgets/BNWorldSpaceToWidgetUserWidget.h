@@ -40,9 +40,7 @@ public:
 	
 protected:
 
-	void SetScreenPositionFromWorldSpace();
-
-	void UpdateVisibility(const bool bIsOnScreen);
-
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+
+	void SetScreenPositionFromWorldSpace();
 };

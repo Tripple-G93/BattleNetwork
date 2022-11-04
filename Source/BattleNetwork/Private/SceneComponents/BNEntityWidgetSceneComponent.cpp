@@ -19,8 +19,6 @@ UBNEntityWidgetSceneComponent::UBNEntityWidgetSceneComponent()
 void UBNEntityWidgetSceneComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	InitializeEntityUserWidget();
 }
 
 void UBNEntityWidgetSceneComponent::InitializeEntityUserWidget()
@@ -32,10 +30,8 @@ void UBNEntityWidgetSceneComponent::InitializeEntityUserWidget()
 		EntityUserWidget = CreateWidget<UBNEntityUserWidget>(GetWorld(), EntityUserWidgetClass);
 		EntityUserWidget->SetAttachedActor(GetOwner());		
 		EntityUserWidget->SetAttachedComponent(this);
+		EntityUserWidget->InitializeWidgetWithAttributes();
+		EntityUserWidget->InitializeAttributeBindingsToWidget();
 		EntityUserWidget->AddToViewport();
-
-		// TODO BN: We want to initialize the widget function here or by the widget class itself
-		// since we now have the attached actor
-		// We want to also set up the bindings for this widget as well. 
 	}
 }

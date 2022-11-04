@@ -100,6 +100,13 @@ void ABNEntityPawn::BeginPlay()
 	PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::UpdateAnimation);
 }
 
+void ABNEntityPawn::InitializeAttributes()
+{
+	Super::InitializeAttributes();
+
+	EntityWidgetSceneComponent->InitializeEntityUserWidget();
+}
+
 void ABNEntityPawn::EnableMovementIfStandaloneMode()
 {
 	if(GetLocalRole() == ROLE_Authority)

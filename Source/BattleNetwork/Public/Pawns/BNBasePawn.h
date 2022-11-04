@@ -51,6 +51,8 @@ public:
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
+	UBNBaseAttributeSet* GetBaseAttributeSet() const; 
+
 	// Switch on AbilityID to return individual ability levels.
 	UFUNCTION(BlueprintCallable, Category = "GAS|GSCharacter")
 	virtual int32 GetAbilityLevel(EGSAbilityInputID AbilityID) const;

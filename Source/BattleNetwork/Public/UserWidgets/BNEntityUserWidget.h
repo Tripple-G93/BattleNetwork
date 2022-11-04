@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
+#include "GameplayEffectTypes.h"
 #include "UserWidgets/BNWorldSpaceToWidgetUserWidget.h"
 #include "BNEntityUserWidget.generated.h"
 
@@ -25,5 +26,16 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UProgressBar> HealthProgressBar;
+
+	float CachedMaxHealth;
+
+public:
+
+	void InitializeWidgetWithAttributes();
+
+	void InitializeAttributeBindingsToWidget();
+
+protected:
 	
+	virtual void HealthChanged(const FOnAttributeChangeData& Data);
 };

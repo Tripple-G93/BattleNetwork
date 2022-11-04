@@ -20,6 +20,11 @@ UAbilitySystemComponent* ABNBasePawn::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
+UBNBaseAttributeSet* ABNBasePawn::GetBaseAttributeSet() const
+{
+	return AttributeSetBase;
+}
+
 int32 ABNBasePawn::GetAbilityLevel(EGSAbilityInputID AbilityID) const
 {
 	// TODO BN: This is suppose to do something?
