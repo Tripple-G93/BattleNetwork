@@ -4,11 +4,11 @@
 #include "Pawns/BNEntityPawn.h"
 
 #include "AbilitySystemComponent.h"
-#include "ActorComponents/BNAbilitySystemComponent.h"
 #include "Actors/BNGridActor.h"
 #include "Components/SceneComponent.h"
 #include "Objects/BNUtilityStatics.h"
 #include "PaperFlipbookComponent.h"
+#include "Attributes/BNBaseAttributeSet.h"
 #include "Net/UnrealNetwork.h"
 #include "SceneComponents/BNEntityWidgetSceneComponent.h"
 
@@ -105,6 +105,8 @@ void ABNEntityPawn::InitializeAttributes()
 	Super::InitializeAttributes();
 
 	EntityWidgetSceneComponent->InitializeEntityUserWidget();
+
+	PaperFlipbookComponent->SetPlayRate(AttributeSetBase->GetSpeedPercentRate());
 }
 
 void ABNEntityPawn::EnableMovementIfStandaloneMode()
