@@ -27,5 +27,5 @@ public:
 	UBNEntityWidgetSceneComponent();
 	
 	void InitializeEntityUserWidget();
-	
+
 };
