@@ -6,13 +6,12 @@
 UBNGA_FireBullet::UBNGA_FireBullet()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+	
+	FGameplayTag Skill1Tag = FGameplayTag::RequestGameplayTag(FName("Entity.Ability.Skill1"));
+	AbilityTags.AddTag(Skill1Tag);
+	ActivationOwnedTags.AddTag(Skill1Tag);
 
-	// TODO BN: Add the apropriate tag for this
-	//FGameplayTag Ability1Tag = FGameplayTag::RequestGameplayTag(FName("Ability.Skill.Ability1"));
-	//AbilityTags.AddTag(Ability1Tag);
-	//ActivationOwnedTags.AddTag(Ability1Tag);
-
-	//ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Skill")));
+	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Entity.Ability")));
 }
 
 void UBNGA_FireBullet::ActivateAbility(const FGameplayAbilitySpecHandle Handle,

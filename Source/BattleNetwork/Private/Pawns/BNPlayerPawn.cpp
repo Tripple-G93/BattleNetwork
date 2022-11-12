@@ -5,6 +5,7 @@
 
 #include "PaperFlipbookComponent.h"
 #include "ActorComponents/BNAbilitySystemComponent.h"
+#include "BattleNetwork/BattleNetwork.h"
 #include "PlayerStates/BNPlayerState.h"
 
 // Sets default values
@@ -13,6 +14,7 @@ ABNPlayerPawn::ABNPlayerPawn(const FObjectInitializer& ObjectInitializer) : Supe
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	ASCInputBound = false;
 }
 
 void ABNPlayerPawn::PossessedBy(AController* NewController)
@@ -29,6 +31,9 @@ void ABNPlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	InputComponent->BindAxis("Move_Horizontal", this, &ABNPlayerPawn::AttemptToMovePlayerEntityHorizontally);
 	InputComponent->BindAxis("Move_Verticle", this, &ABNPlayerPawn::AttemptToMovePlayerEntityVertically);
+
+	// Bind player input to the AbilitySystemComponent. Also called in SetupPlayerInputComponent because of a potential race condition.
+	BindASCInput();
 
 }
 
@@ -86,10 +91,30 @@ void ABNPlayerPawn::AttemptToMovePlayerEntityVertically(const float Value)
 	}
 }
 
+void ABNPlayerPawn::BindASCInput()
+{
+	if (!ASCInputBound && IsValid(AbilitySystemComponent) && IsValid(InputComponent))
+	{
+		AbilitySystemComponent->BindAbilityActivationToInputComponent(InputComponent, FGameplayAbilityInputBinds(FString("ConfirmTarget"),
+			FString("CancelTarget"), FString("EGSAbilityInputID"), static_cast<int32>(EGSAbilityInputID::Confirm), static_cast<int32>(EGSAbilityInputID::Cancel)));
+
+		ASCInputBound = true;
+	}
+}
+
 // Client only
 void ABNPlayerPawn::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 
 	InitializePlayerGameplayAbilitySystem();
+
+	const ABNPlayerState* BNPlayerState = GetPlayerState<ABNPlayerState>();
+	if(ensure(BNPlayerState))
+	{
+		// Bind player input to the AbilitySystemComponent. Also called in SetupPlayerInputComponent because of a potential race condition.
+		BindASCInput();
+	}
 }
+
+
