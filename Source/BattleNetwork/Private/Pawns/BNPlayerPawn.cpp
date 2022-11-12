@@ -34,7 +34,6 @@ void ABNPlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	// Bind player input to the AbilitySystemComponent. Also called in SetupPlayerInputComponent because of a potential race condition.
 	BindASCInput();
-
 }
 
 void ABNPlayerPawn::AttemptToMovePlayerEntityHorizontally(const float Value)

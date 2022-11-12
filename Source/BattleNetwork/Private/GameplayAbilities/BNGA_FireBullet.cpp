@@ -18,13 +18,15 @@ void UBNGA_FireBullet::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                        const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
                                        const FGameplayEventData* TriggerEventData)
 {
-	/* TODO BN: Implement this
+
 	if (!CommitAbility(Handle, ActorInfo, ActivationInfo))
 	{
 		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, true);
-     		
 	}
 
+	// We want to grab the entity class so we can then grab the fire animation instead of it being set up on this class for setting the paper flipbook 
+
+	/*
 	UAnimMontage* MontageToPlay = FireHipMontage;
 
 	if (GetAbilitySystemComponentFromActorInfo()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.AimDownSights"))) &&
