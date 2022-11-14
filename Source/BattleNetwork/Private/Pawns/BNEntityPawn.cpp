@@ -51,6 +51,12 @@ void ABNEntityPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 	DOREPLIFETIME(ABNEntityPawn, ServerGridLocation);
 }
 
+void ABNEntityPawn::UpdateAnimation(FGameplayTag AnimationTag)
+{
+	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
+CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, AnimationTag);
+}
+
 /*
  * Setters
  */
@@ -70,11 +76,6 @@ void ABNEntityPawn::SetServerGridLocation(FBNGridLocation NewServerGridLocation)
 	ServerGridLocation = NewServerGridLocation;
 }
 
-void ABNEntityPawn::SetCurrentFlipbookAnimationTableInfoRow(FBNFlipbookAnimationTableInfoRow* NewFlipbookAnimationTableInfoRow)
-{
-	CurrentFlipbookAnimationTableInfoRow = NewFlipbookAnimationTableInfoRow;
-}
-
 /*
  * Getters
  */
@@ -89,9 +90,9 @@ FBNGridLocation ABNEntityPawn::GetServerGridLocation() const
 	return ServerGridLocation;
 }
 
-TObjectPtr<FBNFlipbookAnimationTableInfoRow> ABNEntityPawn::GetCurrentFlipbookAnimationTableInfoRow() const
+TObjectPtr<UPaperFlipbookComponent> ABNEntityPawn::GetPaperFlipbookComponent()
 {
-	return CurrentFlipbookAnimationTableInfoRow;
+	return PaperFlipbookComponent;
 }
 
 /*
@@ -107,7 +108,7 @@ void ABNEntityPawn::BeginPlay()
 		FlipEntity();
 	}
 	
-	PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::UpdateAnimation);
+	PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::UpdateIdleAnimation);
 }
 
 void ABNEntityPawn::InitializeAttributes()
@@ -127,7 +128,7 @@ void ABNEntityPawn::EnableMovementIfStandaloneMode()
 	}
 }
 
-void ABNEntityPawn::UpdateAnimation()
+void ABNEntityPawn::UpdateIdleAnimation()
 {
 	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
 CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, FGameplayTag::RequestGameplayTag(FName("Entity.Idle")));

@@ -55,6 +55,8 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
+	virtual void UpdateAnimation(FGameplayTag AnimationTag);
+	
 	/*
 	 * Setters
 	 */
@@ -65,8 +67,6 @@ public:
 	
 	void SetServerGridLocation(FBNGridLocation NewServerGridLocation);
 
-	void SetCurrentFlipbookAnimationTableInfoRow(FBNFlipbookAnimationTableInfoRow* NewFlipbookAnimationTableInfoRow);
-
 	/*
 	 * Getters
 	 */
@@ -75,7 +75,7 @@ public:
 	
 	FBNGridLocation GetServerGridLocation() const;
 
-	TObjectPtr<FBNFlipbookAnimationTableInfoRow> GetCurrentFlipbookAnimationTableInfoRow() const;
+	TObjectPtr<UPaperFlipbookComponent> GetPaperFlipbookComponent();
 
 protected:
 
@@ -86,7 +86,7 @@ protected:
 	void EnableMovementIfStandaloneMode();
 
 	UFUNCTION()
-	void UpdateAnimation();
+	void UpdateIdleAnimation();
 
 	UFUNCTION()
 	void ClientCallMoveEntityLeftRPC();

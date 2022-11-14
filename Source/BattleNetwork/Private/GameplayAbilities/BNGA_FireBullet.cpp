@@ -2,6 +2,7 @@
 
 
 #include "GameplayAbilities/BNGA_FireBullet.h"
+#include "AbilityTasks/BNAT_PlayFlipbookAndWaitForEvent.h"
 
 UBNGA_FireBullet::UBNGA_FireBullet()
 {
@@ -24,27 +25,15 @@ void UBNGA_FireBullet::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, true);
 	}
 
-	// We want to grab the entity class so we can then grab the fire animation instead of it being set up on this class for setting the paper flipbook 
-
-	/*
-	UAnimMontage* MontageToPlay = FireHipMontage;
-
-	if (GetAbilitySystemComponentFromActorInfo()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.AimDownSights"))) &&
-		!GetAbilitySystemComponentFromActorInfo()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.AimDownSights.Removal"))))
-	{
-		MontageToPlay = FireIronsightsMontage;
-	}
-
 	// Play fire montage and wait for event telling us to spawn the projectile
-	UGDAT_PlayMontageAndWaitForEvent* Task = UGDAT_PlayMontageAndWaitForEvent::PlayMontageAndWaitForEvent(this, NAME_None, MontageToPlay, FGameplayTagContainer(), 1.0f, NAME_None, false, 1.0f);
-	Task->OnBlendOut.AddDynamic(this, &UGDGA_FireGun::OnCompleted);
-	Task->OnCompleted.AddDynamic(this, &UGDGA_FireGun::OnCompleted);
-	Task->OnInterrupted.AddDynamic(this, &UGDGA_FireGun::OnCancelled);
-	Task->OnCancelled.AddDynamic(this, &UGDGA_FireGun::OnCancelled);
-	Task->EventReceived.AddDynamic(this, &UGDGA_FireGun::EventReceived);
+	UBNAT_PlayFlipbookAndWaitForEvent* Task = UBNAT_PlayFlipbookAndWaitForEvent::PlayMontageAndWaitForEvent(this, FGameplayTagContainer(), NAME_None);
+	Task->OnCompleted.AddDynamic(this, &UBNGA_FireBullet::OnCompleted);
+	Task->OnInterrupted.AddDynamic(this, &UBNGA_FireBullet::OnCancelled);
+	Task->OnCancelled.AddDynamic(this, &UBNGA_FireBullet::OnCancelled);
+	Task->EventReceived.AddDynamic(this, &UBNGA_FireBullet::EventReceived);
 	// ReadyForActivation() is how you activate the AbilityTask in C++. Blueprint has magic from K2Node_LatentGameplayTaskCall that will automatically call ReadyForActivation().
 	Task->ReadyForActivation();
-	*/
+	
 }
 
 void UBNGA_FireBullet::OnCancelled(FGameplayTag EventTag, FGameplayEventData EventData)

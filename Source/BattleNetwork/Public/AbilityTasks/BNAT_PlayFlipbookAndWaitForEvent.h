@@ -37,30 +37,15 @@ public:
 	/** One of the triggering gameplay events happened */
 	UPROPERTY(BlueprintAssignable)
 	FBNPlayFlipbookAndWaitForEventDelegate EventReceived;
-	
-private:
-	
 
-	/** Montage that is playing */
-	UPROPERTY()
-	UPaperFlipbook* PaperFlipbookToPlay;
+private:
 
 	/** List of tags to match against gameplay events */
 	UPROPERTY()
 	FGameplayTagContainer EventTagContainer;
-
-	/** Playback rate */
-	UPROPERTY()
-	float PaperFlipBookPlayRate;
-
-	/** Should Flipbook be aborted if ability ends */
-	UPROPERTY()
-	bool bStopWhenAbilityEnds;
-
-private:
-
 	
-
+	FDelegateHandle CancelledHandle;
+	FDelegateHandle EventHandle;
 public:
 
 	UBNAT_PlayFlipbookAndWaitForEvent(const FObjectInitializer& ObjectInitializer);
@@ -72,19 +57,13 @@ public:
 	 * OnInterrupted is called if another montage overwrites this, and OnCancelled is called if the ability or task is cancelled
 	 *
 	 * @param TaskInstanceName Set to override the name of this task, for later querying
-	 * @param PaperFlipBookAnimation The Paperflipbook animation to play on the character
 	 * @param EventTags Any gameplay events matching this tag will activate the EventReceived callback. If empty, all events will trigger callback
-	 * @param PlayRate Change to play the fire animation faster
-	 * @param bStopWhenAbilityEnds If true, this paperflipbook will be aborted if the ability ends normally. It is always stopped when the ability is explicitly cancelled
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Ability|Tasks", meta = (HidePin = "OwningAbility", DefaultToSelf = "OwningAbility", BlueprintInternalUseOnly = "TRUE"))
 	static UBNAT_PlayFlipbookAndWaitForEvent* PlayMontageAndWaitForEvent(
 			UGameplayAbility* OwningAbility,
-			FName TaskInstanceName,
-			UPaperFlipbook* PaperFlipBookAnimation,
 			FGameplayTagContainer EventTags,
-			float PlayRate = 1.f,
-			bool bStopWhenAbilityEnd = true);
+			FName TaskInstanceName);
 
 	/**
 	* The Blueprint node for this task, PlayMontageAndWaitForEvent, has some black magic from the plugin that automagically calls Activate()
@@ -92,13 +71,20 @@ public:
 	*/
 	virtual void Activate() override;
 	virtual void ExternalCancel() override;
+	virtual FString GetDebugString() const override;
+	virtual void OnDestroy(bool AbilityEnded) override;
 	
 private:
 
+	bool StopPlayingPaperFlipbook();
+	
 	/** Returns our ability system component */
 	UBNAbilitySystemComponent* GetTargetASC();
-
+	
 	void OnAbilityCancelled();
-	void OnPaperFlipBookAnimationLoopEnded(bool bInterrupted);
+	
+	UFUNCTION()
+	void OnPaperFlipBookAnimationLoopEnded();
+	
 	void OnGameplayEvent(FGameplayTag EventTag, const FGameplayEventData* Payload);
 };

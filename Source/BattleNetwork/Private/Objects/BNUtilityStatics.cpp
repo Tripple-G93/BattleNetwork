@@ -22,6 +22,8 @@ FBNFlipbookAnimationTableInfoRow* UBNUtilityStatics::UpdateAnimation(UDataTable*
 				return Entry;
 			}
 		}
+
+		UE_LOG(LogTemp, Error, TEXT("Unable to find flipbook animation of : %s."), *NewStatus.GetTagName().ToString());
 	}
 
 	return CurrentFlipbookAnimationTableInfoRow;
