@@ -18,6 +18,7 @@ FBNFlipbookAnimationTableInfoRow* UBNUtilityStatics::UpdateAnimation(UDataTable*
 			if (NewStatus == Entry->AnimationGameplayTag)
 			{
 				PaperFlipbookComponent->SetFlipbook(Entry->PaperFlipbook);
+				PaperFlipbookComponent->SetLooping(Entry->bDoesLoop);
 				return Entry;
 			}
 		}

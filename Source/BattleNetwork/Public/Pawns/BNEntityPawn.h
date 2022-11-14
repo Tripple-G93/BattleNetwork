@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Pawns/BNBasePawn.h"
 #include "Structs/BNStructs.h"
+#include "Tables/BNFlipbookAnimationTable.h"
 #include "BNEntityPawn.generated.h"
 
 class ABNGridActor;
@@ -38,6 +39,8 @@ protected:
 	UPROPERTY(ReplicatedUsing = OnRep_UpdateClientLocation)
 	FBNGridLocation ServerGridLocation;
 
+	TObjectPtr<FBNFlipbookAnimationTableInfoRow> CurrentFlipbookAnimationTableInfoRow;
+
 	UPROPERTY(Replicated)
 	FGameplayTag TeamTag;
 
@@ -62,6 +65,8 @@ public:
 	
 	void SetServerGridLocation(FBNGridLocation NewServerGridLocation);
 
+	void SetCurrentFlipbookAnimationTableInfoRow(FBNFlipbookAnimationTableInfoRow* NewFlipbookAnimationTableInfoRow);
+
 	/*
 	 * Getters
 	 */
@@ -69,6 +74,8 @@ public:
 	FGameplayTag GetTeamTag() const;
 	
 	FBNGridLocation GetServerGridLocation() const;
+
+	TObjectPtr<FBNFlipbookAnimationTableInfoRow> GetCurrentFlipbookAnimationTableInfoRow() const;
 
 protected:
 

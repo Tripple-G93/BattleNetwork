@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "AbilitySystemInterface.h"
-#include "Tables/BNFlipbookAnimationTable.h"
 #include "BattleNetwork/BattleNetwork.h"
 #include "BNBasePawn.generated.h"
 
@@ -42,8 +41,6 @@ protected:
 	// Reference to the AttributeSetBase. It will live on the PlayerState or here if the character doesn't have a PlayerState.
 	UPROPERTY()
 	UBNBaseAttributeSet* AttributeSetBase; 
-	
-	TObjectPtr<FBNFlipbookAnimationTableInfoRow> CurrentFlipbookAnimationTableInfoRow;
 	
 public:
 

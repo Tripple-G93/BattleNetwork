@@ -34,7 +34,7 @@ void UBNAT_PlayFlipbookAndWaitForEvent::Activate()
 	}
 
 	bool bPlayedFlipBookAnimation = false;
-	UBNAbilitySystemComponent* AbilitySystemComponent = GetTargetASC();
+	UBNAbilitySystemComponent* BNAbilitySystemComponent = GetTargetASC();
 
 	if(AbilitySystemComponent)
 	{

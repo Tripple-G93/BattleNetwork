@@ -70,6 +70,11 @@ void ABNEntityPawn::SetServerGridLocation(FBNGridLocation NewServerGridLocation)
 	ServerGridLocation = NewServerGridLocation;
 }
 
+void ABNEntityPawn::SetCurrentFlipbookAnimationTableInfoRow(FBNFlipbookAnimationTableInfoRow* NewFlipbookAnimationTableInfoRow)
+{
+	CurrentFlipbookAnimationTableInfoRow = NewFlipbookAnimationTableInfoRow;
+}
+
 /*
  * Getters
  */
@@ -82,6 +87,11 @@ FGameplayTag ABNEntityPawn::GetTeamTag() const
 FBNGridLocation ABNEntityPawn::GetServerGridLocation() const
 {
 	return ServerGridLocation;
+}
+
+TObjectPtr<FBNFlipbookAnimationTableInfoRow> ABNEntityPawn::GetCurrentFlipbookAnimationTableInfoRow() const
+{
+	return CurrentFlipbookAnimationTableInfoRow;
 }
 
 /*
@@ -121,8 +131,6 @@ void ABNEntityPawn::UpdateAnimation()
 {
 	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
 CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, FGameplayTag::RequestGameplayTag(FName("Entity.Idle")));
-	PaperFlipbookComponent->SetFlipbook(CurrentFlipbookAnimationTableInfoRow->PaperFlipbook);
-	PaperFlipbookComponent->SetLooping(CurrentFlipbookAnimationTableInfoRow->bDoesLoop);
 	PaperFlipbookComponent->PlayFromStart();
 }
 
@@ -163,8 +171,6 @@ void ABNEntityPawn::UpdateMoveAnimationRPC_Implementation()
 	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
 	CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, FGameplayTag::RequestGameplayTag(FName("Entity.Move")));
 	
-	PaperFlipbookComponent->SetFlipbook(CurrentFlipbookAnimationTableInfoRow->PaperFlipbook);
-	PaperFlipbookComponent->SetLooping(CurrentFlipbookAnimationTableInfoRow->bDoesLoop);
 	PaperFlipbookComponent->PlayFromStart();	
 }
 
