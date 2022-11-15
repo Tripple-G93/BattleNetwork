@@ -13,6 +13,7 @@ UBNGA_FireBullet::UBNGA_FireBullet()
 	ActivationOwnedTags.AddTag(Skill1Tag);
 
 	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Entity.Ability")));
+	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Entity.Move")));
 }
 
 void UBNGA_FireBullet::ActivateAbility(const FGameplayAbilitySpecHandle Handle,

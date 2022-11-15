@@ -38,7 +38,8 @@ void ABNPlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void ABNPlayerPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
 {
-	if(bCanMove)
+	const UAbilitySystemComponent* GameplayAbilitySystemComponent = GetAbilitySystemComponent();
+	if(bCanMove && GameplayAbilitySystemComponent && !GameplayAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Entity.Ability"))))
 	{
 		if(Value < 0)
 		{
@@ -65,7 +66,8 @@ void ABNPlayerPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
 
 void ABNPlayerPawn::AttemptToMovePlayerEntityVertically(const float Value)
 {
-	if(bCanMove)
+	const UAbilitySystemComponent* GameplayAbilitySystemComponent = GetAbilitySystemComponent();
+	if(bCanMove && GameplayAbilitySystemComponent && !GameplayAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Entity.Ability"))))
 	{
 		if(Value > 0)
 		{
