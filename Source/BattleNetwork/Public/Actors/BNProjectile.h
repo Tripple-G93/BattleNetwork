@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ProjectilePool.generated.h"
+#include "BNProjectile.generated.h"
 
 UCLASS()
-class BATTLENETWORK_API AProjectilePool : public AActor
+class BATTLENETWORK_API ABNProjectile : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AProjectilePool();
+	ABNProjectile();
 
 protected:
 	// Called when the game starts or when spawned
