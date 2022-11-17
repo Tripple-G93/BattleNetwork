@@ -25,3 +25,8 @@ void ABNProjectile::Tick(float DeltaTime)
 
 }
 
+void ABNProjectile::SetActorHiddenInGame(bool bNewHidden)
+{
+	Super::SetActorHiddenInGame(bNewHidden);
+}
+

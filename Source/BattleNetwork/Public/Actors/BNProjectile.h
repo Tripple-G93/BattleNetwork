@@ -9,8 +9,9 @@
 UCLASS()
 class BATTLENETWORK_API ABNProjectile : public AActor
 {
+private:
 	GENERATED_BODY()
-	
+
 public:	
 	// Sets default values for this actor's properties
 	ABNProjectile();
@@ -22,5 +23,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+	virtual void SetActorHiddenInGame(bool bNewHidden) override;
 
 };

@@ -16,6 +16,8 @@ void ABNGameModeBase::InitGame(const FString& MapName, const FString& Options, F
 	Super::InitGame(MapName, Options, ErrorMessage);
 
 	SpawnGrid();
+
+	SpawnObjectPool();
 	
 	GridActor->CreateGrid();
 }
@@ -55,5 +57,17 @@ void ABNGameModeBase::SpawnGrid()
 		SpawnParameters.OverrideLevel = GetLevel();
 
 		GridActor = GetWorld()->SpawnActor<ABNGridActor>(GridActorSubClass, FVector(0,0,0), FRotator(0,0,0), SpawnParameters);
+	}
+}
+
+void ABNGameModeBase::SpawnObjectPool()
+{
+	if(ensure(BulletProjectilePoolSubClass))
+	{
+		FActorSpawnParameters SpawnParameters;
+		SpawnParameters.Owner = this;
+		SpawnParameters.OverrideLevel = GetLevel();
+
+		BulletProjectilePool = GetWorld()->SpawnActor<ABNProjectilePool>(BulletProjectilePoolSubClass, SpawnParameters);
 	}
 }

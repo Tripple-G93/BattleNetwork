@@ -39,6 +39,7 @@ void ABNProjectilePool::SpawnProjectiles()
 			UWorld* World = GetWorld();
 
 			Projectiles.Add(World->SpawnActor<ABNProjectile>(ProjectileClass, SpawnParameters));
+			Projectiles[i]->SetActorHiddenInGame(true);
 			// TODO BN: Need to be able to set the next for each projectile so we always know what is the next available
 		}
 	}
