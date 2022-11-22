@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Actors/BNProjectilePool.h"
 #include "GameFramework/GameModeBase.h"
 #include "BNGameModeBase.generated.h"
 

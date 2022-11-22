@@ -2,12 +2,29 @@
 
 
 #include "Actors/BNProjectile.h"
+#include "Components/SphereComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
+#include "PaperFlipbookComponent.h"
 
 // Sets default values
-ABNProjectile::ABNProjectile()
+ABNProjectile::ABNProjectile(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	SetReplicates(true);
+	SetReplicateMovement(true);
+
+	SceneComponent = ObjectInitializer.CreateDefaultSubobject<USceneComponent>(this, TEXT("SceneComponent"));
+	SetRootComponent(SceneComponent);
+
+	PaperFlipbookComponent = ObjectInitializer.CreateDefaultSubobject<UPaperFlipbookComponent>(this, TEXT("PaperFlipbookComponent"));
+	PaperFlipbookComponent->SetupAttachment(SceneComponent);
+
+	SphereCollisionBox = ObjectInitializer.CreateDefaultSubobject<USphereComponent>(this, TEXT("SphereComponent"));
+	SphereCollisionBox->SetupAttachment(PaperFlipbookComponent);
+	
+	ProjectileMovementComponent = ObjectInitializer.CreateDefaultSubobject<UProjectileMovementComponent>(this, TEXT("ProjectileMovementComponent"));
 
 }
 

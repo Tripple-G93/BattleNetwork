@@ -3,6 +3,7 @@
 
 #include "GameModes/BNGameModeBase.h"
 #include "Actors/BNGridActor.h"
+#include "Actors/BNProjectilePool.h"
 #include "Engine/World.h"
 
 ABNGameModeBase::ABNGameModeBase()
