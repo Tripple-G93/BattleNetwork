@@ -26,6 +26,8 @@ ABNProjectile::ABNProjectile(const FObjectInitializer& ObjectInitializer) : Supe
 	
 	ProjectileMovementComponent = ObjectInitializer.CreateDefaultSubobject<UProjectileMovementComponent>(this, TEXT("ProjectileMovementComponent"));
 
+	NextAvailableProjectile = nullptr;
+
 }
 
 // Called when the game starts or when spawned
@@ -45,5 +47,15 @@ void ABNProjectile::Tick(float DeltaTime)
 void ABNProjectile::SetActorHiddenInGame(bool bNewHidden)
 {
 	Super::SetActorHiddenInGame(bNewHidden);
+}
+
+ABNProjectile* ABNProjectile::GetNext() const
+{
+	return NextAvailableProjectile;
+}
+
+void ABNProjectile::SetNextAvailableProjectile(ABNProjectile* Projectile)
+{
+	NextAvailableProjectile = Projectile;
 }
 

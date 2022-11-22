@@ -11,7 +11,7 @@ ABNProjectilePool::ABNProjectilePool()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-
+	FirstAvailableProjectile = nullptr;
 	PoolSize = 0;
 }
 
@@ -25,25 +25,37 @@ void ABNProjectilePool::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SpawnProjectiles();
+	if(ensure(ProjectileClass) && PoolSize > 0)
+	{
+		SpawnProjectiles();
+
+		LinkProjectiles();
+	}
 }
 
 void ABNProjectilePool::SpawnProjectiles()
 {
-	if(ensure(ProjectileClass))
+	Projectiles.Reserve(PoolSize);
+	for(int i = 0; i < PoolSize; ++i)
 	{
-		for(int i = 0; i < PoolSize; ++i)
-		{
-			FActorSpawnParameters SpawnParameters;
-			SpawnParameters.Owner = this;
-			UWorld* World = GetWorld();
+		FActorSpawnParameters SpawnParameters;
+		SpawnParameters.Owner = this;
+		UWorld* World = GetWorld();
 
-			Projectiles.Add(World->SpawnActor<ABNProjectile>(ProjectileClass, SpawnParameters));
-			Projectiles[i]->SetActorHiddenInGame(true);
-			// TODO BN: Need to be able to set the next for each projectile so we always know what is the next available
-		}
+		Projectiles.Add(World->SpawnActor<ABNProjectile>(ProjectileClass, SpawnParameters));
+		Projectiles[i]->SetActorHiddenInGame(true);
 	}
-	
+}
+
+void ABNProjectilePool::LinkProjectiles()
+{
+	FirstAvailableProjectile = Projectiles[0];
+	Projectiles[PoolSize - 1]->SetNextAvailableProjectile(nullptr);
+
+	for(int i = 0; i < PoolSize - 1; ++i)
+	{
+		Projectiles[i]->SetNextAvailableProjectile(Projectiles[i+1]);
+	}
 }
 
 // Called every frame

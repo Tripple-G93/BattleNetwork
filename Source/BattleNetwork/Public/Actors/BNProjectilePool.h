@@ -23,6 +23,8 @@ protected:
 	
 	TArray<TObjectPtr<ABNProjectile>> Projectiles;
 
+	TObjectPtr<ABNProjectile> FirstAvailableProjectile;
+
 public:
 
 	// Sets default values for this actor's properties
@@ -40,5 +42,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	void SpawnProjectiles();
+
+	void LinkProjectiles();
 
 };
