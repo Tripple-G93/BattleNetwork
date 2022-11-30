@@ -2,7 +2,12 @@
 
 
 #include "GameplayAbilities/BNGA_FireBullet.h"
+
+#include "PaperFlipbookComponent.h"
 #include "AbilityTasks/BNAT_PlayFlipbookAndWaitForEvent.h"
+#include "PaperFlipbookComponent.h"
+#include "PaperFlipbook.h"
+#include "Pawns/BNEntityPawn.h"
 
 UBNGA_FireBullet::UBNGA_FireBullet()
 {
@@ -44,51 +49,29 @@ void UBNGA_FireBullet::OnCancelled(FGameplayTag EventTag, FGameplayEventData Eve
 
 void UBNGA_FireBullet::OnCompleted(FGameplayTag EventTag, FGameplayEventData EventData)
 {
+	//TODO BN: Move the stuff fromt the event recieved into this function instead. Oh and remove the event tag as a whole from this class. It is not needed for this situation. 
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
 }
 
 void UBNGA_FireBullet::EventReceived(FGameplayTag EventTag, FGameplayEventData EventData)
 {
-	/* TODO BN: Implement this
-	// Montage told us to end the ability before the montage finished playing.
-	// Montage was set to continue playing animation even after ability ends so this is okay.
-	if (EventTag == FGameplayTag::RequestGameplayTag(FName("Event.Montage.EndAbility")))
+	if (GetOwningActorFromActorInfo()->GetLocalRole() == ROLE_Authority)
 	{
-		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
-		return;
-	}
+		ABNEntityPawn* EntityPawn = Cast<ABNEntityPawn>(GetAvatarActorFromActorInfo());
+		if (!EntityPawn)
+		{
+			EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, true);
+		}
+		
+		UPaperFlipbook* PaperFlipbook = EntityPawn->GetPaperFlipbookComponent()->GetFlipbook();
+		const int32 NumberOfKeyFrames = PaperFlipbook->GetNumKeyFrames();
+		FTransform GunLocation;
 
-	// Only spawn projectiles on the Server.
-	// Predicting projectiles is an advanced topic not covered in this example.
-	if (GetOwningActorFromActorInfo()->GetLocalRole() == ROLE_Authority && EventTag == FGameplayTag::RequestGameplayTag(FName("Event.Montage.SpawnProjectile")))
-	{
-		AGDHeroCharacter* Hero = Cast<AGDHeroCharacter>(GetAvatarActorFromActorInfo());
-		if (!Hero)
+		if(!ensure(PaperFlipbook->FindSocket(TEXT("Gun"), NumberOfKeyFrames - 1, GunLocation)))
 		{
 			EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, true);
 		}
 
-		FVector Start = Hero->GetGunComponent()->GetSocketLocation(FName("Muzzle"));
-		FVector End = Hero->GetCameraBoom()->GetComponentLocation() + Hero->GetFollowCamera()->GetForwardVector() * Range;
-		FRotator Rotation = UKismetMathLibrary::FindLookAtRotation(Start, End);
-
-		FGameplayEffectSpecHandle DamageEffectSpecHandle = MakeOutgoingGameplayEffectSpec(DamageGameplayEffect, GetAbilityLevel());
-		
-		// Pass the damage to the Damage Execution Calculation through a SetByCaller value on the GameplayEffectSpec
-		DamageEffectSpecHandle.Data.Get()->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Data.Damage")), Damage);
-
-		FTransform MuzzleTransform = Hero->GetGunComponent()->GetSocketTransform(FName("Muzzle"));
-		MuzzleTransform.SetRotation(Rotation.Quaternion());
-		MuzzleTransform.SetScale3D(FVector(1.0f));
-
-		FActorSpawnParameters SpawnParameters;
-		SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-		AGDProjectile* Projectile = GetWorld()->SpawnActorDeferred<AGDProjectile>(ProjectileClass, MuzzleTransform, GetOwningActorFromActorInfo(),
-			Hero, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
-		Projectile->DamageEffectSpecHandle = DamageEffectSpecHandle;
-		Projectile->Range = Range;
-		Projectile->FinishSpawning(MuzzleTransform);
+		// TODO BN: We want to be able to turn on a projectile and pass in the transform as well as a tag that will determine direction of the projectile
 	}
-	*/
 }

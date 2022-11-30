@@ -34,7 +34,13 @@ ABNProjectile::ABNProjectile(const FObjectInitializer& ObjectInitializer) : Supe
 void ABNProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	/* TODO BN: We want to create the damage effect spec handle so that we can be able to apply the damage on collision
+	FGameplayEffectSpecHandle DamageEffectSpecHandle = MakeOutgoingGameplayEffectSpec(DamageGameplayEffect, GetAbilityLevel());
+		
+	// Pass the damage to the Damage Execution Calculation through a SetByCaller value on the GameplayEffectSpec
+	DamageEffectSpecHandle.Data.Get()->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Data.Damage")), Damage);
+	*/
 }
 
 // Called every frame
