@@ -10,7 +10,7 @@ class UBNAbilitySystemComponent;
 class UPaperFlipbook;
 
 /** Delegate type used, EventTag and Payload may be empty if it came from the montage callbacks */
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FBNPlayFlipbookAndWaitForEventDelegate, FGameplayTag, EventTag, FGameplayEventData, EventData);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FBNPlayFlipbookAndWaitForEventDelegate, FGameplayTag, EventTag, FGameplayEventData, EventData, FTransform, BulletSpawnLocation);
 
 /**
  * 
@@ -34,10 +34,6 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FBNPlayFlipbookAndWaitForEventDelegate OnCancelled;
 
-	/** One of the triggering gameplay events happened */
-	UPROPERTY(BlueprintAssignable)
-	FBNPlayFlipbookAndWaitForEventDelegate EventReceived;
-
 private:
 
 	/** List of tags to match against gameplay events */
@@ -45,7 +41,8 @@ private:
 	FGameplayTagContainer EventTagContainer;
 	
 	FDelegateHandle CancelledHandle;
-	FDelegateHandle EventHandle;
+
+	FTransform BulletSpawnLocation;
 public:
 
 	UBNAT_PlayFlipbookAndWaitForEvent(const FObjectInitializer& ObjectInitializer);
@@ -85,6 +82,4 @@ private:
 	
 	UFUNCTION()
 	void OnPaperFlipBookAnimationLoopEnded();
-	
-	void OnGameplayEvent(FGameplayTag EventTag, const FGameplayEventData* Payload);
 };

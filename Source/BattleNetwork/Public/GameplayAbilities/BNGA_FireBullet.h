@@ -35,11 +35,9 @@ public:
 protected:
 
 	UFUNCTION()
-	void OnCancelled(FGameplayTag EventTag, FGameplayEventData EventData);
+	void OnCancelled(FGameplayTag EventTag, FGameplayEventData EventData, FTransform BulletSpawnLocation);
 
 	UFUNCTION()
-	void OnCompleted(FGameplayTag EventTag, FGameplayEventData EventData);
-
-	UFUNCTION()
-	void EventReceived(FGameplayTag EventTag, FGameplayEventData EventData);
+	void OnCompleted(FGameplayTag EventTag, FGameplayEventData EventData, FTransform BulletSpawnLocation);
+	
 };
