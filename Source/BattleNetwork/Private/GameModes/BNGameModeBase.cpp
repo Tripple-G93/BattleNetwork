@@ -49,6 +49,11 @@ TArray<APlayerController*>& ABNGameModeBase::GetPlayerControllers()
 	return PlayerControllers;
 }
 
+TObjectPtr<ABNProjectilePool> ABNGameModeBase::GetBulletProjectilePool()
+{
+	return BulletProjectilePool;
+}
+
 void ABNGameModeBase::SpawnGrid()
 {
 	if(ensure(GridActorSubClass))

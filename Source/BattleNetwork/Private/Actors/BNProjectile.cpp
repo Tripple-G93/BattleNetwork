@@ -12,7 +12,7 @@ ABNProjectile::ABNProjectile(const FObjectInitializer& ObjectInitializer) : Supe
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	SetReplicates(true);
+	bReplicates = true;
 	SetReplicateMovement(true);
 
 	SceneComponent = ObjectInitializer.CreateDefaultSubobject<USceneComponent>(this, TEXT("SceneComponent"));
@@ -55,7 +55,7 @@ void ABNProjectile::SetActorHiddenInGame(bool bNewHidden)
 	Super::SetActorHiddenInGame(bNewHidden);
 }
 
-ABNProjectile* ABNProjectile::GetNext() const
+ABNProjectile* ABNProjectile::GetNextNextAvailableProjectile() const
 {
 	return NextAvailableProjectile;
 }

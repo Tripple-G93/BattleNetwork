@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "GameFramework/Actor.h"
+#include "Structs/BNStructs.h"
 #include "BNProjectilePool.generated.h"
 
 class ABNProjectile;
@@ -29,9 +31,8 @@ public:
 
 	// Sets default values for this actor's properties
 	ABNProjectilePool();
-
-	// TODO BN: Pass in the necessary parameters for the projectile to operate
-	void CreateProjectile();
+	
+	void CreateProjectile(FVector SpawnLocation, FGameplayTag Team, FBNGridLocation GridLocation );
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

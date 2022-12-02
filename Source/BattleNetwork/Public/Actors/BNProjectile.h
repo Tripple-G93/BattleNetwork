@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "GameplayEffect.h"
+#include "Structs/BNStructs.h"
 #include "BNProjectile.generated.h"
 
 class UGameplayEffect;
@@ -48,7 +49,7 @@ public:
 	
 	virtual void SetActorHiddenInGame(bool bNewHidden) override;
 
-	ABNProjectile* GetNext() const;
+	ABNProjectile* GetNextNextAvailableProjectile() const;
 	void SetNextAvailableProjectile(ABNProjectile* Projectile);
 
 protected:

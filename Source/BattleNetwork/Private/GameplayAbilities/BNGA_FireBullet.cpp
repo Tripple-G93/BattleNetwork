@@ -5,6 +5,8 @@
 
 #include "PaperFlipbookComponent.h"
 #include "AbilityTasks/BNAT_PlayFlipbookAndWaitForEvent.h"
+#include "Actors/BNProjectilePool.h"
+#include "GameModes/BNGameModeBase.h"
 #include "Pawns/BNEntityPawn.h"
 
 UBNGA_FireBullet::UBNGA_FireBullet()
@@ -47,7 +49,15 @@ void UBNGA_FireBullet::OnCompleted(FGameplayTag EventTag, FGameplayEventData Eve
 {
 	if (GetOwningActorFromActorInfo()->GetLocalRole() == ROLE_Authority)
 	{
-		// TODO BN: We want to be able to turn on a projectile and pass in the transform as well as a tag that will determine direction of the projectile
+		ABNEntityPawn* EntityPawn = Cast<ABNEntityPawn>(CurrentActorInfo->AvatarActor);
+		if(ensure(EntityPawn))
+		{
+			const FVector FlipBookLocation = EntityPawn->GetPaperFlipbookComponent()->GetComponentLocation();
+			const FVector SpawnLocation(BulletSpawnLocation.GetLocation().X, GetOwningActorFromActorInfo()->GetActorLocation().Y, BulletSpawnLocation.GetLocation().Z + FlipBookLocation.Z);
+			ABNGameModeBase* GameModeBase = Cast<ABNGameModeBase>(GetWorld()->GetAuthGameMode());
+			GameModeBase->GetBulletProjectilePool()->CreateProjectile(SpawnLocation, FGameplayTag::RequestGameplayTag("Team1"), FBNGridLocation(0,0));
+		}
+
 	}
 	
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);

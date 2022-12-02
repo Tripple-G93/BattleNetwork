@@ -48,6 +48,8 @@ public:
 	int GetMaxPlayersOnGrid() const;
 	
 	TArray<APlayerController*>& GetPlayerControllers();
+
+	TObjectPtr<ABNProjectilePool> GetBulletProjectilePool();
 	
 
 private:

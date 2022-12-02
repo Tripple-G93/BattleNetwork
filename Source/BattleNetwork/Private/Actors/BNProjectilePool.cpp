@@ -15,9 +15,13 @@ ABNProjectilePool::ABNProjectilePool()
 	PoolSize = 0;
 }
 
-void ABNProjectilePool::CreateProjectile()
+void ABNProjectilePool::CreateProjectile(FVector SpawnLocation, FGameplayTag Team, FBNGridLocation GridLocation)
 {
-	// TODO BN: We want to initialize and turn on the projectile for it to be in use
+	FirstAvailableProjectile->SetActorHiddenInGame(false);
+	FirstAvailableProjectile->SetActorLocation(SpawnLocation);
+	
+	// TODO: Handle the "spawning" and "unspawning" of the projectiles
+	//FirstAvailableProjectile = FirstAvailableProjectile->GetNextNextAvailableProjectile();
 }
 
 // Called when the game starts or when spawned
