@@ -53,11 +53,21 @@ void UBNGA_FireBullet::OnCompleted(FGameplayTag EventTag, FGameplayEventData Eve
 		if(ensure(EntityPawn))
 		{
 			const FVector FlipBookLocation = EntityPawn->GetPaperFlipbookComponent()->GetComponentLocation();
-			const FVector SpawnLocation(BulletSpawnLocation.GetLocation().X, GetOwningActorFromActorInfo()->GetActorLocation().Y, BulletSpawnLocation.GetLocation().Z + FlipBookLocation.Z);
+			float SpawnLocationX = FlipBookLocation.X;
+			if(EntityPawn->GetTeamTag() == FGameplayTag::RequestGameplayTag("Team1"))
+			{
+				SpawnLocationX += BulletSpawnLocation.GetLocation().X;
+			}
+			else
+			{
+				SpawnLocationX -= BulletSpawnLocation.GetLocation().X;
+			}
+			
+			const FVector SpawnLocation(SpawnLocationX, GetOwningActorFromActorInfo()->GetActorLocation().Y, BulletSpawnLocation.GetLocation().Z + FlipBookLocation.Z);
+			
 			ABNGameModeBase* GameModeBase = Cast<ABNGameModeBase>(GetWorld()->GetAuthGameMode());
 			GameModeBase->GetBulletProjectilePool()->CreateProjectile(SpawnLocation, FGameplayTag::RequestGameplayTag("Team1"), FBNGridLocation(0,0));
 		}
-
 	}
 	
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);

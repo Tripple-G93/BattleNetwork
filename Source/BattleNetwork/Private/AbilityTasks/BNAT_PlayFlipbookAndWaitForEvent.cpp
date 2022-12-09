@@ -27,10 +27,7 @@ void UBNAT_PlayFlipbookAndWaitForEvent::Activate()
 	{
 		return;
 	}
-
-	bool bPlayedFlipBookAnimation = false;
-	UBNAbilitySystemComponent* BNAbilitySystemComponent = GetTargetASC();
-
+	
 	if(AbilitySystemComponent)
 	{
 		const FGameplayAbilityActorInfo* ActorInfo = Ability->GetCurrentActorInfo();
@@ -41,9 +38,7 @@ void UBNAT_PlayFlipbookAndWaitForEvent::Activate()
 
 			EntityPawn->UpdateAnimation(FGameplayTag::RequestGameplayTag(FName("Entity.Ability.Skill1")));
 			UPaperFlipbookComponent* PaperFlipbookComponent = EntityPawn->GetPaperFlipbookComponent();
-			PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &UBNAT_PlayFlipbookAndWaitForEvent::OnPaperFlipBookAnimationLoopEnded);
 			PaperFlipbookComponent->PlayFromStart();
-			bPlayedFlipBookAnimation = true;
 
 			UPaperFlipbook* PaperFlipbook = PaperFlipbookComponent->GetFlipbook();
 			const int32 NumberOfKeyFrames = PaperFlipbook->GetNumKeyFrames();
@@ -51,23 +46,15 @@ void UBNAT_PlayFlipbookAndWaitForEvent::Activate()
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Does not have a valid socket called Gun for Skill1 animation"));
 			}
+
+			// TODO BN: This needs to be called for now because we can not be reliant on dynamic binding through replication 
+			OnPaperFlipBookAnimationLoopEnded();
 		}
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("UBNAT_PlayFlipbookAndWaitForEvent called on invalid AbilitySystemComponent"));
 	}
-
-	if (!bPlayedFlipBookAnimation)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("UBNAT_PlayFlipbookAndWaitForEvent called in Ability %s failed to play flipbook animation Task Instance Name %s."), *Ability->GetName(), *InstanceName.ToString());
-		if (ShouldBroadcastAbilityTaskDelegates())
-		{
-			//ABILITY_LOG(Display, TEXT("%s: OnCancelled"), *GetName());
-			OnCancelled.Broadcast(FGameplayTag(), FGameplayEventData(), BulletSpawnLocation);
-		}
-	}
-
 }
 
 void UBNAT_PlayFlipbookAndWaitForEvent::ExternalCancel()
@@ -105,15 +92,8 @@ bool UBNAT_PlayFlipbookAndWaitForEvent::StopPlayingPaperFlipbook()
 	{
 		return false;
 	}
-	
-	ABNEntityPawn* EntityPawn = Cast<ABNEntityPawn>(ActorInfo->AvatarActor);
-	if(ensure(EntityPawn))
-	{
-		EntityPawn->GetPaperFlipbookComponent()->OnFinishedPlaying.RemoveDynamic(this, &UBNAT_PlayFlipbookAndWaitForEvent::OnPaperFlipBookAnimationLoopEnded);
-		return true;
-	}
 
-	return false;
+	return true;
 }
 
 UBNAbilitySystemComponent* UBNAT_PlayFlipbookAndWaitForEvent::GetTargetASC()
