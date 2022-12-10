@@ -66,7 +66,7 @@ void UBNGA_FireBullet::OnCompleted(FGameplayTag EventTag, FGameplayEventData Eve
 			const FVector SpawnLocation(SpawnLocationX, GetOwningActorFromActorInfo()->GetActorLocation().Y, BulletSpawnLocation.GetLocation().Z + FlipBookLocation.Z);
 			
 			ABNGameModeBase* GameModeBase = Cast<ABNGameModeBase>(GetWorld()->GetAuthGameMode());
-			GameModeBase->GetBulletProjectilePool()->CreateProjectile(SpawnLocation, FGameplayTag::RequestGameplayTag("Team1"), FBNGridLocation(0,0));
+			GameModeBase->GetBulletProjectilePool()->CreateProjectile(SpawnLocation, EntityPawn->GetTeamTag(), FBNGridLocation(0,0));
 		}
 	}
 	

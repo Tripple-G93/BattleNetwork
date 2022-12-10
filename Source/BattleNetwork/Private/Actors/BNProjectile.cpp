@@ -53,6 +53,25 @@ void ABNProjectile::Tick(float DeltaTime)
 void ABNProjectile::SetActorHiddenInGame(bool bNewHidden)
 {
 	Super::SetActorHiddenInGame(bNewHidden);
+
+	if(bNewHidden == true)
+	{
+		ProjectileMovementComponent->Velocity = FVector(0, 0, 0);
+	}
+}
+
+void ABNProjectile::SetProjectilesVelocity(FGameplayTag GameplayTag)
+{
+	if(GameplayTag == FGameplayTag::RequestGameplayTag("Team1"))
+	{
+		ProjectileMovementComponent->Velocity = ProjectileVelocity;
+	}
+	else
+	{
+		ProjectileMovementComponent->Velocity.X = -ProjectileVelocity.X;
+		ProjectileMovementComponent->Velocity.Y = ProjectileVelocity.Y;
+		ProjectileMovementComponent->Velocity.Z = ProjectileVelocity.Z;
+	}
 }
 
 ABNProjectile* ABNProjectile::GetNextNextAvailableProjectile() const

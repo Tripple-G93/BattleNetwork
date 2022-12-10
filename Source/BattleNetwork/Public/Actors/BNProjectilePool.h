@@ -32,7 +32,7 @@ public:
 	// Sets default values for this actor's properties
 	ABNProjectilePool();
 	
-	void CreateProjectile(FVector SpawnLocation, FGameplayTag Team, FBNGridLocation GridLocation );
+	void CreateProjectile(FVector SpawnLocation, FGameplayTag TeamGameplayTag, FBNGridLocation GridLocation );
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

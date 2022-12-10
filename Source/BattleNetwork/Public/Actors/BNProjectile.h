@@ -21,6 +21,9 @@ class BATTLENETWORK_API ABNProjectile : public AActor
 
 protected:
 
+	UPROPERTY(EditAnywhere, Category="BN|Values")
+	FVector ProjectileVelocity;
+
 	UPROPERTY(EditDefaultsOnly, Category="BN|Values")
 	TObjectPtr<UGameplayEffect> GameplayEffect;
 
@@ -49,6 +52,8 @@ public:
 	
 	virtual void SetActorHiddenInGame(bool bNewHidden) override;
 
+	void SetProjectilesVelocity(FGameplayTag GameplayTag);
+	
 	ABNProjectile* GetNextNextAvailableProjectile() const;
 	void SetNextAvailableProjectile(ABNProjectile* Projectile);
 

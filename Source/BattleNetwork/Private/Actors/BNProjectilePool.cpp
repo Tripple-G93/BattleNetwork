@@ -15,10 +15,11 @@ ABNProjectilePool::ABNProjectilePool()
 	PoolSize = 0;
 }
 
-void ABNProjectilePool::CreateProjectile(FVector SpawnLocation, FGameplayTag Team, FBNGridLocation GridLocation)
+void ABNProjectilePool::CreateProjectile(FVector SpawnLocation, FGameplayTag TeamGameplayTag, FBNGridLocation GridLocation)
 {
 	FirstAvailableProjectile->SetActorHiddenInGame(false);
 	FirstAvailableProjectile->SetActorLocation(SpawnLocation);
+	FirstAvailableProjectile->SetProjectilesVelocity(TeamGameplayTag);
 	
 	// TODO: Handle the "spawning" and "unspawning" of the projectiles
 	//FirstAvailableProjectile = FirstAvailableProjectile->GetNextNextAvailableProjectile();
