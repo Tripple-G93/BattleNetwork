@@ -23,8 +23,8 @@ ABNProjectile::ABNProjectile(const FObjectInitializer& ObjectInitializer) : Supe
 	PaperFlipbookComponent = ObjectInitializer.CreateDefaultSubobject<UPaperFlipbookComponent>(this, TEXT("PaperFlipbookComponent"));
 	PaperFlipbookComponent->SetupAttachment(SceneComponent);
 
-	CapsuleComponent = ObjectInitializer.CreateDefaultSubobject<UCapsuleComponent>(this, TEXT("CapsuleComponent"));
-	CapsuleComponent->SetupAttachment(PaperFlipbookComponent);
+	CollisionCapsuleComponent = ObjectInitializer.CreateDefaultSubobject<UCapsuleComponent>(this, TEXT("CapsuleComponent"));
+	CollisionCapsuleComponent->SetupAttachment(PaperFlipbookComponent);
 	
 	ProjectileMovementComponent = ObjectInitializer.CreateDefaultSubobject<UProjectileMovementComponent>(this, TEXT("ProjectileMovementComponent"));
 
@@ -38,7 +38,7 @@ void ABNProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CapsuleComponent->OnComponentBeginOverlap.AddDynamic(this,&ABNProjectile::OverlapBegin);
+	CollisionCapsuleComponent->OnComponentBeginOverlap.AddDynamic(this,&ABNProjectile::OverlapBegin);
 }
 
 void ABNProjectile::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -79,11 +79,11 @@ void ABNProjectile::SetActorHiddenInGame(bool bNewHidden)
 	if(bNewHidden == true)
 	{
 		ResetProjectileLocation();
-		CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		CollisionCapsuleComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 	else
 	{
-		CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		CollisionCapsuleComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	}
 }
 

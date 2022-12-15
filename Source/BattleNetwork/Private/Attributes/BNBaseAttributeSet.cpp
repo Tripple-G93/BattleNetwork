@@ -55,7 +55,7 @@ void UBNBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 		if (SourceController == nullptr && SourceActor != nullptr)
 		{
 			if (APawn* Pawn = Cast<APawn>(SourceActor))
-			{
+			{ 
 				SourceController = Pawn->GetController();
 			}
 		}

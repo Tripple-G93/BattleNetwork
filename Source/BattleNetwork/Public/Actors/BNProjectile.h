@@ -23,9 +23,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category="BN|Values")
 	FVector ProjectileVelocity;
 
-	UPROPERTY(EditDefaultsOnly, Category="BN|Values")
-	TObjectPtr<UGameplayEffect> GameplayEffect;
-
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
 
@@ -36,7 +33,7 @@ protected:
 	TObjectPtr<UPaperFlipbookComponent> PaperFlipbookComponent;
 	
 	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UCapsuleComponent> CapsuleComponent;
+	TObjectPtr<UCapsuleComponent> CollisionCapsuleComponent;
 
 	UPROPERTY(BlueprintReadWrite, Meta = (ExposeOnSpawn = true))
 	FGameplayEffectSpecHandle DamageEffectSpecHandle;
