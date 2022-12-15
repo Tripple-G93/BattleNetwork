@@ -5,14 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "GameplayEffect.h"
-#include "Structs/BNStructs.h"
 #include "BNProjectile.generated.h"
 
+class UCapsuleComponent;
 class UGameplayEffect;
 class UPaperFlipbookComponent;
 class UProjectileMovementComponent;
 class USceneComponent;
-class USphereComponent;
 
 UCLASS()
 class BATTLENETWORK_API ABNProjectile : public AActor
@@ -37,12 +36,16 @@ protected:
 	TObjectPtr<UPaperFlipbookComponent> PaperFlipbookComponent;
 	
 	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<USphereComponent> SphereCollisionBox;
+	TObjectPtr<UCapsuleComponent> CapsuleComponent;
 
 	UPROPERTY(BlueprintReadWrite, Meta = (ExposeOnSpawn = true))
 	FGameplayEffectSpecHandle DamageEffectSpecHandle;
 
 	TObjectPtr<ABNProjectile> NextAvailableProjectile;
+
+	FGameplayTag TeamFiredGameplayTag;
+
+	FGameplayEffectSpecHandle GameplayEffectSpecHandle;
 	
 public:	
 
@@ -53,6 +56,10 @@ public:
 	virtual void SetActorHiddenInGame(bool bNewHidden) override;
 
 	void SetProjectilesVelocity(FGameplayTag GameplayTag);
+
+	void SetTeamFiredTag(FGameplayTag NewTeamFiredGameplayTag);
+
+	void SetGameplayEffectSpecHandle(FGameplayEffectSpecHandle NewGameplayEffectSpecHandle);
 	
 	ABNProjectile* GetNextNextAvailableProjectile() const;
 	void SetNextAvailableProjectile(ABNProjectile* Projectile);
@@ -60,4 +67,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+
+	void ResetProjectileLocation();
+
 };

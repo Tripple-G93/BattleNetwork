@@ -15,11 +15,13 @@ ABNProjectilePool::ABNProjectilePool()
 	PoolSize = 0;
 }
 
-void ABNProjectilePool::CreateProjectile(FVector SpawnLocation, FGameplayTag TeamGameplayTag, FBNGridLocation GridLocation)
+void ABNProjectilePool::CreateProjectile(FVector SpawnLocation, FGameplayTag TeamGameplayTag, FBNGridLocation GridLocation, FGameplayEffectSpecHandle NewGameplayEffectSpecHandle)
 {
+	// TODO BN: Possible pass in the damage comming from the attribute of the entity that shot it and set it in the game spec?
 	FirstAvailableProjectile->SetActorHiddenInGame(false);
 	FirstAvailableProjectile->SetActorLocation(SpawnLocation);
 	FirstAvailableProjectile->SetProjectilesVelocity(TeamGameplayTag);
+	FirstAvailableProjectile->SetGameplayEffectSpecHandle(NewGameplayEffectSpecHandle);
 	
 	// TODO: Handle the "spawning" and "unspawning" of the projectiles
 	//FirstAvailableProjectile = FirstAvailableProjectile->GetNextNextAvailableProjectile();

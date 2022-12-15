@@ -9,6 +9,7 @@
 #include "BNEntityPawn.generated.h"
 
 class ABNGridActor;
+class UBoxComponent;
 class UBNEntityWidgetSceneComponent;
 class UDataTable;
 class UPaperFlipbookComponent;
@@ -35,6 +36,9 @@ protected:
 
 	UPROPERTY(Replicated)
 	TObjectPtr<ABNGridActor> GridActorReference;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UBoxComponent> BoxComponent;
 	
 	UPROPERTY(ReplicatedUsing = OnRep_UpdateClientLocation)
 	FBNGridLocation ServerGridLocation;

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "GameFramework/Actor.h"
+#include "GameplayEffect.h"
 #include "Structs/BNStructs.h"
 #include "BNProjectilePool.generated.h"
 
@@ -32,7 +33,7 @@ public:
 	// Sets default values for this actor's properties
 	ABNProjectilePool();
 	
-	void CreateProjectile(FVector SpawnLocation, FGameplayTag TeamGameplayTag, FBNGridLocation GridLocation );
+	void CreateProjectile(FVector SpawnLocation, FGameplayTag TeamGameplayTag, FBNGridLocation GridLocation, FGameplayEffectSpecHandle NewGameplayEffectSpecHandle);
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

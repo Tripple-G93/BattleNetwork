@@ -3,10 +3,11 @@
 
 #include "GameplayAbilities/BNGA_FireBullet.h"
 
-#include "PaperFlipbookComponent.h"
+#include "Attributes/BNBaseAttributeSet.h"
 #include "AbilityTasks/BNAT_PlayFlipbookAndWaitForEvent.h"
 #include "Actors/BNProjectilePool.h"
 #include "GameModes/BNGameModeBase.h"
+#include "PaperFlipbookComponent.h"
 #include "Pawns/BNEntityPawn.h"
 
 UBNGA_FireBullet::UBNGA_FireBullet()
@@ -65,8 +66,14 @@ void UBNGA_FireBullet::OnCompleted(FGameplayTag EventTag, FGameplayEventData Eve
 			
 			const FVector SpawnLocation(SpawnLocationX, GetOwningActorFromActorInfo()->GetActorLocation().Y, BulletSpawnLocation.GetLocation().Z + FlipBookLocation.Z);
 			
+			const float EntityDamage = EntityPawn->GetBaseAttributeSet()->GetDamage();
+
+			ensure(DamageGameplayEffect);
+			FGameplayEffectSpecHandle GameplayEffectSpecHandle = MakeOutgoingGameplayEffectSpec(DamageGameplayEffect, GetAbilityLevel());
+			GameplayEffectSpecHandle.Data.Get()->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Data.Damage")), 1.0f);
+			
 			ABNGameModeBase* GameModeBase = Cast<ABNGameModeBase>(GetWorld()->GetAuthGameMode());
-			GameModeBase->GetBulletProjectilePool()->CreateProjectile(SpawnLocation, EntityPawn->GetTeamTag(), FBNGridLocation(0,0));
+			GameModeBase->GetBulletProjectilePool()->CreateProjectile(SpawnLocation, EntityPawn->GetTeamTag(), FBNGridLocation(0,0), GameplayEffectSpecHandle);
 		}
 	}
 	

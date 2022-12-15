@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "Actors/BNGridActor.h"
+#include "Components/BoxComponent.h"
 #include "Components/SceneComponent.h"
 #include "Objects/BNUtilityStatics.h"
 #include "PaperFlipbookComponent.h"
@@ -14,7 +15,7 @@
 
 ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this pawn to call Tick() every frame. You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
 	SceneComponent = ObjectInitializer.CreateDefaultSubobject<USceneComponent>(this, TEXT("SceneComponent"));
@@ -27,6 +28,9 @@ ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Supe
 
 	EntityWidgetSceneComponent = ObjectInitializer.CreateDefaultSubobject<UBNEntityWidgetSceneComponent>(this, TEXT("EntityWidgetSceneComponent"));
 	EntityWidgetSceneComponent->SetupAttachment(PaperFlipbookComponent);
+
+	BoxComponent = ObjectInitializer.CreateDefaultSubobject<UBoxComponent>(this, TEXT("BoxComponent"));
+	BoxComponent->SetupAttachment(EntityWidgetSceneComponent);
 	
 	bCanMove = true;
 }

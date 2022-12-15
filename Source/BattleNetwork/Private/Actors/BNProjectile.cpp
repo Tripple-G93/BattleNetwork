@@ -2,9 +2,11 @@
 
 
 #include "Actors/BNProjectile.h"
-#include "Components/SphereComponent.h"
+#include "AbilitySystemComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "PaperFlipbookComponent.h"
+#include "Pawns/BNEntityPawn.h"
 
 // Sets default values
 ABNProjectile::ABNProjectile(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -21,13 +23,14 @@ ABNProjectile::ABNProjectile(const FObjectInitializer& ObjectInitializer) : Supe
 	PaperFlipbookComponent = ObjectInitializer.CreateDefaultSubobject<UPaperFlipbookComponent>(this, TEXT("PaperFlipbookComponent"));
 	PaperFlipbookComponent->SetupAttachment(SceneComponent);
 
-	SphereCollisionBox = ObjectInitializer.CreateDefaultSubobject<USphereComponent>(this, TEXT("SphereComponent"));
-	SphereCollisionBox->SetupAttachment(PaperFlipbookComponent);
+	CapsuleComponent = ObjectInitializer.CreateDefaultSubobject<UCapsuleComponent>(this, TEXT("CapsuleComponent"));
+	CapsuleComponent->SetupAttachment(PaperFlipbookComponent);
 	
 	ProjectileMovementComponent = ObjectInitializer.CreateDefaultSubobject<UProjectileMovementComponent>(this, TEXT("ProjectileMovementComponent"));
 
 	NextAvailableProjectile = nullptr;
 
+	TeamFiredGameplayTag = FGameplayTag::RequestGameplayTag("Team1");
 }
 
 // Called when the game starts or when spawned
@@ -35,12 +38,31 @@ void ABNProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
-	/* TODO BN: We want to create the damage effect spec handle so that we can be able to apply the damage on collision
-	FGameplayEffectSpecHandle DamageEffectSpecHandle = MakeOutgoingGameplayEffectSpec(DamageGameplayEffect, GetAbilityLevel());
-		
-	// Pass the damage to the Damage Execution Calculation through a SetByCaller value on the GameplayEffectSpec
-	DamageEffectSpecHandle.Data.Get()->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Data.Damage")), Damage);
-	*/
+	CapsuleComponent->OnComponentBeginOverlap.AddDynamic(this,&ABNProjectile::OverlapBegin);
+}
+
+void ABNProjectile::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	// Projectile exist on the server and is replicated to clients
+	if(GetLocalRole() == ROLE_Authority)
+	{
+		ABNEntityPawn* EntityPawn = Cast<ABNEntityPawn>(OtherActor);
+		if(EntityPawn)
+		{
+			if(EntityPawn->GetTeamTag() != TeamFiredGameplayTag)
+			{
+				EntityPawn->GetAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*GameplayEffectSpecHandle.Data);
+				SetActorHiddenInGame(true);
+				ResetProjectileLocation();
+			}
+		}
+	}
+}
+
+void ABNProjectile::ResetProjectileLocation()
+{
+	ProjectileMovementComponent->Velocity = FVector(-200, 0, 0);
 }
 
 // Called every frame
@@ -56,13 +78,20 @@ void ABNProjectile::SetActorHiddenInGame(bool bNewHidden)
 
 	if(bNewHidden == true)
 	{
-		ProjectileMovementComponent->Velocity = FVector(0, 0, 0);
+		ResetProjectileLocation();
+		CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+	else
+	{
+		CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	}
 }
 
 void ABNProjectile::SetProjectilesVelocity(FGameplayTag GameplayTag)
 {
-	if(GameplayTag == FGameplayTag::RequestGameplayTag("Team1"))
+	TeamFiredGameplayTag = GameplayTag;
+	
+	if(TeamFiredGameplayTag == FGameplayTag::RequestGameplayTag("Team1"))
 	{
 		ProjectileMovementComponent->Velocity = ProjectileVelocity;
 	}
@@ -72,6 +101,16 @@ void ABNProjectile::SetProjectilesVelocity(FGameplayTag GameplayTag)
 		ProjectileMovementComponent->Velocity.Y = ProjectileVelocity.Y;
 		ProjectileMovementComponent->Velocity.Z = ProjectileVelocity.Z;
 	}
+}
+
+void ABNProjectile::SetTeamFiredTag(FGameplayTag NewTeamFiredGameplayTag)
+{
+	TeamFiredGameplayTag = NewTeamFiredGameplayTag;
+}
+
+void ABNProjectile::SetGameplayEffectSpecHandle(FGameplayEffectSpecHandle NewGameplayEffectSpecHandle)
+{
+	GameplayEffectSpecHandle = NewGameplayEffectSpecHandle;
 }
 
 ABNProjectile* ABNProjectile::GetNextNextAvailableProjectile() const
