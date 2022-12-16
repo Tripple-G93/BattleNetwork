@@ -77,7 +77,7 @@ void UBNBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 		}
 	}
 
-	if (Data.EvaluatedData.Attribute == GetDamageAttribute())
+	if (Data.EvaluatedData.Attribute == GetCurrentDamageAttribute())
 	{
 		// Try to extract a hit result
 		FHitResult HitResult;
@@ -87,13 +87,13 @@ void UBNBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 		}
 		
 		// Store a local copy of the amount of damage done and clear the damage attribute
-		const float LocalDamageDone = GetDamage();
-		SetDamage(0.f);
+		const float LocalCurrentDamage = GetCurrentDamage();
+		SetCurrentDamage(0.f);
 	
-		if (LocalDamageDone > 0.0f)
+		if (LocalCurrentDamage > 0.0f)
 		{
 			// Apply the health change and then clamp it
-			const float NewHealth = GetHealth() - LocalDamageDone;
+			const float NewHealth = GetHealth() - LocalCurrentDamage;
 			SetHealth(FMath::Clamp(NewHealth, 0.0f, GetMaxHealth()));
 		}
 	}// Damage
