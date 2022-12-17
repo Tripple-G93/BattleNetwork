@@ -46,4 +46,7 @@ protected:
 
 	void LinkProjectiles();
 
+	UFUNCTION()
+	void AddProjectileBackToPool(ABNProjectile* Projectile);
+
 };

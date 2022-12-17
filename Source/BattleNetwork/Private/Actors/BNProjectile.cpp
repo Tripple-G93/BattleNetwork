@@ -60,6 +60,7 @@ void ABNProjectile::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActo
 				EntityPawn->GetAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*GameplayEffectSpecHandle.Data);
 				SetActorHiddenInGame(true);
 				ResetProjectileLocation();
+				OnProjectileDeactivateDelegate.Execute(this);
 			}
 		}
 	}
@@ -78,7 +79,8 @@ void ABNProjectile::Tick(float DeltaTime)
 	if(GetLocalRole() == ROLE_Authority && CanWeTurnOffProjectile())
 	{
 		SetActorHiddenInGame(true);
-		// TODO BN: We want to add it back to the projectile pool
+		ResetProjectileLocation();
+		OnProjectileDeactivateDelegate.Execute(this);
 	}
 }
 

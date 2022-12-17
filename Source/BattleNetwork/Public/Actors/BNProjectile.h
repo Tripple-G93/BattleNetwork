@@ -7,11 +7,14 @@
 #include "GameplayEffect.h"
 #include "BNProjectile.generated.h"
 
+class ABNProjectile;
 class UCapsuleComponent;
 class UGameplayEffect;
 class UPaperFlipbookComponent;
 class UProjectileMovementComponent;
 class USceneComponent;
+
+DECLARE_DELEGATE_OneParam(FOnProjectileDeactivateSignature, ABNProjectile*);
 
 UCLASS()
 class BATTLENETWORK_API ABNProjectile : public AActor
@@ -46,6 +49,7 @@ protected:
 	
 public:	
 
+	FOnProjectileDeactivateSignature OnProjectileDeactivateDelegate;
 	ABNProjectile(const FObjectInitializer& ObjectInitializer);
 
 	virtual void Tick(float DeltaTime) override;
