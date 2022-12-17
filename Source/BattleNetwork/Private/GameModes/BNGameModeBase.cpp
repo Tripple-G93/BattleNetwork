@@ -54,6 +54,11 @@ TObjectPtr<ABNProjectilePool> ABNGameModeBase::GetBulletProjectilePool()
 	return BulletProjectilePool;
 }
 
+ABNGridActor* ABNGameModeBase::GetGridActor()
+{
+	return GridActor;
+}
+
 void ABNGameModeBase::SpawnGrid()
 {
 	if(ensure(GridActorSubClass))

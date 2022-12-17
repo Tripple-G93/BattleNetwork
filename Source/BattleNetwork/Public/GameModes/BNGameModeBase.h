@@ -50,6 +50,8 @@ public:
 	TArray<APlayerController*>& GetPlayerControllers();
 
 	TObjectPtr<ABNProjectilePool> GetBulletProjectilePool();
+
+	ABNGridActor* GetGridActor();
 	
 
 private:

@@ -2,9 +2,12 @@
 
 
 #include "Actors/BNProjectile.h"
+
+#include "Actors/BNGridActor.h"
 #include "AbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "GameModes/BNGameModeBase.h"
 #include "PaperFlipbookComponent.h"
 #include "Pawns/BNEntityPawn.h"
 
@@ -38,6 +41,8 @@ void ABNProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
+	SetActorTickEnabled(false);
+	
 	CollisionCapsuleComponent->OnComponentBeginOverlap.AddDynamic(this,&ABNProjectile::OverlapBegin);
 }
 
@@ -70,11 +75,34 @@ void ABNProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if(GetLocalRole() == ROLE_Authority && CanWeTurnOffProjectile())
+	{
+		SetActorHiddenInGame(true);
+		// TODO BN: We want to add it back to the projectile pool
+	}
 }
+
+bool ABNProjectile::CanWeTurnOffProjectile() const
+{
+	bool bTurnOffProjectile = false;
+	ABNGameModeBase* GameModeBase = Cast<ABNGameModeBase>(GetWorld()->GetAuthGameMode());
+	if(TeamFiredGameplayTag == FGameplayTag::RequestGameplayTag("Team1"))
+	{
+		bTurnOffProjectile = GameModeBase->GetGridActor()->GetRightMostPanelXLocation() < GetActorLocation().X;
+	}
+	else
+	{
+		bTurnOffProjectile = GameModeBase->GetGridActor()->GetLeftMostPanelXLocation() > GetActorLocation().X;
+	}
+
+	return bTurnOffProjectile;
+}
+
 
 void ABNProjectile::SetActorHiddenInGame(bool bNewHidden)
 {
 	Super::SetActorHiddenInGame(bNewHidden);
+	SetActorTickEnabled(!bNewHidden);
 
 	if(bNewHidden == true)
 	{
