@@ -9,6 +9,7 @@
 #include "BNEntityPawn.generated.h"
 
 class ABNGridActor;
+class UAudioComponent;
 class UBoxComponent;
 class UBNEntityWidgetSceneComponent;
 class UDataTable;
@@ -39,6 +40,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UBoxComponent> BoxComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UAudioComponent> AudioComponent;
 	
 	UPROPERTY(ReplicatedUsing = OnRep_UpdateClientLocation)
 	FBNGridLocation ServerGridLocation;
@@ -60,6 +64,8 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 	virtual void UpdateAnimation(FGameplayTag AnimationTag);
+
+	void PlayAnimationSoundEffect() const;
 	
 	/*
 	 * Setters

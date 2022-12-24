@@ -60,7 +60,10 @@ void ABNProjectile::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActo
 				EntityPawn->GetAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*GameplayEffectSpecHandle.Data);
 				SetActorHiddenInGame(true);
 				ResetProjectileLocation();
-				OnProjectileDeactivateDelegate.Execute(this);
+				if(OnProjectileDeactivateDelegate.IsBound())
+				{
+					OnProjectileDeactivateDelegate.Execute(this);
+				}
 			}
 		}
 	}

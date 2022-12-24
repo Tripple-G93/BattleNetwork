@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "Actors/BNGridActor.h"
+#include "Components/AudioComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/SceneComponent.h"
 #include "Objects/BNUtilityStatics.h"
@@ -12,6 +13,7 @@
 #include "Attributes/BNBaseAttributeSet.h"
 #include "Net/UnrealNetwork.h"
 #include "SceneComponents/BNEntityWidgetSceneComponent.h"
+#include "Sound/SoundCue.h"
 
 ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -31,6 +33,8 @@ ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Supe
 
 	BoxComponent = ObjectInitializer.CreateDefaultSubobject<UBoxComponent>(this, TEXT("BoxComponent"));
 	BoxComponent->SetupAttachment(EntityWidgetSceneComponent);
+
+	AudioComponent = ObjectInitializer.CreateDefaultSubobject<UAudioComponent>(this,TEXT("AudioComponent"));
 	
 	bCanMove = true;
 }
@@ -59,6 +63,21 @@ void ABNEntityPawn::UpdateAnimation(FGameplayTag AnimationTag)
 {
 	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
 CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, AnimationTag);
+}
+
+void ABNEntityPawn::PlayAnimationSoundEffect() const
+{
+	USoundCue* SoundEffectCue = CurrentFlipbookAnimationTableInfoRow->SoundEffectSoundCue;
+	if(SoundEffectCue)
+	{
+		AudioComponent->SetSound(SoundEffectCue);
+		AudioComponent->Play();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Can't play Gameplay Tag animation sound effect %s"), *CurrentFlipbookAnimationTableInfoRow->AnimationGameplayTag.ToString());
+	}
+	
 }
 
 /*

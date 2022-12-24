@@ -39,6 +39,8 @@ void UBNAT_PlayFlipbookAndWaitForEvent::Activate()
 			EntityPawn->UpdateAnimation(FGameplayTag::RequestGameplayTag(FName("Entity.Ability.Skill1")));
 			UPaperFlipbookComponent* PaperFlipbookComponent = EntityPawn->GetPaperFlipbookComponent();
 			PaperFlipbookComponent->PlayFromStart();
+			
+			EntityPawn->PlayAnimationSoundEffect();
 
 			UPaperFlipbook* PaperFlipbook = PaperFlipbookComponent->GetFlipbook();
 			const int32 NumberOfKeyFrames = PaperFlipbook->GetNumKeyFrames();
