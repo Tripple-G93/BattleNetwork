@@ -24,7 +24,6 @@ void ABNProjectilePool::CreateProjectile(FVector SpawnLocation, FGameplayTag Tea
 		CurrentProjectile->SetActorLocation(SpawnLocation);
 		CurrentProjectile->SetProjectilesVelocity(TeamGameplayTag);
 		CurrentProjectile->SetGameplayEffectSpecHandle(NewGameplayEffectSpecHandle);
-		CurrentProjectile->OnProjectileDeactivateDelegate.BindUObject(this, &ABNProjectilePool::AddProjectileBackToPool);
 
 		FirstAvailableProjectile = CurrentProjectile->GetNextNextAvailableProjectile();
 		CurrentProjectile->SetNextAvailableProjectile(nullptr);
@@ -73,18 +72,23 @@ void ABNProjectilePool::LinkProjectiles()
 	}
 }
 
-void ABNProjectilePool::AddProjectileBackToPool(ABNProjectile* Projectile)
-{
-	Projectile->OnProjectileDeactivateDelegate.Unbind();
-	Projectile->SetNextAvailableProjectile(FirstAvailableProjectile);
-
-	FirstAvailableProjectile = Projectile;
-}
-
-// Called every frame
 void ABNProjectilePool::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	UpdateObjectPool();
+}
+
+void ABNProjectilePool::UpdateObjectPool()
+{
+	for(int i = 0; i < PoolSize; ++i)
+	{
+		if(Projectiles[i]->DoesProjectileNeedToBeAddedToTheObjectPool())
+		{
+			Projectiles[i]->SetNextAvailableProjectile(FirstAvailableProjectile);
+			FirstAvailableProjectile = Projectiles[i];
+			FirstAvailableProjectile->MarkProjectileInObjectPool();
+		}
+	}
 }
 

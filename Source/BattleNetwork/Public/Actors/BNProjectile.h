@@ -14,8 +14,6 @@ class UPaperFlipbookComponent;
 class UProjectileMovementComponent;
 class USceneComponent;
 
-DECLARE_DELEGATE_OneParam(FOnProjectileDeactivateSignature, ABNProjectile*);
-
 UCLASS()
 class BATTLENETWORK_API ABNProjectile : public AActor
 {
@@ -47,9 +45,10 @@ protected:
 
 	FGameplayEffectSpecHandle GameplayEffectSpecHandle;
 	
-public:	
+	bool bNeedsToBeAddedInTheObjectPool;
 
-	FOnProjectileDeactivateSignature OnProjectileDeactivateDelegate;
+public:	
+	
 	ABNProjectile(const FObjectInitializer& ObjectInitializer);
 
 	virtual void Tick(float DeltaTime) override;
@@ -64,6 +63,10 @@ public:
 	
 	ABNProjectile* GetNextNextAvailableProjectile() const;
 	void SetNextAvailableProjectile(ABNProjectile* Projectile);
+
+	void MarkProjectileInObjectPool();
+
+	bool DoesProjectileNeedToBeAddedToTheObjectPool() const;
 
 protected:
 	// Called when the game starts or when spawned

@@ -34,6 +34,8 @@ ABNProjectile::ABNProjectile(const FObjectInitializer& ObjectInitializer) : Supe
 	NextAvailableProjectile = nullptr;
 
 	TeamFiredGameplayTag = FGameplayTag::RequestGameplayTag("Team1");
+	
+	bNeedsToBeAddedInTheObjectPool = false;
 }
 
 // Called when the game starts or when spawned
@@ -60,10 +62,7 @@ void ABNProjectile::OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActo
 				EntityPawn->GetAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*GameplayEffectSpecHandle.Data);
 				SetActorHiddenInGame(true);
 				ResetProjectileLocation();
-				if(OnProjectileDeactivateDelegate.IsBound())
-				{
-					OnProjectileDeactivateDelegate.Execute(this);
-				}
+				bNeedsToBeAddedInTheObjectPool = true;
 			}
 		}
 	}
@@ -83,7 +82,7 @@ void ABNProjectile::Tick(float DeltaTime)
 	{
 		SetActorHiddenInGame(true);
 		ResetProjectileLocation();
-		OnProjectileDeactivateDelegate.Execute(this);
+		bNeedsToBeAddedInTheObjectPool = true;
 	}
 }
 
@@ -154,5 +153,15 @@ ABNProjectile* ABNProjectile::GetNextNextAvailableProjectile() const
 void ABNProjectile::SetNextAvailableProjectile(ABNProjectile* Projectile)
 {
 	NextAvailableProjectile = Projectile;
+}
+
+void ABNProjectile::MarkProjectileInObjectPool()
+{
+	bNeedsToBeAddedInTheObjectPool = false;
+}
+
+bool ABNProjectile::DoesProjectileNeedToBeAddedToTheObjectPool() const
+{
+	return bNeedsToBeAddedInTheObjectPool;
 }
 
