@@ -6,7 +6,6 @@
 #include "GameplayEffect.h"
 #include "GameplayEffectExtension.h"
 #include "Net/UnrealNetwork.h"
-#include "Pawns/BNEntityPawn.h"
 
 UBNBaseAttributeSet::UBNBaseAttributeSet()
 {
@@ -55,7 +54,7 @@ void UBNBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 		if (SourceController == nullptr && SourceActor != nullptr)
 		{
 			if (APawn* Pawn = Cast<APawn>(SourceActor))
-			{ 
+			{
 				SourceController = Pawn->GetController();
 			}
 		}
@@ -89,7 +88,6 @@ void UBNBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 		// Store a local copy of the amount of damage done and clear the damage attribute
 		const float LocalCurrentDamage = GetCurrentDamage();
 		SetCurrentDamage(0.f);
-	
 		if (LocalCurrentDamage > 0.0f)
 		{
 			// Apply the health change and then clamp it

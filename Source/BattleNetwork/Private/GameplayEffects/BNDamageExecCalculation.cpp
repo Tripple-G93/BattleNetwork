@@ -55,13 +55,4 @@ void UBNDamageExecCalculation::Execute_Implementation(const FGameplayEffectCusto
 	Damage += FMath::Max<float>(Spec.GetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Data.Damage")), false, -1.0f), 0.0f);
 
 	OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(DamageStatics().CurrentDamageProperty, EGameplayModOp::Additive, Damage));
-
-	// Broadcast damages to Target ASC
-	UBNAbilitySystemComponent* TargetASC = Cast<UBNAbilitySystemComponent>(TargetAbilitySystemComponent);
-	if (TargetASC)
-	{
-		UBNAbilitySystemComponent* SourceASC = Cast<UBNAbilitySystemComponent>(SourceAbilitySystemComponent);
-		// TODO BN: Look into how relevant this is
-		//TargetASC->ReceiveDamage(SourceASC, UnmitigatedDamage, MitigatedDamage);
-	}
 }

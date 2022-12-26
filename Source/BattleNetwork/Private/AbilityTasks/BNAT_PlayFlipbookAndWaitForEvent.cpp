@@ -61,8 +61,6 @@ void UBNAT_PlayFlipbookAndWaitForEvent::Activate()
 
 void UBNAT_PlayFlipbookAndWaitForEvent::ExternalCancel()
 {
-	check(AbilitySystemComponent);
-
 	OnAbilityCancelled();
 
 	Super::ExternalCancel();
