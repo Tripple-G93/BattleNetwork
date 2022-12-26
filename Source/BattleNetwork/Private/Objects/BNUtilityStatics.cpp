@@ -18,9 +18,12 @@ FBNFlipbookAnimationTableInfoRow* UBNUtilityStatics::UpdateAnimation(UDataTable*
 			if (NewStatus == Entry->AnimationGameplayTag)
 			{
 				PaperFlipbookComponent->SetFlipbook(Entry->PaperFlipbook);
+				PaperFlipbookComponent->SetLooping(Entry->bDoesLoop);
 				return Entry;
 			}
 		}
+
+		UE_LOG(LogTemp, Error, TEXT("Unable to find flipbook animation of : %s."), *NewStatus.GetTagName().ToString());
 	}
 
 	return CurrentFlipbookAnimationTableInfoRow;

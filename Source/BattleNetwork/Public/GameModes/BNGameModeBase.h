@@ -7,6 +7,7 @@
 #include "BNGameModeBase.generated.h"
 
 class ABNGridActor;
+class ABNProjectilePool;
 
 /**
  * 
@@ -18,13 +19,18 @@ class BATTLENETWORK_API ABNGameModeBase : public AGameModeBase
 
 protected:
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category="BN|SubClasses")
 	TSubclassOf<ABNGridActor> GridActorSubClass;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category="BN|SubClasses")
+	TSubclassOf<ABNProjectilePool> BulletProjectilePoolSubClass;
+
+	UPROPERTY(EditDefaultsOnly, Category="BN|Values")
 	int MaxPlayersOnGrid;
 	
 	TObjectPtr<ABNGridActor> GridActor;
+
+	TObjectPtr<ABNProjectilePool> BulletProjectilePool;
 
 	TArray<APlayerController*> PlayerControllers;
 public:
@@ -42,9 +48,14 @@ public:
 	int GetMaxPlayersOnGrid() const;
 	
 	TArray<APlayerController*>& GetPlayerControllers();
+
+	TObjectPtr<ABNProjectilePool> GetBulletProjectilePool();
+
+	ABNGridActor* GetGridActor();
 	
 
 private:
 
 	void SpawnGrid();
+	void SpawnObjectPool();
 };

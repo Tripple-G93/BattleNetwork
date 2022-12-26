@@ -94,6 +94,10 @@ public:
 
 	void MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXIndex, int32 NewYIndex);
 
+	float GetLeftMostPanelXLocation();
+
+	float GetRightMostPanelXLocation();
+
 	/*
      * Server Calls
      */

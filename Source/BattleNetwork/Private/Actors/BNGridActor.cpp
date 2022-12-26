@@ -186,6 +186,16 @@ void ABNGridActor::MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXInd
 	}
 }
 
+float ABNGridActor::GetLeftMostPanelXLocation()
+{
+	return Grid[0][0]->GetActorLocation().X - PanelSpacingWidth;
+}
+
+float ABNGridActor::GetRightMostPanelXLocation()
+{
+	return Grid[GridWidth - 1][0]->GetActorLocation().X + PanelSpacingWidth;	
+}
+
 void ABNGridActor::SpawnPanel(const int32 XIndex, const int32 YIndex)
 {
 	const FVector Location(XIndex * PanelSpacingWidth, 0, YIndex * PanelSpacingHeight);

@@ -5,16 +5,19 @@
 
 #include "AbilitySystemComponent.h"
 #include "Actors/BNGridActor.h"
+#include "Components/AudioComponent.h"
+#include "Components/BoxComponent.h"
 #include "Components/SceneComponent.h"
 #include "Objects/BNUtilityStatics.h"
 #include "PaperFlipbookComponent.h"
 #include "Attributes/BNBaseAttributeSet.h"
 #include "Net/UnrealNetwork.h"
 #include "SceneComponents/BNEntityWidgetSceneComponent.h"
+#include "Sound/SoundCue.h"
 
 ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this pawn to call Tick() every frame. You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
 	SceneComponent = ObjectInitializer.CreateDefaultSubobject<USceneComponent>(this, TEXT("SceneComponent"));
@@ -27,6 +30,11 @@ ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Supe
 
 	EntityWidgetSceneComponent = ObjectInitializer.CreateDefaultSubobject<UBNEntityWidgetSceneComponent>(this, TEXT("EntityWidgetSceneComponent"));
 	EntityWidgetSceneComponent->SetupAttachment(PaperFlipbookComponent);
+
+	BoxComponent = ObjectInitializer.CreateDefaultSubobject<UBoxComponent>(this, TEXT("BoxComponent"));
+	BoxComponent->SetupAttachment(EntityWidgetSceneComponent);
+
+	AudioComponent = ObjectInitializer.CreateDefaultSubobject<UAudioComponent>(this,TEXT("AudioComponent"));
 	
 	bCanMove = true;
 }
@@ -49,6 +57,27 @@ void ABNEntityPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 	DOREPLIFETIME(ABNEntityPawn, TeamTag);
 	DOREPLIFETIME(ABNEntityPawn, GridActorReference);
 	DOREPLIFETIME(ABNEntityPawn, ServerGridLocation);
+}
+
+void ABNEntityPawn::UpdateAnimation(FGameplayTag AnimationTag)
+{
+	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
+CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, AnimationTag);
+}
+
+void ABNEntityPawn::PlayAnimationSoundEffect() const
+{
+	USoundCue* SoundEffectCue = CurrentFlipbookAnimationTableInfoRow->SoundEffectSoundCue;
+	if(SoundEffectCue)
+	{
+		AudioComponent->SetSound(SoundEffectCue);
+		AudioComponent->Play();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Can't play Gameplay Tag animation sound effect %s"), *CurrentFlipbookAnimationTableInfoRow->AnimationGameplayTag.ToString());
+	}
+	
 }
 
 /*
@@ -84,6 +113,11 @@ FBNGridLocation ABNEntityPawn::GetServerGridLocation() const
 	return ServerGridLocation;
 }
 
+TObjectPtr<UPaperFlipbookComponent> ABNEntityPawn::GetPaperFlipbookComponent()
+{
+	return PaperFlipbookComponent;
+}
+
 /*
  * End Getters
  */
@@ -97,7 +131,7 @@ void ABNEntityPawn::BeginPlay()
 		FlipEntity();
 	}
 	
-	PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::UpdateAnimation);
+	PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::UpdateIdleAnimation);
 }
 
 void ABNEntityPawn::InitializeAttributes()
@@ -117,13 +151,17 @@ void ABNEntityPawn::EnableMovementIfStandaloneMode()
 	}
 }
 
-void ABNEntityPawn::UpdateAnimation()
+void ABNEntityPawn::UpdateIdleAnimation()
 {
 	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
 CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, FGameplayTag::RequestGameplayTag(FName("Entity.Idle")));
-	PaperFlipbookComponent->SetFlipbook(CurrentFlipbookAnimationTableInfoRow->PaperFlipbook);
-	PaperFlipbookComponent->SetLooping(CurrentFlipbookAnimationTableInfoRow->bDoesLoop);
 	PaperFlipbookComponent->PlayFromStart();
+
+	const FGameplayTag MoveGameplayTag = FGameplayTag::RequestGameplayTag(FName("Entity.Move"));
+	if(GetAbilitySystemComponent()->HasMatchingGameplayTag(MoveGameplayTag))
+	{
+		GetAbilitySystemComponent()->RemoveLooseGameplayTag(MoveGameplayTag);
+	}
 }
 
 void ABNEntityPawn::ClientCallMoveEntityLeftRPC()
@@ -160,12 +198,16 @@ void ABNEntityPawn::ClientCallMoveEntityDownRPC()
 
 void ABNEntityPawn::UpdateMoveAnimationRPC_Implementation()
 {
-	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
-	CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, FGameplayTag::RequestGameplayTag(FName("Entity.Move")));
+	const FGameplayTag MoveGameplayTag = FGameplayTag::RequestGameplayTag(FName("Entity.Move"));
+	if(!GetAbilitySystemComponent()->HasMatchingGameplayTag(MoveGameplayTag))
+	{
+		GetAbilitySystemComponent()->AddLooseGameplayTag(MoveGameplayTag);
+	}
 	
-	PaperFlipbookComponent->SetFlipbook(CurrentFlipbookAnimationTableInfoRow->PaperFlipbook);
-	PaperFlipbookComponent->SetLooping(CurrentFlipbookAnimationTableInfoRow->bDoesLoop);
-	PaperFlipbookComponent->PlayFromStart();	
+	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
+	CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, MoveGameplayTag);
+	
+	PaperFlipbookComponent->PlayFromStart();
 }
 
 void ABNEntityPawn::MoveEntityLeftRPC_Implementation()

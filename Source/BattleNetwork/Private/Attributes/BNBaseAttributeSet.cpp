@@ -26,8 +26,6 @@ void UBNBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 {
 	Super::PostGameplayEffectExecute(Data);
 
-	/*
-
 	FGameplayEffectContextHandle Context = Data.EffectSpec.GetContext();
 	UAbilitySystemComponent* Source = Context.GetOriginalInstigatorAbilitySystemComponent();
 	const FGameplayTagContainer& SourceTags = *Data.EffectSpec.CapturedSourceTags.GetAggregatedTags();
@@ -78,105 +76,29 @@ void UBNBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 		}
 	}
 
-	if (Data.EvaluatedData.Attribute == GetDamageAttribute())
+	if (Data.EvaluatedData.Attribute == GetCurrentDamageAttribute())
 	{
-		// Store a local copy of the amount of damage done and clear the damage attribute
-		const float LocalDamageDone = GetDamage();
-		SetDamage(0.f);
-
-		if (LocalDamageDone > 0.0f)
+		// Try to extract a hit result
+		FHitResult HitResult;
+		if (Context.GetHitResult())
 		{
-			// If character was alive before damage is added, handle damage
-			// This prevents damage being added to dead things and replaying death animations
-			bool WasAlive = true;
-
-			if (TargetCharacter)
-			{
-				//WasAlive = TargetCharacter->IsAlive();
-			}
-
-			//if (!TargetCharacter->IsAlive())
-			{
-				//UE_LOG(LogTemp, Warning, TEXT("%s() %s is NOT alive when receiving damage"), *FString(__FUNCTION__), *TargetCharacter->GetName());
-			}
-
-			// Apply the damage to shield first if it exists
-			//const float OldShield = GetShield();
-			//float DamageAfterShield = LocalDamageDone - OldShield;
-			//if (OldShield > 0)
-			{
-				//float NewShield = OldShield - LocalDamageDone;
-				//SetShield(FMath::Clamp<float>(NewShield, 0.0f, GetMaxShield()));
-			}
-
-			//if (DamageAfterShield > 0)
-			{
-				// Apply the health change and then clamp it
-				//const float NewHealth = GetHealth() - DamageAfterShield;
-				//SetHealth(FMath::Clamp(NewHealth, 0.0f, GetMaxHealth()));
-			}
-
-			if (TargetCharacter && WasAlive)
-			{
-				// This is the log statement for damage received. Turned off for live games.
-				//UE_LOG(LogTemp, Log, TEXT("%s() %s Damage Received: %f"), *FString(__FUNCTION__), *GetOwningActor()->GetName(), LocalDamageDone);
-
-				// Show damage number for the Source player unless it was self damage
-				if (SourceActor != TargetActor)
-				{
-					//AGSPlayerController* PC = Cast<AGSPlayerController>(SourceController);
-					//if (PC)
-					{
-						//FGameplayTagContainer DamageNumberTags;
-
-						//if (Data.EffectSpec.DynamicAssetTags.HasTag(HeadShotTag))
-						{
-							//DamageNumberTags.AddTagFast(HeadShotTag);
-						}
-
-						//PC->ShowDamageNumber(LocalDamageDone, TargetCharacter, DamageNumberTags);
-					}
-				}
-
-				/*
-				if (!TargetCharacter->IsAlive())
-				{
-					// TargetCharacter was alive before this damage and now is not alive, give XP and Gold bounties to Source.
-					// Don't give bounty to self.
-					if (SourceController != TargetController)
-					{
-						// Create a dynamic instant Gameplay Effect to give the bounties
-						UGameplayEffect* GEBounty = NewObject<UGameplayEffect>(GetTransientPackage(), FName(TEXT("Bounty")));
-						GEBounty->DurationPolicy = EGameplayEffectDurationType::Instant;
-
-						int32 Idx = GEBounty->Modifiers.Num();
-						GEBounty->Modifiers.SetNum(Idx + 2);
-
-						FGameplayModifierInfo& InfoXP = GEBounty->Modifiers[Idx];
-						InfoXP.ModifierMagnitude = FScalableFloat(GetXPBounty());
-						InfoXP.ModifierOp = EGameplayModOp::Additive;
-						InfoXP.Attribute = UGSAttributeSetBase::GetXPAttribute();
-
-						FGameplayModifierInfo& InfoGold = GEBounty->Modifiers[Idx + 1];
-						InfoGold.ModifierMagnitude = FScalableFloat(GetGoldBounty());
-						InfoGold.ModifierOp = EGameplayModOp::Additive;
-						InfoGold.Attribute = UGSAttributeSetBase::GetGoldAttribute();
-
-						Source->ApplyGameplayEffectToSelf(GEBounty, 1.0f, Source->MakeEffectContext());
-					}
-				}
-
-			}
+			HitResult = *Context.GetHitResult();
+		}
+		
+		// Store a local copy of the amount of damage done and clear the damage attribute
+		const float LocalCurrentDamage = GetCurrentDamage();
+		SetCurrentDamage(0.f);
+		if (LocalCurrentDamage > 0.0f)
+		{
+			// Apply the health change and then clamp it
+			const float NewHealth = GetHealth() - LocalCurrentDamage;
+			SetHealth(FMath::Clamp(NewHealth, 0.0f, GetMaxHealth()));
 		}
 	}// Damage
 	else if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
-		// Handle other health changes.
-		// Health loss should go through Damage.
 		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
-	} // Health
-
-*/
+	}
 }
 
 void UBNBaseAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -187,6 +109,7 @@ void UBNBaseAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UBNBaseAttributeSet, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UBNBaseAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UBNBaseAttributeSet, BulletDamage, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UBNBaseAttributeSet, SpeedPercentRate, COND_None, REPNOTIFY_Always);
 }
 
@@ -213,6 +136,11 @@ void UBNBaseAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth)
 void UBNBaseAttributeSet::OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UBNBaseAttributeSet, MaxHealth, OldMaxHealth);
+}
+
+void UBNBaseAttributeSet::OnRep_BulletDamage(const FGameplayAttributeData& OldBulletDamage)
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UBNBaseAttributeSet, BulletDamage, OldBulletDamage);
 }
 
 void UBNBaseAttributeSet::OnRep_SpeedPercentRate(const FGameplayAttributeData& OldSpeedPercentRate)

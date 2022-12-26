@@ -5,9 +5,12 @@
 #include "CoreMinimal.h"
 #include "Pawns/BNBasePawn.h"
 #include "Structs/BNStructs.h"
+#include "Tables/BNFlipbookAnimationTable.h"
 #include "BNEntityPawn.generated.h"
 
 class ABNGridActor;
+class UAudioComponent;
+class UBoxComponent;
 class UBNEntityWidgetSceneComponent;
 class UDataTable;
 class UPaperFlipbookComponent;
@@ -34,9 +37,17 @@ protected:
 
 	UPROPERTY(Replicated)
 	TObjectPtr<ABNGridActor> GridActorReference;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UBoxComponent> BoxComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UAudioComponent> AudioComponent;
 	
 	UPROPERTY(ReplicatedUsing = OnRep_UpdateClientLocation)
 	FBNGridLocation ServerGridLocation;
+
+	TObjectPtr<FBNFlipbookAnimationTableInfoRow> CurrentFlipbookAnimationTableInfoRow;
 
 	UPROPERTY(Replicated)
 	FGameplayTag TeamTag;
@@ -51,6 +62,10 @@ public:
 	void FlipEntity();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
+	virtual void UpdateAnimation(FGameplayTag AnimationTag);
+
+	void PlayAnimationSoundEffect() const;
 	
 	/*
 	 * Setters
@@ -70,6 +85,8 @@ public:
 	
 	FBNGridLocation GetServerGridLocation() const;
 
+	TObjectPtr<UPaperFlipbookComponent> GetPaperFlipbookComponent();
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -79,7 +96,7 @@ protected:
 	void EnableMovementIfStandaloneMode();
 
 	UFUNCTION()
-	void UpdateAnimation();
+	void UpdateIdleAnimation();
 
 	UFUNCTION()
 	void ClientCallMoveEntityLeftRPC();

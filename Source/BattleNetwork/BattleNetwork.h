@@ -13,4 +13,6 @@ enum class EGSAbilityInputID : uint8
 	Confirm				UMETA(DisplayName = "Confirm"),
 	// 2 Cancel
 	Cancel				UMETA(DisplayName = "Cancel"),
+	// 3 Skill1
+	Skill1				UMETA(DisplayName = "Skill1")
 };
