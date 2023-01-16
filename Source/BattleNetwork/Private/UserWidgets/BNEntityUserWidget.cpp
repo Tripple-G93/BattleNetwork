@@ -4,6 +4,8 @@
 #include "UserWidgets/BNEntityUserWidget.h"
 
 #include "Attributes/BNBaseAttributeSet.h"
+#include "Components/TextBlock.h"
+#include "Components/ProgressBar.h"
 #include "Pawns/BNEntityPawn.h"
 
 void UBNEntityUserWidget::InitializeWidgetWithAttributes()

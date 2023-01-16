@@ -3,12 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ProgressBar.h"
-#include "Components/TextBlock.h"
+
 #include "GameplayEffectTypes.h"
 #include "UserWidgets/BNWorldSpaceToWidgetUserWidget.h"
+
 #include "BNEntityUserWidget.generated.h"
 
+class UProgressBar;
 class UTextBlock;
 
 /**

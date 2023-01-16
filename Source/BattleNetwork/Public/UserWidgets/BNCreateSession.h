@@ -13,5 +13,6 @@ UCLASS()
 class BATTLENETWORK_API UBNCreateSession : public UUserWidget
 {
 	GENERATED_BODY()
+
 	
 };
