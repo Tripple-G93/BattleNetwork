@@ -15,7 +15,7 @@ UBNSessionSubsystem::UBNSessionSubsystem() :
 	JoinSessionCompleteDelegate(FOnJoinSessionCompleteDelegate::CreateUObject(this, &ThisClass::OnJoinSessionCompleted))
 {}
 
-void UBNSessionSubsystem::CreateSession(int32 NumberPublicConnections, bool IsLANMatch)
+void UBNSessionSubsystem::CreateSession(int32 NumberPublicConnections, bool IsLANMatch, FName MapName)
 {
 	const IOnlineSessionPtr sessionInterface = Online::GetSessionInterface(GetWorld());
 	if (!sessionInterface.IsValid())
@@ -36,7 +36,7 @@ void UBNSessionSubsystem::CreateSession(int32 NumberPublicConnections, bool IsLA
 	LastSessionSettings->bIsLANMatch = IsLANMatch;
 	LastSessionSettings->bShouldAdvertise = true;
 
-	LastSessionSettings->Set(SETTING_MAPNAME, FString("Your Level Name"), EOnlineDataAdvertisementType::ViaOnlineService);
+	LastSessionSettings->Set(SETTING_MAPNAME, MapName.ToString(), EOnlineDataAdvertisementType::ViaOnlineService);
 
 	CreateSessionCompleteDelegateHandle = sessionInterface->AddOnCreateSessionCompleteDelegate_Handle(CreateSessionCompleteDelegate);
 

@@ -26,7 +26,13 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> ButtonCreate;
 
+	UPROPERTY(EditAnywhere, Category = "BN|MainGameMapName")
+	FName MapName;
+
 public:
+
+	UBNCreateSession(const FObjectInitializer& ObjectInitializer);
+	
 	virtual bool Initialize() override;
 
 protected:

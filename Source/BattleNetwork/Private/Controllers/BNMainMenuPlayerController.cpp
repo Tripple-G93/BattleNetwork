@@ -17,7 +17,7 @@ void ABNMainMenuPlayerController::CreateMainMenu()
 {
 	if(IsLocalPlayerController() && ensure(MainMenuUserWidgetClass) && ensure(!MainMenuUserWidget))
 	{
-		MainMenuUserWidget = CreateWidget<UBNCreateSession>(this, MainMenuUserWidgetClass);
+		MainMenuUserWidget = CreateWidget(this, MainMenuUserWidgetClass);
 		MainMenuUserWidget->AddToViewport();
 	}
 }

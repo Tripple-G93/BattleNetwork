@@ -50,7 +50,7 @@ public:
 
 	UBNSessionSubsystem();
 
-	void CreateSession(int32 NumberPublicConnections, bool IsLANMatch);
+	void CreateSession(int32 NumberPublicConnections, bool IsLANMatch, FName MapName);
 
 	void UpdateSession();
 
