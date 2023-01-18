@@ -6,7 +6,6 @@
 #include "Components/Button.h"
 #include "Components/CheckBox.h"
 #include "Components/Slider.h"
-#include "Kismet/GameplayStatics.h"
 
 #include "Subsystems/BNSessionSubsystem.h"
 
@@ -25,11 +24,14 @@ bool UBNCreateSession::Initialize()
 	return bIsInitialized;
 }
 
+UButton* UBNCreateSession::GetButtonGoBack()
+{
+	return ButtonGoBack;
+}
+
 void UBNCreateSession::CreateSession()
 {
 	const int32 NumberOfPlayers = static_cast<int32>(SliderNumberPlayers->GetValue());
 	const bool IsLocalNetworkEnabled = CheckBoxEnableLocalNetwork->IsChecked();
 	GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->CreateSession(NumberOfPlayers, IsLocalNetworkEnabled, MapName);
-
-	UGameplayStatics::OpenLevel(GetWorld(), MapName);
 }

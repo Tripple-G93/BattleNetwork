@@ -10,6 +10,7 @@
 class UBorder;
 class UButton;
 class UBNCreateSession;
+class UBNFindSessionUserWidget;
 
 UCLASS()
 class BATTLENETWORK_API UBNMainMenuUserWidget : public UUserWidget
@@ -25,7 +26,13 @@ protected:
 	TObjectPtr<UButton> ButtonCreateGame;
 
 	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UButton> ButtonFindGame;
+
+	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UBNCreateSession> CreateSessionWidget;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UBNFindSessionUserWidget> FindSessionWidget;
 
 public:
 
@@ -35,5 +42,14 @@ protected:
 
 	UFUNCTION()
 	void ShowCreateGameMenu();
+
+	UFUNCTION()
+	void HideCreateGameMenu();
+
+	UFUNCTION()
+	void ShowFindSessionMenu();
+
+	UFUNCTION()
+	void HideFindSessionMenu();
 
 };

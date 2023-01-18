@@ -23,7 +23,6 @@ class BATTLENETWORK_API UBNSessionSubsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 	
 	TSharedPtr<FOnlineSessionSettings> LastSessionSettings;
-	TSharedPtr<FOnlineSessionSearch> LastSessionSearch;
 	
 	FOnCreateSessionCompleteDelegate CreateSessionCompleteDelegate;
 	FDelegateHandle CreateSessionCompleteDelegateHandle;
@@ -48,6 +47,8 @@ class BATTLENETWORK_API UBNSessionSubsystem : public UGameInstanceSubsystem
 	
 public:
 
+	TSharedPtr<FOnlineSessionSearch> LastSessionSearch;
+	
 	UBNSessionSubsystem();
 
 	void CreateSession(int32 NumberPublicConnections, bool IsLANMatch, FName MapName);

@@ -30,4 +30,7 @@ protected:
 private:
 
 	void CreateMainMenu();
+protected:
+	
+	virtual void BeginPlay() override;
 };

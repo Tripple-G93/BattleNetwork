@@ -26,6 +26,9 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> ButtonCreate;
 
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UButton> ButtonGoBack;
+
 	UPROPERTY(EditAnywhere, Category = "BN|MainGameMapName")
 	FName MapName;
 
@@ -34,6 +37,8 @@ public:
 	UBNCreateSession(const FObjectInitializer& ObjectInitializer);
 	
 	virtual bool Initialize() override;
+
+	UButton* GetButtonGoBack();
 
 protected:
 

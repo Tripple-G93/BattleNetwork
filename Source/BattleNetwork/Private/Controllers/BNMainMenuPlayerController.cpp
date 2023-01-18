@@ -10,7 +10,7 @@ void ABNMainMenuPlayerController::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 
-	CreateMainMenu();
+	//CreateMainMenu();
 }
 
 void ABNMainMenuPlayerController::CreateMainMenu()
@@ -20,4 +20,11 @@ void ABNMainMenuPlayerController::CreateMainMenu()
 		MainMenuUserWidget = CreateWidget(this, MainMenuUserWidgetClass);
 		MainMenuUserWidget->AddToViewport();
 	}
+}
+
+void ABNMainMenuPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	CreateMainMenu();
 }

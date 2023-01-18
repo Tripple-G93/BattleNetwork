@@ -3,8 +3,12 @@
 
 #include "Subsystems/BNSessionSubsystem.h"
 
+#include "Engine/Engine.h"
+#include "UnrealEngine.h"
 #include "OnlineSubsystemUtils.h"
+#include "GameFramework/PlayerController.h"
 
+#include "Kismet/GameplayStatics.h"
 UBNSessionSubsystem::UBNSessionSubsystem() :
 	CreateSessionCompleteDelegate(FOnCreateSessionCompleteDelegate::CreateUObject(this, &ThisClass::OnCreateSessionCompleted)),
 	UpdateSessionCompleteDelegate(FOnUpdateSessionCompleteDelegate::CreateUObject(this, &ThisClass::OnUpdateSessionCompleted)),
@@ -192,6 +196,8 @@ void UBNSessionSubsystem::OnCreateSessionCompleted(FName SessionName, bool Succe
 		sessionInterface->ClearOnCreateSessionCompleteDelegate_Handle(CreateSessionCompleteDelegateHandle);
 	}
 
+	StartSession();
+	
 	OnCreateSessionCompleteEvent.Broadcast(Successful);
 }
 
@@ -213,6 +219,8 @@ void UBNSessionSubsystem::OnStartSessionCompleted(FName SessionName, bool Succes
 	{
 		sessionInterface->ClearOnStartSessionCompleteDelegate_Handle(StartSessionCompleteDelegateHandle);
 	}
+
+	UGameplayStatics::OpenLevel(GetWorld(), "Test", true, "listen");
 
 	OnStartSessionCompleteEvent.Broadcast(Successful);
 }
@@ -262,6 +270,34 @@ void UBNSessionSubsystem::OnJoinSessionCompleted(FName SessionName, EOnJoinSessi
 	if (sessionInterface)
 	{
 		sessionInterface->ClearOnJoinSessionCompleteDelegate_Handle(JoinSessionCompleteDelegateHandle);
+	}
+
+	// Get the OnlineSubsystem we want to work with
+	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
+	if (OnlineSub)
+	{
+		// Get SessionInterface from the OnlineSubsystem
+		//IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
+
+		if (sessionInterface.IsValid())
+		{
+
+			// Get the first local PlayerController, so we can call "ClientTravel" to get to the Server Map
+			// This is something the Blueprint Node "Join Session" does automatically!
+			APlayerController * const PlayerController = GEngine->GetFirstLocalPlayerController(GetWorld());
+
+			// We need a FString to use ClientTravel and we can let the SessionInterface contruct such a
+			// String for us by giving him the SessionName and an empty String. We want to do this, because
+			// Every OnlineSubsystem uses different TravelURLs
+			FString TravelURL;
+
+			if (PlayerController && sessionInterface->GetResolvedConnectString(SessionName, TravelURL))
+			{
+				// Finally call the ClienTravel. If you want, you could print the TravelURL to see
+				// how it really looks like
+				PlayerController->ClientTravel(TravelURL, ETravelType::TRAVEL_Absolute);
+			}
+		}
 	}
 
 	OnJoinGameSessionCompleteEvent.Broadcast(Result);
