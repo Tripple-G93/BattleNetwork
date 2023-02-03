@@ -28,7 +28,7 @@ void UBNAT_PlayFlipbookAndWaitForEvent::Activate()
 		return;
 	}
 	
-	if(AbilitySystemComponent)
+	if(AbilitySystemComponent.IsValid())
 	{
 		const FGameplayAbilityActorInfo* ActorInfo = Ability->GetCurrentActorInfo();
 		ABNEntityPawn* EntityPawn = Cast<ABNEntityPawn>(ActorInfo->AvatarActor);
