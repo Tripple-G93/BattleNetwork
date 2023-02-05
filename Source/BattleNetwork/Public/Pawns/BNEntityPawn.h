@@ -22,6 +22,9 @@ class BATTLENETWORK_API ABNEntityPawn : public ABNBasePawn
 	GENERATED_BODY()
 
 protected:
+
+	UPROPERTY(EditAnywhere, Category="BN")
+	FVector3d SpriteOffset;
 	
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UDataTable> FlipbookAnimationDataTable;
@@ -81,6 +84,8 @@ public:
 	 * Getters
 	 */
 
+	FVector3d GetSpriteOffset() const;
+	
 	FGameplayTag GetTeamTag() const;
 	
 	FBNGridLocation GetServerGridLocation() const;

@@ -60,6 +60,7 @@ void ABNGridActor::SpawnPlayer1_Implementation(APlayerController* PlayerControll
 		SpawnParameters.Owner = PlayerController;
 
 		ABNPlayerPawn* Player = GetWorld()->SpawnActor<ABNPlayerPawn>(PlayerPawnSubclass, Location, Rotation, SpawnParameters);
+		Player->SetActorLocation(Location + Player->GetSpriteOffset());
 		PlayerController->Possess(Player);
 		PlayerController->SetViewTarget(this);
 		Panel->SetEntityPawn(Player);
@@ -87,6 +88,7 @@ void ABNGridActor::SpawnPlayer2_Implementation(APlayerController* PlayerControll
 		SpawnParameters.Owner = PlayerController;
 
 		ABNPlayerPawn* Player = GetWorld()->SpawnActor<ABNPlayerPawn>(PlayerPawnSubclass, Location, Rotation, SpawnParameters);
+		Player->SetActorLocation(Location + Player->GetSpriteOffset());
 		PlayerController->Possess(Player);
 		PlayerController->SetViewTarget(this);
 		Panel->SetEntityPawn(Player);
@@ -180,7 +182,7 @@ void ABNGridActor::MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXInd
 		PanelActor->SetEntityPawn(EntityPawn);
 	
 		const FVector NewLocation = PanelActor->GetActorLocation();
-		EntityPawn->SetActorLocation(NewLocation);
+		EntityPawn->SetActorLocation(NewLocation + EntityPawn->GetSpriteOffset());
 	
 		EntityPawn->SetServerGridLocation(FBNGridLocation(NewXIndex, NewYIndex));
 	}
