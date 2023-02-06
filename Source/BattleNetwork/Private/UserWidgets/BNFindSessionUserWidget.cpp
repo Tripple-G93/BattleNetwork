@@ -8,15 +8,14 @@
 #include "Components/CheckBox.h"
 #include "Subsystems/BNSessionSubsystem.h"
 
-#include "Kismet/GameplayStatics.h"
-
 bool UBNFindSessionUserWidget::Initialize()
 {
 	bool bIsInitialized = Super::Initialize();
-
-	ButtonFindSession->OnPressed.AddDynamic(this, &UBNFindSessionUserWidget::FindSession);
+	
 	ButtonJoinFirstResult->OnPressed.AddDynamic(this, &UBNFindSessionUserWidget::UBNFindSessionUserWidget::JoinFirstSession);
 
+	ButtonJoinFirstResult->SetIsEnabled(false);
+	
 	return bIsInitialized;
 }
 
@@ -25,16 +24,24 @@ UButton* UBNFindSessionUserWidget::GetBackButton()
 	return ButtonBack;
 }
 
-void UBNFindSessionUserWidget::FindSession()
-{
-	bool bIsLanQuery = CheckBoxEnableNetworkSession->IsChecked();
-	GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->FindSessions(10, bIsLanQuery);
-}
-
 void UBNFindSessionUserWidget::JoinFirstSession()
 {
+	ButtonJoinFirstResult->SetIsEnabled(false);
 	GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->JoinGameSession(GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->LastSessionSearch->SearchResults.Top());
-	//UGameplayStatics::OpenLevel(GetWorld(), "Test");
+}
 
+void UBNFindSessionUserWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+	Super::NativeTick(MyGeometry, InDeltaTime);
+
+	UBNSessionSubsystem* SessionSubsystem = GetGameInstance()->GetSubsystem<UBNSessionSubsystem>();
 	
+	if(!ButtonJoinFirstResult->GetIsEnabled() && SessionSubsystem->LastSessionSearch.IsValid() && !SessionSubsystem->LastSessionSearch->SearchResults.IsEmpty())
+	{
+		ButtonJoinFirstResult->SetIsEnabled(true);
+	}
+	else if(ButtonJoinFirstResult->GetIsEnabled() && SessionSubsystem->LastSessionSearch.IsValid() && SessionSubsystem->LastSessionSearch->SearchResults.IsEmpty())
+	{
+		ButtonJoinFirstResult->SetIsEnabled(false);
+	}
 }

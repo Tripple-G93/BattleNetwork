@@ -12,6 +12,7 @@ class UCheckBox;
 UCLASS()
 class BATTLENETWORK_API UBNFindSessionUserWidget : public UUserWidget
 {
+private:
 	GENERATED_BODY()
 
 protected:
@@ -20,13 +21,7 @@ protected:
 	TObjectPtr<UButton> ButtonBack;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> ButtonFindSession;
-
-	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> ButtonJoinFirstResult;
-
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UCheckBox> CheckBoxEnableNetworkSession;
 
 public:
 
@@ -37,9 +32,8 @@ public:
 protected:
 
 	UFUNCTION()
-	void FindSession();
-
-	UFUNCTION()
 	void JoinFirstSession();
+
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	
 };

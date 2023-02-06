@@ -37,6 +37,8 @@ void UBNMainMenuUserWidget::CreateLocalMultiplayerGame()
 
 void UBNMainMenuUserWidget::ShowFindSessionMenu()
 {
+	GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->FindSessions(10, true);
+	
 	BorderMainMenu->SetVisibility(ESlateVisibility::Collapsed);
 	FindSessionWidget->SetVisibility(ESlateVisibility::Visible);
 }
