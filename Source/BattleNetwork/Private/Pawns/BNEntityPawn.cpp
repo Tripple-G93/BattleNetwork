@@ -36,6 +36,10 @@ ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Supe
 
 	AudioComponent = ObjectInitializer.CreateDefaultSubobject<UAudioComponent>(this,TEXT("AudioComponent"));
 	
+	SpriteOffset.X = 0;
+	SpriteOffset.Y = 0;
+	SpriteOffset.Z = 0;
+	
 	bCanMove = true;
 }
 
@@ -97,6 +101,11 @@ void ABNEntityPawn::SetTeamTag(FGameplayTag NewTeamTag)
 void ABNEntityPawn::SetServerGridLocation(FBNGridLocation NewServerGridLocation)
 {
 	ServerGridLocation = NewServerGridLocation;
+}
+
+FVector3d ABNEntityPawn::GetSpriteOffset() const
+{
+	return SpriteOffset;
 }
 
 /*
