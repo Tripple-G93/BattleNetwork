@@ -22,14 +22,10 @@ protected:
 	UPROPERTY(BlueprintReadWrite, Category = "BN|UI")
 	TObjectPtr<UUserWidget> MainMenuUserWidget;
 
-public:
-	
-protected:
-	virtual void OnRep_PlayerState() override;
-
 private:
 
 	void CreateMainMenu();
+	
 protected:
 	
 	virtual void BeginPlay() override;

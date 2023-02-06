@@ -5,13 +5,6 @@
 
 #include "Blueprint/UserWidget.h"
 
-void ABNMainMenuPlayerController::OnRep_PlayerState()
-{
-	Super::OnRep_PlayerState();
-
-	//CreateMainMenu();
-}
-
 void ABNMainMenuPlayerController::CreateMainMenu()
 {
 	if(IsLocalPlayerController() && ensure(MainMenuUserWidgetClass) && ensure(!MainMenuUserWidget))
