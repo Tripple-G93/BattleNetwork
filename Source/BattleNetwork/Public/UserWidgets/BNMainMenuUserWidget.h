@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BNCreateSession.h"
 #include "Blueprint/UserWidget.h"
 #include "BNMainMenuUserWidget.generated.h"
 

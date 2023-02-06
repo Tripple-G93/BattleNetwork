@@ -6,7 +6,6 @@
 #include "Components/Border.h"
 #include "Components/Button.h"
 #include "Subsystems/BNSessionSubsystem.h"
-#include "UserWidgets/BNCreateSession.h"
 #include "UserWidgets/BNFindSessionUserWidget.h"
 
 bool UBNMainMenuUserWidget::Initialize()
