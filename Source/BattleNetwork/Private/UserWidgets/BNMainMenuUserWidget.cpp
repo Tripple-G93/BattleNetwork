@@ -5,6 +5,7 @@
 
 #include "Components/Border.h"
 #include "Components/Button.h"
+#include "Subsystems/BNSessionSubsystem.h"
 #include "UserWidgets/BNCreateSession.h"
 #include "UserWidgets/BNFindSessionUserWidget.h"
 
@@ -14,27 +15,25 @@ bool UBNMainMenuUserWidget::Initialize()
 
 	FindSessionWidget->SetVisibility(ESlateVisibility::Collapsed);
 	FindSessionWidget->GetBackButton()->OnPressed.AddDynamic(this, &UBNMainMenuUserWidget::HideFindSessionMenu);
-	
-	CreateSessionWidget->SetVisibility(ESlateVisibility::Collapsed);
-	CreateSessionWidget->GetButtonGoBack()->OnPressed.AddDynamic(this, &UBNMainMenuUserWidget::HideCreateGameMenu);
-	
-	ButtonCreateGame->OnPressed.AddDynamic(this, &UBNMainMenuUserWidget::ShowCreateGameMenu);
 
-	ButtonFindGame->OnPressed.AddDynamic(this, &UBNMainMenuUserWidget::ShowFindSessionMenu);
+	if(IsValid(ButtonCreateLocalMultiplayerGame))
+	{
+		ButtonCreateLocalMultiplayerGame->OnPressed.AddDynamic(this, &UBNMainMenuUserWidget::CreateLocalMultiplayerGame);
+	}
 
+	if(IsValid(ButtonFindGame))
+	{
+		ButtonFindGame->OnPressed.AddDynamic(this, &UBNMainMenuUserWidget::ShowFindSessionMenu);
+	}
+	
+	MultiplayerMapName = "Test";
+	
 	return bIsInitialized;
 }
 
-void UBNMainMenuUserWidget::ShowCreateGameMenu()
+void UBNMainMenuUserWidget::CreateLocalMultiplayerGame()
 {
-	BorderMainMenu->SetVisibility(ESlateVisibility::Collapsed);
-	CreateSessionWidget->SetVisibility(ESlateVisibility::Visible);
-}
-
-void UBNMainMenuUserWidget::HideCreateGameMenu()
-{
-	BorderMainMenu->SetVisibility(ESlateVisibility::Visible);
-	CreateSessionWidget->SetVisibility(ESlateVisibility::Collapsed);
+	GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->CreateSession(2, true, MultiplayerMapName);
 }
 
 void UBNMainMenuUserWidget::ShowFindSessionMenu()

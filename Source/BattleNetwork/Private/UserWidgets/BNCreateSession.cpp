@@ -12,7 +12,7 @@
 UBNCreateSession::UBNCreateSession(const FObjectInitializer& ObjectInitializer) 
 	: Super(ObjectInitializer)
 {
-	MapName = "Test";
+	MultiplayerMapName = "Test";
 }
 
 bool UBNCreateSession::Initialize()
@@ -31,7 +31,5 @@ UButton* UBNCreateSession::GetButtonGoBack()
 
 void UBNCreateSession::CreateSession()
 {
-	const int32 NumberOfPlayers = static_cast<int32>(SliderNumberPlayers->GetValue());
-	const bool IsLocalNetworkEnabled = CheckBoxEnableLocalNetwork->IsChecked();
-	GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->CreateSession(NumberOfPlayers, IsLocalNetworkEnabled, MapName);
+	GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->CreateSession(2, true, MultiplayerMapName);
 }

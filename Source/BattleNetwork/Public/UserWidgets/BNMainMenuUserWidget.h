@@ -23,16 +23,19 @@ protected:
 	TObjectPtr<UBorder> BorderMainMenu;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> ButtonCreateGame;
+	TObjectPtr<UButton> ButtonCreateLocalMultiplayerGame;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UButton> ButtonCreateSinglePlayerGame;
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> ButtonFindGame;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UBNCreateSession> CreateSessionWidget;
-
-	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UBNFindSessionUserWidget> FindSessionWidget;
+
+	UPROPERTY(EditAnywhere, Category = "BN|MapName")
+	FName MultiplayerMapName;
 
 public:
 
@@ -41,11 +44,8 @@ public:
 protected:
 
 	UFUNCTION()
-	void ShowCreateGameMenu();
-
-	UFUNCTION()
-	void HideCreateGameMenu();
-
+	void CreateLocalMultiplayerGame();
+	
 	UFUNCTION()
 	void ShowFindSessionMenu();
 

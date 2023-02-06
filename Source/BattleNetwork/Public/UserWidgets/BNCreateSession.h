@@ -18,19 +18,13 @@ class BATTLENETWORK_API UBNCreateSession : public UUserWidget
 protected:
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<USlider> SliderNumberPlayers;
-
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UCheckBox> CheckBoxEnableLocalNetwork;
-
-	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> ButtonCreate;
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> ButtonGoBack;
 
 	UPROPERTY(EditAnywhere, Category = "BN|MainGameMapName")
-	FName MapName;
+	FName MultiplayerMapName;
 
 public:
 
