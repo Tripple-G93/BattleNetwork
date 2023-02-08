@@ -8,9 +8,3 @@ void UBNStackActivatableWidget::SetCommonActivatableWidgetStackReference(
 {
 	CommonActivatableWidgetStackReference = CommonActivatableWidgetStack;
 }
-
-UCommonActivatableWidgetStack* UBNStackActivatableWidget::GetCommonActivatableWidgetStackReference()
-{
-	ensure(CommonActivatableWidgetStackReference);
-	return CommonActivatableWidgetStackReference;
-}

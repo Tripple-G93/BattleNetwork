@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CommonActivatableWidget.h"
+#include "ActivatableWidgets/BNStackActivatableWidget.h"
 #include "BNMainMenuActivatableWidget.generated.h"
 
-class ActivatableWidgetT;
+class UBNStackActivatableWidget;
 class UButton;
 class UCommonActivatableWidgetStack;
 
@@ -14,11 +14,11 @@ class UCommonActivatableWidgetStack;
  * 
  */
 UCLASS()
-class BATTLENETWORK_API UBNMainMenuActivatableWidget : public UCommonActivatableWidget
+class BATTLENETWORK_API UBNMainMenuActivatableWidget : public UBNStackActivatableWidget
 {
 	GENERATED_BODY()
 
-	UCommonActivatableWidget* FindSessionActivatableWidget;
+	UBNStackActivatableWidget* FindSessionActivatableWidget;
 	
 protected:
 
@@ -30,9 +30,6 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UButton> ButtonFindGame;
-
-	//UPROPERTY(meta = (BindWidget))
-	//TObjectPtr<UCommonActivatableWidgetStack> FindLocalMultiplayerGameWidgetStack;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "BN|UI")
 	TSubclassOf<UCommonActivatableWidget> FindSessionActivatableWidgetClass;

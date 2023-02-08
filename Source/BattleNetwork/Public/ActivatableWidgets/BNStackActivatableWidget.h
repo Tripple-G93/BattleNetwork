@@ -22,6 +22,4 @@ protected:
 public:
 
 	void SetCommonActivatableWidgetStackReference(UCommonActivatableWidgetStack* CommonActivatableWidgetStack);
-
-	UCommonActivatableWidgetStack* GetCommonActivatableWidgetStackReference();
 };

@@ -28,13 +28,19 @@ bool UBNMainMenuActivatableWidget::Initialize()
 
 void UBNMainMenuActivatableWidget::AddFindSessionActivatableWidgetToStack()
 {
-	/*
-	if(ensure(FindSessionActivatableWidgetClass) && !IsValid(FindSessionActivatableWidget))
+	if(ensure(CommonActivatableWidgetStackReference))
 	{
-		FindSessionActivatableWidget = FindLocalMultiplayerGameWidgetStack->AddWidget(FindSessionActivatableWidgetClass);
-		DeactivateWidget();
+		if(ensure(FindSessionActivatableWidgetClass) && !IsValid(FindSessionActivatableWidget))
+		{
+			FindSessionActivatableWidget = Cast<UBNStackActivatableWidget>(CommonActivatableWidgetStackReference->AddWidget(FindSessionActivatableWidgetClass));
+			if(ensure(FindSessionActivatableWidget))
+			{
+				FindSessionActivatableWidget->SetCommonActivatableWidgetStackReference(CommonActivatableWidgetStackReference);
+			}
+		}
 	}
 
+	/*
 	if(!IsValid(FindSessionActivatableWidget) && !FindSessionActivatableWidget->IsActivated())
 	{
 		FindSessionActivatableWidget->ActivateWidget();
