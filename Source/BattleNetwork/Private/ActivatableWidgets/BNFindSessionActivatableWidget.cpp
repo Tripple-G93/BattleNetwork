@@ -8,19 +8,21 @@
 #include "Components/CheckBox.h"
 #include "Subsystems/BNSessionSubsystem.h"
 
-bool UBNFindSessionActivatableWidget::Initialize()
+void UBNFindSessionActivatableWidget::NativeConstruct()
 {
-	bool bIsInitialized = Super::Initialize();
-	
-	ButtonJoinFirstResult->OnPressed.AddDynamic(this, &UBNFindSessionActivatableWidget::JoinFirstSession);
-	ButtonJoinFirstResult->SetIsEnabled(false);
-	
-	return bIsInitialized;
-}
+	Super::NativeConstruct();
 
-UButton* UBNFindSessionActivatableWidget::GetBackButton()
-{
-	return ButtonBack;
+	if(!ButtonJoinFirstResult->OnPressed.Contains(this, "JoinFirstSession"))
+	{
+		ButtonJoinFirstResult->OnPressed.AddDynamic(this, &UBNFindSessionActivatableWidget::JoinFirstSession);
+	}
+	
+	ButtonJoinFirstResult->SetIsEnabled(false);
+
+	if(!ButtonBack->OnPressed.Contains(this, "DeactivateWidget"))
+	{
+		ButtonBack->OnPressed.AddDynamic(this, &UBNFindSessionActivatableWidget::DeactivateWidget);
+	}
 }
 
 void UBNFindSessionActivatableWidget::JoinFirstSession()

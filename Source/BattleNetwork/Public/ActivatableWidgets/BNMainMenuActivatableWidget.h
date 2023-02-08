@@ -15,8 +15,6 @@ UCLASS()
 class BATTLENETWORK_API UBNMainMenuActivatableWidget : public UBNStackActivatableWidget
 {
 	GENERATED_BODY()
-
-	UBNStackActivatableWidget* FindSessionActivatableWidget;
 	
 protected:
 

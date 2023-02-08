@@ -15,7 +15,7 @@ UCLASS()
 class BATTLENETWORK_API UBNFindSessionActivatableWidget : public UBNStackActivatableWidget
 {
 	GENERATED_BODY()
-	
+
 protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
@@ -23,17 +23,12 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UButton> ButtonJoinFirstResult;
-
-public:
-
-	virtual bool Initialize() override;
 	
-	UButton* GetBackButton();
+	virtual void NativeConstruct() override;
 
-protected:
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 	UFUNCTION()
 	void JoinFirstSession();
-
-	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+	
 };
