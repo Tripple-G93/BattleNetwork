@@ -6,9 +6,7 @@
 #include "ActivatableWidgets/BNStackActivatableWidget.h"
 #include "BNMainMenuActivatableWidget.generated.h"
 
-class UBNStackActivatableWidget;
 class UButton;
-class UCommonActivatableWidgetStack;
 
 /**
  * 
