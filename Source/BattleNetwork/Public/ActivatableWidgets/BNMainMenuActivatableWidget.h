@@ -4,16 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "CommonActivatableWidget.h"
-#include "BNCommonActivatableWidget.generated.h"
+#include "BNMainMenuActivatableWidget.generated.h"
 
 class ActivatableWidgetT;
 class UButton;
 class UCommonActivatableWidgetStack;
+
 /**
  * 
  */
 UCLASS()
-class BATTLENETWORK_API UBNCommonActivatableWidget : public UCommonActivatableWidget
+class BATTLENETWORK_API UBNMainMenuActivatableWidget : public UCommonActivatableWidget
 {
 	GENERATED_BODY()
 
@@ -21,17 +22,17 @@ class BATTLENETWORK_API UBNCommonActivatableWidget : public UCommonActivatableWi
 	
 protected:
 
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UButton> ButtonCreateLocalMultiplayerGame;
 
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UButton> ButtonCreateSinglePlayerGame;
 
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UButton> ButtonFindGame;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UCommonActivatableWidgetStack> CommonActivatableWidgetStack;
+	TObjectPtr<UCommonActivatableWidgetStack> FindLocalMultiplayerGameWidgetStack;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "BN|UI")
 	TSubclassOf<UCommonActivatableWidget> FindSessionActivatableWidgetClass;
