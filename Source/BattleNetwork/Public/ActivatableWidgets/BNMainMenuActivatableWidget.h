@@ -31,8 +31,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UButton> ButtonFindGame;
 
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UCommonActivatableWidgetStack> FindLocalMultiplayerGameWidgetStack;
+	//UPROPERTY(meta = (BindWidget))
+	//TObjectPtr<UCommonActivatableWidgetStack> FindLocalMultiplayerGameWidgetStack;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "BN|UI")
 	TSubclassOf<UCommonActivatableWidget> FindSessionActivatableWidgetClass;
