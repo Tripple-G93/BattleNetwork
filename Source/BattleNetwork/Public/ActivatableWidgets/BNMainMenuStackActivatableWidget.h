@@ -6,7 +6,6 @@
 #include "CommonActivatableWidget.h"
 #include "BNMainMenuStackActivatableWidget.generated.h"
 
-class UBNStackActivatableWidget;
 class UCommonActivatableWidgetStack;
 
 /**
@@ -17,8 +16,6 @@ class BATTLENETWORK_API UBNMainMenuStackActivatableWidget : public UCommonActiva
 {
 private:
 	GENERATED_BODY()
-
-	UBNStackActivatableWidget* MainMenuActivatableWidget;
 	
 protected:
 	
@@ -27,11 +24,6 @@ protected:
 
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "BN|MainMenuUI")
     TSubclassOf<UCommonActivatableWidget> MainMenuActivatableWidgetClass;
-    
-public:
-
-    virtual bool Initialize() override;
-
-protected:
+	
 	virtual void NativeConstruct() override;
 };

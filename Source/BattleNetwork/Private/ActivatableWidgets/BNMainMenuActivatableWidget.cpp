@@ -7,9 +7,9 @@
 #include "Subsystems/BNSessionSubsystem.h"
 #include "Widgets/CommonActivatableWidgetContainer.h"
 
-bool UBNMainMenuActivatableWidget::Initialize()
+void UBNMainMenuActivatableWidget::NativeConstruct()
 {
-	const bool bIsInitialized = Super::Initialize();
+	Super::NativeConstruct();
 
 	if(IsValid(ButtonCreateLocalMultiplayerGame))
 	{
@@ -18,16 +18,14 @@ bool UBNMainMenuActivatableWidget::Initialize()
 
 	if(IsValid(ButtonFindGame))
 	{
-		ButtonFindGame->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::AddFindSessionActivatableWidgetToStack);
+		ButtonFindGame->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::FindSessionWidgetFlow);
 	}
-	
-	MultiplayerMapName = "Test";
-	
-	return bIsInitialized;
 }
 
-void UBNMainMenuActivatableWidget::AddFindSessionActivatableWidgetToStack()
+void UBNMainMenuActivatableWidget::FindSessionWidgetFlow()
 {
+	GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->FindSessions(10, true);
+	
 	if(ensure(CommonActivatableWidgetStackReference))
 	{
 		if(ensure(FindSessionActivatableWidgetClass))
@@ -40,4 +38,13 @@ void UBNMainMenuActivatableWidget::AddFindSessionActivatableWidgetToStack()
 void UBNMainMenuActivatableWidget::CreateLocalMultiplayerGame()
 {
 	GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->CreateSession(2, true, MultiplayerMapName);
+
+	SetInputModeToGameplay();
+}
+
+void UBNMainMenuActivatableWidget::SetInputModeToGameplay() const
+{
+	const FInputModeGameOnly GameOnlyInputMode;
+	GetOwningPlayer()->SetInputMode(GameOnlyInputMode);
+	GetOwningPlayer()->SetShowMouseCursor(false);
 }

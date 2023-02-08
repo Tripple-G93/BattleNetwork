@@ -15,7 +15,7 @@ UCLASS()
 class BATTLENETWORK_API UBNMainMenuActivatableWidget : public UBNStackActivatableWidget
 {
 	GENERATED_BODY()
-	
+
 protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
@@ -33,14 +33,15 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "BN|MapName")
 	FName MultiplayerMapName;
 
-public:
-
-	virtual bool Initialize() override;
+protected:
+	virtual void NativeConstruct() override;
 
 private:
 
+	void SetInputModeToGameplay() const;
+	
 	UFUNCTION()
-	void AddFindSessionActivatableWidgetToStack();
+	void FindSessionWidgetFlow();
 
 	UFUNCTION()
 	void CreateLocalMultiplayerGame();
