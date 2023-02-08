@@ -6,7 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "BNMainMenuPlayerController.generated.h"
 
-class UUserWidget;
+class UCommonActivatableWidget;
 
 UCLASS()
 class BATTLENETWORK_API ABNMainMenuPlayerController : public APlayerController
@@ -17,10 +17,10 @@ private:
 protected:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "BN|UI")
-	TSubclassOf<UUserWidget> MainMenuUserWidgetClass;
+	TSubclassOf<UCommonActivatableWidget> MainMenuUserWidgetClass;
 
 	UPROPERTY(BlueprintReadWrite, Category = "BN|UI")
-	TObjectPtr<UUserWidget> MainMenuUserWidget;
+	TObjectPtr<UCommonActivatableWidget> MainMenuUserWidget;
 
 private:
 
