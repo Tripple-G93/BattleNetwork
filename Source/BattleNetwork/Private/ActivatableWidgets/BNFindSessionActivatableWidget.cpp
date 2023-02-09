@@ -1,36 +1,37 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UserWidgets/BNFindSessionUserWidget.h"
+#include "ActivatableWidgets/BNFindSessionActivatableWidget.h"
 
 #include "OnlineSessionSettings.h"
 #include "Components/Button.h"
 #include "Components/CheckBox.h"
 #include "Subsystems/BNSessionSubsystem.h"
 
-bool UBNFindSessionUserWidget::Initialize()
+void UBNFindSessionActivatableWidget::NativeConstruct()
 {
-	bool bIsInitialized = Super::Initialize();
-	
-	ButtonJoinFirstResult->OnPressed.AddDynamic(this, &UBNFindSessionUserWidget::UBNFindSessionUserWidget::JoinFirstSession);
+	Super::NativeConstruct();
 
+	if(!ButtonJoinFirstResult->OnPressed.Contains(this, "JoinFirstSession"))
+	{
+		ButtonJoinFirstResult->OnPressed.AddDynamic(this, &UBNFindSessionActivatableWidget::JoinFirstSession);
+	}
+	
 	ButtonJoinFirstResult->SetIsEnabled(false);
-	
-	return bIsInitialized;
+
+	if(!ButtonBack->OnPressed.Contains(this, "DeactivateWidget"))
+	{
+		ButtonBack->OnPressed.AddDynamic(this, &UBNFindSessionActivatableWidget::DeactivateWidget);
+	}
 }
 
-UButton* UBNFindSessionUserWidget::GetBackButton()
-{
-	return ButtonBack;
-}
-
-void UBNFindSessionUserWidget::JoinFirstSession()
+void UBNFindSessionActivatableWidget::JoinFirstSession()
 {
 	ButtonJoinFirstResult->SetIsEnabled(false);
 	GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->JoinGameSession(GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->LastSessionSearch->SearchResults.Top());
 }
 
-void UBNFindSessionUserWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+void UBNFindSessionActivatableWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 
