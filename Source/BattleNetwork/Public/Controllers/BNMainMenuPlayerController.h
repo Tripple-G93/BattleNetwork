@@ -21,12 +21,12 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, Category = "BN|UI")
 	TObjectPtr<UCommonActivatableWidget> MainMenuUserWidget;
-
+	
+	virtual void BeginPlay() override;
+	
 private:
 
 	void CreateMainMenu();
 	
-protected:
-	
-	virtual void BeginPlay() override;
+    void SetInputModeUI();
 };

@@ -16,13 +16,18 @@ void ABNMainMenuPlayerController::CreateMainMenu()
 	}
 }
 
+void ABNMainMenuPlayerController::SetInputModeUI()
+{
+	const FInputModeUIOnly InputModeUIOnly;
+	SetInputMode(InputModeUIOnly);
+	SetShowMouseCursor(true);
+}
+
 void ABNMainMenuPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	const FInputModeUIOnly InputModeUIOnly;
-	SetInputMode(InputModeUIOnly);
-	SetShowMouseCursor(true);
+	SetInputModeUI();
 	
 	CreateMainMenu();
 }
