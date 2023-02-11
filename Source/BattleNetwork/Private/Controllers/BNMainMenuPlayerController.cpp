@@ -3,7 +3,6 @@
 
 #include "Controllers/BNMainMenuPlayerController.h"
 
-#include "Blueprint/UserWidget.h"
 #include "CommonActivatableWidget.h"
 
 void ABNMainMenuPlayerController::CreateMainMenu()

@@ -6,6 +6,8 @@
 #include "GameFramework/PlayerController.h"
 #include "BNPlayerController.generated.h"
 
+class UCommonActivatableWidget;
+
 /**
  * 
  */
@@ -20,7 +22,17 @@ protected:
 	// Server only
 	virtual void OnPossess(APawn* InPawn) override;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "BN|UI")
+	TSubclassOf<UCommonActivatableWidget> ResultActivatableWidgetClass;
+
+	UPROPERTY(BlueprintReadWrite, Category = "BN|UI")
+	TObjectPtr<UCommonActivatableWidget> ResultActivatableWidget;
+	
 public:
 
 	void DisplayResultUI();
+
+private:
+	
+	void SetInputModeUI();
 };
