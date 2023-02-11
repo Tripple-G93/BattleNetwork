@@ -17,3 +17,8 @@ void ABNPlayerController::OnPossess(APawn* InPawn)
 	}
 	
 }
+
+void ABNPlayerController::DisplayResultUI()
+{
+
+}

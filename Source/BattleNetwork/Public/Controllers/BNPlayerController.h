@@ -19,4 +19,8 @@ protected:
 
 	// Server only
 	virtual void OnPossess(APawn* InPawn) override;
+
+public:
+
+	void DisplayResultUI();
 };

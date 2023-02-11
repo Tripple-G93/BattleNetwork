@@ -41,6 +41,9 @@ public:
 	
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 
+	UFUNCTION(Server, Reliable)
+	void GameHasEnded();
+
 	/*
 	 *	Getters
 	 */

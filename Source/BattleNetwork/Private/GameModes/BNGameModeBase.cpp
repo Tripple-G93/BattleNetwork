@@ -2,8 +2,11 @@
 
 
 #include "GameModes/BNGameModeBase.h"
+
 #include "Actors/BNGridActor.h"
 #include "Actors/BNProjectilePool.h"
+#include "Attributes/BNBaseAttributeSet.h"
+#include "Controllers/BNPlayerController.h"
 #include "Engine/World.h"
 
 ABNGameModeBase::ABNGameModeBase()
@@ -32,10 +35,31 @@ void ABNGameModeBase::PostLogin(APlayerController* NewPlayer)
 	if(PlayerControllers.Num() == 1)
 	{
 		GridActor->SpawnPlayer1(NewPlayer);
+		GridActor->GetPlayer1Pawn()->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "GameHasEnded");
 	}
 	else if(PlayerControllers.Num() == 2)
 	{
 		GridActor->SpawnPlayer2(NewPlayer);
+		GridActor->GetPlayer2Pawn()->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "GameHasEnded");
+	}
+}
+
+void ABNGameModeBase::GameHasEnded_Implementation()
+{
+	if(GetWorld()->GetNetMode() != NM_DedicatedServer)
+	{
+		for(int index = 0; index < PlayerControllers.Num(); ++index)
+		{
+			if(PlayerControllers[index]->IsLocalPlayerController())
+			{
+				ABNPlayerController* PlayerController = Cast<ABNPlayerController>(PlayerControllers[index]);
+				if(IsValid(PlayerController))
+				{
+					PlayerController->DisplayResultUI();
+					break;
+				}
+			}
+		}
 	}
 }
 
