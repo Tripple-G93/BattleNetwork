@@ -20,13 +20,27 @@ void ABNPlayerController::OnPossess(APawn* InPawn)
 	
 }
 
-void ABNPlayerController::DisplayResultUI()
+// Client Implementation
+void ABNPlayerController::DisplayWinResultUI_Implementation()
 {
 	SetInputModeUI();
-
+	
 	if(IsLocalPlayerController() && ensure(ResultActivatableWidgetClass) && ensure(!ResultActivatableWidget))
 	{
-		ResultActivatableWidget = Cast<UCommonActivatableWidget>(CreateWidget(this, ResultActivatableWidgetClass));
+		ResultActivatableWidget = CreateWidget<UCommonActivatableWidget>(this, ResultActivatableWidgetClass);
+		ResultActivatableWidget->AddToViewport();
+		ResultActivatableWidget->ActivateWidget();
+	}
+}
+
+// Client Implementation
+void ABNPlayerController::DisplayLossResultUI_Implementation()
+{
+	SetInputModeUI();
+	
+	if(IsLocalPlayerController() && ensure(ResultActivatableWidgetClass) && ensure(!ResultActivatableWidget))
+	{
+		ResultActivatableWidget = CreateWidget<UCommonActivatableWidget>(this, ResultActivatableWidgetClass);
 		ResultActivatableWidget->AddToViewport();
 		ResultActivatableWidget->ActivateWidget();
 	}

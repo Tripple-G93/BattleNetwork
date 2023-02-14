@@ -47,22 +47,20 @@ void ABNGameModeBase::PostLogin(APlayerController* NewPlayer)
 void ABNGameModeBase::GameHasEnded(AController* Controller)
 {
 	// Do a check if player controller is null then return and honestly do an ensure because that should not be the case
-
-	// Then you want to iterate through all the player controllers and the ones that do not match the dying player controller
-	// You then want to call it's rpc to let them know that they have won. Where that rpc will display the result screen for them
-	if(GetWorld()->GetNetMode() != NM_DedicatedServer)
+	if(!ensure(Controller))
 	{
-		for(int index = 0; index < PlayerControllers.Num(); ++index)
+		return;
+	}
+
+	for(int index = 0; index < PlayerControllers.Num(); ++index)
+	{
+		if(Controller != PlayerControllers[index])
 		{
-			if(PlayerControllers[index]->IsLocalPlayerController())
-			{
-				//ABNPlayerController* PlayerController = Cast<ABNPlayerController>(PlayerControllers[index]);
-				//if(IsValid(PlayerController))
-				//{
-					//PlayerController->DisplayResultUI();
-					//break;
-				//}
-			}
+			Cast<ABNPlayerController>(PlayerControllers[index])->DisplayWinResultUI();
+		}
+		else
+		{
+			Cast<ABNPlayerController>(PlayerControllers[index])->DisplayLossResultUI();
 		}
 	}
 }

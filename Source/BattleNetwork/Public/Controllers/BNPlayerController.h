@@ -30,7 +30,11 @@ protected:
 	
 public:
 
-	void DisplayResultUI();
+	UFUNCTION(Client, Reliable)
+	void DisplayWinResultUI();
+
+	UFUNCTION(Client, Reliable)
+	void DisplayLossResultUI();
 
 private:
 	
