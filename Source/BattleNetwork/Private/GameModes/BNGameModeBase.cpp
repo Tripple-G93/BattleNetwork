@@ -8,6 +8,7 @@
 #include "Attributes/BNBaseAttributeSet.h"
 #include "Controllers/BNPlayerController.h"
 #include "Engine/World.h"
+#include "Subsystems/BNSessionSubsystem.h"
 
 ABNGameModeBase::ABNGameModeBase()
 {
@@ -46,6 +47,10 @@ void ABNGameModeBase::PostLogin(APlayerController* NewPlayer)
 
 void ABNGameModeBase::GameHasEnded(AController* Controller)
 {
+	// We want to end the multiplayer session here
+	UBNSessionSubsystem* SessionSubsystem = GetGameInstance()->GetSubsystem<UBNSessionSubsystem>();
+	SessionSubsystem->EndSession();
+	
 	// Do a check if player controller is null then return and honestly do an ensure because that should not be the case
 	if(!ensure(Controller))
 	{
