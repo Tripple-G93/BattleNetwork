@@ -7,6 +7,7 @@
 #include "BNPlayerController.generated.h"
 
 class UCommonActivatableWidget;
+class UBNGameResultActivatableWidget;
 
 /**
  * 
@@ -22,11 +23,17 @@ protected:
 	// Server only
 	virtual void OnPossess(APawn* InPawn) override;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "BN|UI")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "BN|UI|Result")
 	TSubclassOf<UCommonActivatableWidget> ResultActivatableWidgetClass;
 
-	UPROPERTY(BlueprintReadWrite, Category = "BN|UI")
-	TObjectPtr<UCommonActivatableWidget> ResultActivatableWidget;
+	UPROPERTY(BlueprintReadWrite, Category = "BN|UI|Result")
+	TObjectPtr<UBNGameResultActivatableWidget> ResultActivatableWidget;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	FText WinResultText;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	FText LossResultText;
 	
 public:
 
@@ -39,4 +46,6 @@ public:
 private:
 	
 	void SetInputModeUI();
+
+	void CreateResultWidget(FText text);
 };

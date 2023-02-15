@@ -4,6 +4,7 @@
 #include "Controllers/BNPlayerController.h"
 
 #include "ActorComponents/BNAbilitySystemComponent.h"
+#include "ActivatableWidgets/BNGameResultActivatableWidget.h"
 #include "CommonActivatableWidget.h"
 #include "PlayerStates/BNPlayerState.h"
 
@@ -23,27 +24,13 @@ void ABNPlayerController::OnPossess(APawn* InPawn)
 // Client Implementation
 void ABNPlayerController::DisplayWinResultUI_Implementation()
 {
-	SetInputModeUI();
-	
-	if(IsLocalPlayerController() && ensure(ResultActivatableWidgetClass) && ensure(!ResultActivatableWidget))
-	{
-		ResultActivatableWidget = CreateWidget<UCommonActivatableWidget>(this, ResultActivatableWidgetClass);
-		ResultActivatableWidget->AddToViewport();
-		ResultActivatableWidget->ActivateWidget();
-	}
+	CreateResultWidget(WinResultText);
 }
 
 // Client Implementation
 void ABNPlayerController::DisplayLossResultUI_Implementation()
 {
-	SetInputModeUI();
-	
-	if(IsLocalPlayerController() && ensure(ResultActivatableWidgetClass) && ensure(!ResultActivatableWidget))
-	{
-		ResultActivatableWidget = CreateWidget<UCommonActivatableWidget>(this, ResultActivatableWidgetClass);
-		ResultActivatableWidget->AddToViewport();
-		ResultActivatableWidget->ActivateWidget();
-	}
+	CreateResultWidget(LossResultText);
 }
 
 void ABNPlayerController::SetInputModeUI()
@@ -51,4 +38,17 @@ void ABNPlayerController::SetInputModeUI()
 	const FInputModeUIOnly InputModeUIOnly;
 	SetInputMode(InputModeUIOnly);
 	SetShowMouseCursor(true);
+}
+
+void ABNPlayerController::CreateResultWidget(FText Text)
+{
+	SetInputModeUI();
+	
+	if(IsLocalPlayerController() && ensure(ResultActivatableWidgetClass) && ensure(!ResultActivatableWidget))
+	{
+		ResultActivatableWidget = CreateWidget<UBNGameResultActivatableWidget>(this, ResultActivatableWidgetClass);
+		ResultActivatableWidget->SetResultTextBlock(Text);
+		ResultActivatableWidget->AddToViewport();
+		ResultActivatableWidget->ActivateWidget();
+	}
 }
