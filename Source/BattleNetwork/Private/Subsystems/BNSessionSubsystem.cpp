@@ -50,6 +50,8 @@ void UBNSessionSubsystem::CreateSession(int32 NumberPublicConnections, bool IsLA
 
 		OnCreateSessionCompleteEvent.Broadcast(false);
 	}
+
+	
 }
 
 void UBNSessionSubsystem::UpdateSession()
