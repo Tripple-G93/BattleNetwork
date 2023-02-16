@@ -33,5 +33,5 @@ void UBNGameResultActivatableWidget::LeaveGame()
 		SessionSubsystem->DestroySession();
 	}
 
-	UGameplayStatics::OpenLevel(GetWorld(), "MainMenu", true, "listen");
+	UGameplayStatics::OpenLevel(GetWorld(), "MainMenu", true);
 }
