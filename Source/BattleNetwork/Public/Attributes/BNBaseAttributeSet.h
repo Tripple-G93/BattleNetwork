@@ -24,6 +24,11 @@ class BATTLENETWORK_API UBNBaseAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
 
+protected:
+
+	// Server variable only
+	bool bIsPlayerDead;
+	
 public:
 
 	FOnPlayerDeathDelegate OnPlayerDeathDelegate;

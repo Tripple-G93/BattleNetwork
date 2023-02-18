@@ -11,6 +11,7 @@
 
 UBNBaseAttributeSet::UBNBaseAttributeSet()
 {
+	bIsPlayerDead = false;
 }
 
 void UBNBaseAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -87,8 +88,9 @@ void UBNBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
 	}
 
-	if(SourceController->GetLocalRole() == ROLE_Authority && GetHealth() <= 0 && IsPlayerEntity(SourceController))
+	if(SourceController->GetLocalRole() == ROLE_Authority && GetHealth() <= 0 && IsPlayerEntity(SourceController) && !bIsPlayerDead)
 	{
+		bIsPlayerDead = true;
 		OnPlayerDeathDelegate.Broadcast(TargetController);
 	}
 }
