@@ -28,7 +28,15 @@ void UBNFindSessionActivatableWidget::NativeConstruct()
 void UBNFindSessionActivatableWidget::JoinFirstSession()
 {
 	ButtonJoinFirstResult->SetIsEnabled(false);
+	SetInputModeToGameplay();
 	GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->JoinGameSession(GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->LastSessionSearch->SearchResults.Top());
+}
+
+void UBNFindSessionActivatableWidget::SetInputModeToGameplay() const
+{
+	const FInputModeGameOnly GameOnlyInputMode;
+	GetOwningPlayer()->SetInputMode(GameOnlyInputMode);
+	GetOwningPlayer()->SetShowMouseCursor(false);
 }
 
 void UBNFindSessionActivatableWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)

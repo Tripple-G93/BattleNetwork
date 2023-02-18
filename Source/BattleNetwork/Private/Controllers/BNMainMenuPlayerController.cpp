@@ -3,14 +3,13 @@
 
 #include "Controllers/BNMainMenuPlayerController.h"
 
-#include "Blueprint/UserWidget.h"
 #include "CommonActivatableWidget.h"
 
 void ABNMainMenuPlayerController::CreateMainMenu()
 {
 	if(IsLocalPlayerController() && ensure(MainMenuUserWidgetClass) && ensure(!MainMenuUserWidget))
 	{
-		MainMenuUserWidget = Cast<UCommonActivatableWidget>(CreateWidget(this, MainMenuUserWidgetClass));
+		MainMenuUserWidget = CreateWidget<UCommonActivatableWidget>(this, MainMenuUserWidgetClass);
 		MainMenuUserWidget->AddToViewport();
 		MainMenuUserWidget->ActivateWidget();
 	}

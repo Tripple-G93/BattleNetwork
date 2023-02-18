@@ -14,6 +14,8 @@ GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerDeathDelegate, AController* Controller)
+
 /**
  * 
  */
@@ -22,8 +24,15 @@ class BATTLENETWORK_API UBNBaseAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
 
+protected:
+
+	// Server variable only
+	bool bIsPlayerDead;
+	
 public:
 
+	FOnPlayerDeathDelegate OnPlayerDeathDelegate;
+	
 	UBNBaseAttributeSet();
 
 	// Current Health, when 0 we expect owner to die unless prevented by an ability. Capped by MaxHealth.
@@ -76,4 +85,10 @@ protected:
 
 	UFUNCTION()
 	virtual void OnRep_SpeedPercentRate(const FGameplayAttributeData& OldSpeedPercentRate);
+
+private:
+
+	void EvaluateDamageAttribute(FGameplayEffectContextHandle Context);
+	
+	bool IsPlayerEntity(AController* SourceController);
 };

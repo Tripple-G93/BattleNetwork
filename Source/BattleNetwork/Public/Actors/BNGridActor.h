@@ -39,6 +39,8 @@ class BATTLENETWORK_API ABNGridActor : public AActor
 {
 	GENERATED_BODY()
 
+	ABNPlayerPawn* Player1Pawn;
+	ABNPlayerPawn* Player2Pawn;
 protected:
 
 	UPROPERTY(EditDefaultsOnly)
@@ -97,6 +99,9 @@ public:
 	float GetLeftMostPanelXLocation();
 
 	float GetRightMostPanelXLocation();
+
+	ABNPlayerPawn* GetPlayer1Pawn();
+	ABNPlayerPawn* GetPlayer2Pawn();
 
 	/*
      * Server Calls

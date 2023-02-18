@@ -2,7 +2,10 @@
 
 
 #include "Controllers/BNPlayerController.h"
+
 #include "ActorComponents/BNAbilitySystemComponent.h"
+#include "ActivatableWidgets/BNGameResultActivatableWidget.h"
+#include "CommonActivatableWidget.h"
 #include "PlayerStates/BNPlayerState.h"
 
 void ABNPlayerController::OnPossess(APawn* InPawn)
@@ -16,4 +19,36 @@ void ABNPlayerController::OnPossess(APawn* InPawn)
 		PS->GetAbilitySystemComponent()->InitAbilityActorInfo(PS, InPawn);
 	}
 	
+}
+
+// Client Implementation
+void ABNPlayerController::DisplayWinResultUI_Implementation()
+{
+	CreateResultWidget(WinResultText);
+}
+
+// Client Implementation
+void ABNPlayerController::DisplayLossResultUI_Implementation()
+{
+	CreateResultWidget(LossResultText);
+}
+
+void ABNPlayerController::SetInputModeUI()
+{
+	const FInputModeUIOnly InputModeUIOnly;
+	SetInputMode(InputModeUIOnly);
+	SetShowMouseCursor(true);
+}
+
+void ABNPlayerController::CreateResultWidget(FText Text)
+{
+	SetInputModeUI();
+	
+	if(IsLocalPlayerController() && ensure(ResultActivatableWidgetClass) && ensure(!ResultActivatableWidget))
+	{
+		ResultActivatableWidget = CreateWidget<UBNGameResultActivatableWidget>(this, ResultActivatableWidgetClass);
+		ResultActivatableWidget->SetResultTextBlock(Text);
+		ResultActivatableWidget->AddToViewport();
+		ResultActivatableWidget->ActivateWidget();
+	}
 }

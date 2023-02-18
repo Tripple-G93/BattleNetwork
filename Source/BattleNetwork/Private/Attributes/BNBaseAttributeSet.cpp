@@ -2,13 +2,16 @@
 
 
 #include "Attributes/BNBaseAttributeSet.h"
+
 #include "Pawns/BNBasePawn.h"
+#include "Pawns/BNPlayerPawn.h"
 #include "GameplayEffect.h"
 #include "GameplayEffectExtension.h"
 #include "Net/UnrealNetwork.h"
 
 UBNBaseAttributeSet::UBNBaseAttributeSet()
 {
+	bIsPlayerDead = false;
 }
 
 void UBNBaseAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -78,26 +81,17 @@ void UBNBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 
 	if (Data.EvaluatedData.Attribute == GetCurrentDamageAttribute())
 	{
-		// Try to extract a hit result
-		FHitResult HitResult;
-		if (Context.GetHitResult())
-		{
-			HitResult = *Context.GetHitResult();
-		}
-		
-		// Store a local copy of the amount of damage done and clear the damage attribute
-		const float LocalCurrentDamage = GetCurrentDamage();
-		SetCurrentDamage(0.f);
-		if (LocalCurrentDamage > 0.0f)
-		{
-			// Apply the health change and then clamp it
-			const float NewHealth = GetHealth() - LocalCurrentDamage;
-			SetHealth(FMath::Clamp(NewHealth, 0.0f, GetMaxHealth()));
-		}
+		EvaluateDamageAttribute(Context);
 	}// Damage
 	else if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
+	}
+
+	if(SourceController->GetLocalRole() == ROLE_Authority && GetHealth() <= 0 && IsPlayerEntity(SourceController) && !bIsPlayerDead)
+	{
+		bIsPlayerDead = true;
+		OnPlayerDeathDelegate.Broadcast(TargetController);
 	}
 }
 
@@ -146,4 +140,29 @@ void UBNBaseAttributeSet::OnRep_BulletDamage(const FGameplayAttributeData& OldBu
 void UBNBaseAttributeSet::OnRep_SpeedPercentRate(const FGameplayAttributeData& OldSpeedPercentRate)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UBNBaseAttributeSet, MaxHealth, SpeedPercentRate);
+}
+
+void UBNBaseAttributeSet::EvaluateDamageAttribute(FGameplayEffectContextHandle Context)
+{
+	// Try to extract a hit result
+	FHitResult HitResult;
+	if (Context.GetHitResult())
+	{
+		HitResult = *Context.GetHitResult();
+	}
+		
+	// Store a local copy of the amount of damage done and clear the damage attribute
+	const float LocalCurrentDamage = GetCurrentDamage();
+	SetCurrentDamage(0.f);
+	if (LocalCurrentDamage > 0.0f)
+	{
+		// Apply the health change and then clamp it
+		const float NewHealth = GetHealth() - LocalCurrentDamage;
+		SetHealth(FMath::Clamp(NewHealth, 0.0f, GetMaxHealth()));
+	}
+}
+
+bool UBNBaseAttributeSet::IsPlayerEntity(AController* SourceController)
+{
+	return SourceController->GetPawn()->IsA(ABNPlayerPawn::StaticClass());
 }

@@ -30,5 +30,6 @@ protected:
 
 	UFUNCTION()
 	void JoinFirstSession();
-	
+
+	void SetInputModeToGameplay() const;
 };

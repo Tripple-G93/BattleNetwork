@@ -4,11 +4,10 @@
 #include "Subsystems/BNSessionSubsystem.h"
 
 #include "Engine/Engine.h"
-#include "UnrealEngine.h"
-#include "OnlineSubsystemUtils.h"
 #include "GameFramework/PlayerController.h"
-
 #include "Kismet/GameplayStatics.h"
+#include "OnlineSubsystemUtils.h"
+
 UBNSessionSubsystem::UBNSessionSubsystem() :
 	CreateSessionCompleteDelegate(FOnCreateSessionCompleteDelegate::CreateUObject(this, &ThisClass::OnCreateSessionCompleted)),
 	UpdateSessionCompleteDelegate(FOnUpdateSessionCompleteDelegate::CreateUObject(this, &ThisClass::OnUpdateSessionCompleted)),
@@ -196,7 +195,10 @@ void UBNSessionSubsystem::OnCreateSessionCompleted(FName SessionName, bool Succe
 		sessionInterface->ClearOnCreateSessionCompleteDelegate_Handle(CreateSessionCompleteDelegateHandle);
 	}
 
-	StartSession();
+	if(Successful)
+	{
+		StartSession();
+	}
 	
 	OnCreateSessionCompleteEvent.Broadcast(Successful);
 }

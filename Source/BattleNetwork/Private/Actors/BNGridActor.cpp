@@ -59,14 +59,14 @@ void ABNGridActor::SpawnPlayer1_Implementation(APlayerController* PlayerControll
 		FActorSpawnParameters SpawnParameters;
 		SpawnParameters.Owner = PlayerController;
 
-		ABNPlayerPawn* Player = GetWorld()->SpawnActor<ABNPlayerPawn>(PlayerPawnSubclass, Location, Rotation, SpawnParameters);
-		Player->SetActorLocation(Location + Player->GetSpriteOffset());
-		PlayerController->Possess(Player);
+		Player1Pawn = GetWorld()->SpawnActor<ABNPlayerPawn>(PlayerPawnSubclass, Location, Rotation, SpawnParameters);
+		Player1Pawn->SetActorLocation(Location + Player1Pawn->GetSpriteOffset());
+		PlayerController->Possess(Player1Pawn);
 		PlayerController->SetViewTarget(this);
-		Panel->SetEntityPawn(Player);
-		Player->SetTeamTag(FGameplayTag::RequestGameplayTag("Team1"));
-		Player->SetGridActorReference(this);
-		Player->SetServerGridLocation(FBNGridLocation(CenterX, CenterY));
+		Panel->SetEntityPawn(Player1Pawn);
+		Player1Pawn->SetTeamTag(FGameplayTag::RequestGameplayTag("Team1"));
+		Player1Pawn->SetGridActorReference(this);
+		Player1Pawn->SetServerGridLocation(FBNGridLocation(CenterX, CenterY));
 	}
 }
 
@@ -87,14 +87,14 @@ void ABNGridActor::SpawnPlayer2_Implementation(APlayerController* PlayerControll
 		FActorSpawnParameters SpawnParameters;
 		SpawnParameters.Owner = PlayerController;
 
-		ABNPlayerPawn* Player = GetWorld()->SpawnActor<ABNPlayerPawn>(PlayerPawnSubclass, Location, Rotation, SpawnParameters);
-		Player->SetActorLocation(Location + Player->GetSpriteOffset());
-		PlayerController->Possess(Player);
+		Player2Pawn  = GetWorld()->SpawnActor<ABNPlayerPawn>(PlayerPawnSubclass, Location, Rotation, SpawnParameters);
+		Player2Pawn->SetActorLocation(Location + Player2Pawn->GetSpriteOffset());
+		PlayerController->Possess(Player2Pawn);
 		PlayerController->SetViewTarget(this);
-		Panel->SetEntityPawn(Player);
-		Player->SetTeamTag(FGameplayTag::RequestGameplayTag("Team2"));
-		Player->SetGridActorReference(this);
-		Player->SetServerGridLocation(FBNGridLocation(CenterX, CenterY));
+		Panel->SetEntityPawn(Player2Pawn);
+		Player2Pawn->SetTeamTag(FGameplayTag::RequestGameplayTag("Team2"));
+		Player2Pawn->SetGridActorReference(this);
+		Player2Pawn->SetServerGridLocation(FBNGridLocation(CenterX, CenterY));
 	}
 }
 
@@ -196,6 +196,16 @@ float ABNGridActor::GetLeftMostPanelXLocation()
 float ABNGridActor::GetRightMostPanelXLocation()
 {
 	return Grid[GridWidth - 1][0]->GetActorLocation().X + PanelSpacingWidth;	
+}
+
+ABNPlayerPawn* ABNGridActor::GetPlayer1Pawn()
+{
+	return Player1Pawn;
+}
+
+ABNPlayerPawn* ABNGridActor::GetPlayer2Pawn()
+{
+	return Player2Pawn;
 }
 
 void ABNGridActor::SpawnPanel(const int32 XIndex, const int32 YIndex)

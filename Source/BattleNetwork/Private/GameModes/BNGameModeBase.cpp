@@ -2,9 +2,13 @@
 
 
 #include "GameModes/BNGameModeBase.h"
+
 #include "Actors/BNGridActor.h"
 #include "Actors/BNProjectilePool.h"
+#include "Attributes/BNBaseAttributeSet.h"
+#include "Controllers/BNPlayerController.h"
 #include "Engine/World.h"
+#include "Subsystems/BNSessionSubsystem.h"
 
 ABNGameModeBase::ABNGameModeBase()
 {
@@ -32,10 +36,37 @@ void ABNGameModeBase::PostLogin(APlayerController* NewPlayer)
 	if(PlayerControllers.Num() == 1)
 	{
 		GridActor->SpawnPlayer1(NewPlayer);
+		GridActor->GetPlayer1Pawn()->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "GameHasEnded");
 	}
 	else if(PlayerControllers.Num() == 2)
 	{
 		GridActor->SpawnPlayer2(NewPlayer);
+		GridActor->GetPlayer2Pawn()->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "GameHasEnded");
+	}
+}
+
+void ABNGameModeBase::GameHasEnded(AController* Controller)
+{
+	// We want to end the multiplayer session here
+	UBNSessionSubsystem* SessionSubsystem = GetGameInstance()->GetSubsystem<UBNSessionSubsystem>();
+	SessionSubsystem->EndSession();
+	
+	// Do a check if player controller is null then return and honestly do an ensure because that should not be the case
+	if(!ensure(Controller))
+	{
+		return;
+	}
+
+	for(int index = 0; index < PlayerControllers.Num(); ++index)
+	{
+		if(Controller != PlayerControllers[index])
+		{
+			Cast<ABNPlayerController>(PlayerControllers[index])->DisplayWinResultUI();
+		}
+		else
+		{
+			Cast<ABNPlayerController>(PlayerControllers[index])->DisplayLossResultUI();
+		}
 	}
 }
 
