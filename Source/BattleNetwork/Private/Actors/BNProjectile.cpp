@@ -7,7 +7,7 @@
 #include "AbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-#include "GameModes/BNGameModeBase.h"
+#include "GameModes/BNGameModeMultiplayer.h"
 #include "PaperFlipbookComponent.h"
 #include "Pawns/BNEntityPawn.h"
 
@@ -89,7 +89,7 @@ void ABNProjectile::Tick(float DeltaTime)
 bool ABNProjectile::CanWeTurnOffProjectile() const
 {
 	bool bTurnOffProjectile = false;
-	ABNGameModeBase* GameModeBase = Cast<ABNGameModeBase>(GetWorld()->GetAuthGameMode());
+    ABNGameModeMultiplayer* GameModeBase = Cast<ABNGameModeMultiplayer>(GetWorld()->GetAuthGameMode());
 	if(TeamFiredGameplayTag == FGameplayTag::RequestGameplayTag("Team1"))
 	{
 		bTurnOffProjectile = GameModeBase->GetGridActor()->GetRightMostPanelXLocation() < GetActorLocation().X;
