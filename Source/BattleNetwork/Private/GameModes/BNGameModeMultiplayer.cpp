@@ -5,6 +5,7 @@
 
 #include "Actors/BNGridActor.h"
 #include "Actors/BNProjectilePool.h"
+#include "ActorComponents/BNGameMusicAudioComponent.h"
 #include "Attributes/BNBaseAttributeSet.h"
 #include "Controllers/BNPlayerController.h"
 #include "Engine/World.h"
@@ -68,6 +69,13 @@ void ABNGameModeMultiplayer::GameHasEnded(AController* Controller)
             Cast<ABNPlayerController>(PlayerControllers[index])->DisplayLossResultUI();
         }
     }
+}
+
+void ABNGameModeMultiplayer::BeginPlay()
+{
+    Super::BeginPlay();
+    
+    GameMusicAudioComponent->RandomlyPlayGameMusic();
 }
 
 int ABNGameModeMultiplayer::GetMaxPlayersOnGrid() const

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
+#include "GameModes/BNGameModeBase.h"
 #include "BNGameModeMultiplayer.generated.h"
 
 class ABNGridActor;
@@ -13,7 +13,7 @@ class ABNProjectilePool;
  * 
  */
 UCLASS()
-class BATTLENETWORK_API ABNGameModeMultiplayer : public AGameModeBase
+class BATTLENETWORK_API ABNGameModeMultiplayer : public ABNGameModeBase
 {
 	GENERATED_BODY()
 	
@@ -33,6 +33,7 @@ class BATTLENETWORK_API ABNGameModeMultiplayer : public AGameModeBase
 	TObjectPtr<ABNProjectilePool> BulletProjectilePool;
 
 	TArray<APlayerController*> PlayerControllers;
+
 public:
 
     ABNGameModeMultiplayer();
@@ -56,6 +57,9 @@ public:
 
 	ABNGridActor* GetGridActor();
 	
+protected:
+
+    void BeginPlay() override;
 
 private:
 

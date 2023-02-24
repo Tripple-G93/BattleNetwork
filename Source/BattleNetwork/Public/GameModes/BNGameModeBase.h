@@ -19,18 +19,12 @@ class BATTLENETWORK_API ABNGameModeBase : public AGameModeBase
 protected:
 
     UPROPERTY(VisibleAnywhere, Replicated)
-    TObjectPtr< UBNGameMusicAudioComponent> GameMusicAudioComponent;
+    TObjectPtr<UBNGameMusicAudioComponent> GameMusicAudioComponent;
 
 public:
 
     ABNGameModeBase();
 
     void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-protected:
-
-    void BeginPlay() override;
-
-    virtual void RandomlyPlayGameMusic();
 
 };

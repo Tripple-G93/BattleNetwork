@@ -26,5 +26,7 @@ protected:
 public:
 
     void PlayGameMusic(FGameplayTag GameMusicGameplayTag);
+
+    void RandomlyPlayGameMusic();
 	
 };
