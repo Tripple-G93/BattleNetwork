@@ -6,8 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "BNGameModeBase.generated.h"
 
-class ABNGridActor;
-class ABNProjectilePool;
+class UBNGameMusicAudioComponent;
 
 /**
  * 
@@ -19,46 +18,19 @@ class BATTLENETWORK_API ABNGameModeBase : public AGameModeBase
 
 protected:
 
-	UPROPERTY(EditDefaultsOnly, Category="BN|SubClasses")
-	TSubclassOf<ABNGridActor> GridActorSubClass;
+    UPROPERTY(VisibleAnywhere, Replicated)
+    TObjectPtr< UBNGameMusicAudioComponent> GameMusicAudioComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category="BN|SubClasses")
-	TSubclassOf<ABNProjectilePool> BulletProjectilePoolSubClass;
-
-	UPROPERTY(EditDefaultsOnly, Category="BN|Values")
-	int MaxPlayersOnGrid;
-	
-	TObjectPtr<ABNGridActor> GridActor;
-
-	TObjectPtr<ABNProjectilePool> BulletProjectilePool;
-
-	TArray<APlayerController*> PlayerControllers;
 public:
 
-	ABNGameModeBase();
+    ABNGameModeBase();
 
-	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
-	
-	virtual void PostLogin(APlayerController* NewPlayer) override;
+    void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	UFUNCTION()
-	void GameHasEnded(AController* Controller);
+protected:
 
-	/*
-	 *	Getters
-	 */
+    void BeginPlay() override;
 
-	int GetMaxPlayersOnGrid() const;
-	
-	TArray<APlayerController*>& GetPlayerControllers();
+    virtual void RandomlyPlayGameMusic();
 
-	TObjectPtr<ABNProjectilePool> GetBulletProjectilePool();
-
-	ABNGridActor* GetGridActor();
-	
-
-private:
-
-	void SpawnGrid();
-	void SpawnObjectPool();
 };

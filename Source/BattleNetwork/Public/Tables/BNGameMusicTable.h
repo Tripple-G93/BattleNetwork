@@ -21,5 +21,5 @@ struct FBNGameMusicTableInfoRow : public FTableRowBase
 	FGameplayTag GameMusicGameplayTag;
 
 	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<USoundCue> GameMusicSoundBase;
+	TObjectPtr<USoundCue> GameMusicSoundCue;
 };

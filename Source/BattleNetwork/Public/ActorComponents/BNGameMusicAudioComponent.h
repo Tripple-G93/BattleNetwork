@@ -23,10 +23,8 @@ protected:
     UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UDataTable> GameMusicDataTable;
 
-    TObjectPtr<FBNGameMusicTableInfoRow> CurrentFlipbookAnimationTableInfoRow;
-
 public:
 
-
+    void PlayGameMusic(FGameplayTag GameMusicGameplayTag);
 	
 };

@@ -2,4 +2,25 @@
 
 
 #include "ActorComponents/BNGameMusicAudioComponent.h"
+#include "Sound/SoundCue.h"
 
+void UBNGameMusicAudioComponent::PlayGameMusic(FGameplayTag GameMusicGameplayTag)
+{
+    if (ensure(GameMusicDataTable))
+	{
+		TArray<FBNGameMusicTableInfoRow*> GameMusicTableRows;
+		GameMusicDataTable->GetAllRows("", GameMusicTableRows);
+
+		for (FBNGameMusicTableInfoRow* Entry : GameMusicTableRows)
+		{
+			if (GameMusicGameplayTag == Entry->GameMusicGameplayTag)
+			{
+				SetSound(Entry->GameMusicSoundCue);
+                Play();
+				return;
+			}
+		}
+
+		UE_LOG(LogTemp, Error, TEXT("Unable to find game music of : %s."), *GameMusicGameplayTag.GetTagName().ToString());
+	}
+}
