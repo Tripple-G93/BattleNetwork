@@ -32,14 +32,22 @@ void ABNGameModeMultiplayer::PostLogin(APlayerController* NewPlayer)
 {
     Super::PostLogin(NewPlayer);
 
-    PlayerControllers.Add(NewPlayer);
+    // Test to see if I can change this from the one that is inherited from instead.
+    MultiPlayerControllers.Add(NewPlayer);
 
-    if (PlayerControllers.Num() == 1)
+    ABNBasePlayerController* BasePlayerController = Cast<ABNBasePlayerController>(NewPlayer);
+    if (BasePlayerController)
+    {
+        BasePlayerController->RandomlyPlayGameMusic();
+    }
+    // I think for now we want to be able to  play the music through here but when we have an offical start to the game mode we want ot iterate through all the added controllers
+
+    if (MultiPlayerControllers.Num() == 1)
     {
         GridActor->SpawnPlayer1(NewPlayer);
         GridActor->GetPlayer1Pawn()->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "GameHasEnded");
     }
-    else if (PlayerControllers.Num() == 2)
+    else if (MultiPlayerControllers.Num() == 2)
     {
         GridActor->SpawnPlayer2(NewPlayer);
         GridActor->GetPlayer2Pawn()->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "GameHasEnded");
@@ -58,24 +66,22 @@ void ABNGameModeMultiplayer::GameHasEnded(AController* Controller)
         return;
     }
 
-    for (int index = 0; index < PlayerControllers.Num(); ++index)
+    for (int index = 0; index < MultiPlayerControllers.Num(); ++index)
     {
-        if (Controller != PlayerControllers[index])
+        if (Controller != MultiPlayerControllers[index])
         {
-            Cast<ABNPlayerController>(PlayerControllers[index])->DisplayWinResultUI();
+            Cast<ABNPlayerController>(MultiPlayerControllers[index])->DisplayWinResultUI();
         }
         else
         {
-            Cast<ABNPlayerController>(PlayerControllers[index])->DisplayLossResultUI();
+            Cast<ABNPlayerController>(MultiPlayerControllers[index])->DisplayLossResultUI();
         }
     }
 }
 
 void ABNGameModeMultiplayer::BeginPlay()
 {
-    Super::BeginPlay();
-    
-    GameMusicAudioComponent->RandomlyPlayGameMusic();
+    Super::BeginPlay();  
 }
 
 int ABNGameModeMultiplayer::GetMaxPlayersOnGrid() const

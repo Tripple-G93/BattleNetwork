@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "Controllers/BNBasePlayerController.h"
 #include "BNPlayerController.generated.h"
 
 class UCommonActivatableWidget;
@@ -13,7 +14,7 @@ class UBNGameResultActivatableWidget;
  * 
  */
 UCLASS()
-class BATTLENETWORK_API ABNPlayerController : public APlayerController
+class BATTLENETWORK_API ABNPlayerController : public ABNBasePlayerController
 {
 	GENERATED_BODY()
 

@@ -16,6 +16,8 @@ class BATTLENETWORK_API ABNGameModeMainMenu : public ABNGameModeBase
 	
 protected:
 
+protected:
+
     void BeginPlay() override;
 
 };
