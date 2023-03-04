@@ -3,17 +3,13 @@
 
 #include "GameModes/BNGameModeBase.h"
 
-#include "ActorComponents/BNGameMusicAudioComponent.h"
-#include <Net/UnrealNetwork.h>
 
 ABNGameModeBase::ABNGameModeBase()
-{
-    GameMusicAudioComponent = CreateDefaultSubobject<UBNGameMusicAudioComponent>(TEXT("GameMusicAudioComponent"));
-}
+{}
 
-void ABNGameModeBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void ABNGameModeBase::PostLogin(APlayerController* NewPlayer)
 {
-    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+    Super::PostLogin(NewPlayer);
 
-    DOREPLIFETIME(ABNGameModeBase, GameMusicAudioComponent);
+    PlayerControllers.Add(NewPlayer);
 }

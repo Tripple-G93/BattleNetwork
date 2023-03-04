@@ -32,7 +32,12 @@ void ABNGameModeMultiplayer::PostLogin(APlayerController* NewPlayer)
 {
     Super::PostLogin(NewPlayer);
 
-    PlayerControllers.Add(NewPlayer);
+    ABNBasePlayerController* BasePlayerController = Cast<ABNBasePlayerController>(NewPlayer);
+    if (BasePlayerController)
+    {
+        BasePlayerController->RandomlyPlayGameMusic();
+    }
+    // I think for now we want to be able to  play the music through here but when we have an offical start to the game mode we want ot iterate through all the added controllers
 
     if (PlayerControllers.Num() == 1)
     {
@@ -73,9 +78,7 @@ void ABNGameModeMultiplayer::GameHasEnded(AController* Controller)
 
 void ABNGameModeMultiplayer::BeginPlay()
 {
-    Super::BeginPlay();
-    
-    GameMusicAudioComponent->RandomlyPlayGameMusic();
+    Super::BeginPlay();  
 }
 
 int ABNGameModeMultiplayer::GetMaxPlayersOnGrid() const

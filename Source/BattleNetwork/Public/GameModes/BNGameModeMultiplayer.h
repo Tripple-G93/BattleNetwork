@@ -32,8 +32,6 @@ class BATTLENETWORK_API ABNGameModeMultiplayer : public ABNGameModeBase
 
 	TObjectPtr<ABNProjectilePool> BulletProjectilePool;
 
-	TArray<APlayerController*> PlayerControllers;
-
 public:
 
     ABNGameModeMultiplayer();

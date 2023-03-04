@@ -6,8 +6,6 @@
 #include "GameFramework/GameModeBase.h"
 #include "BNGameModeBase.generated.h"
 
-class UBNGameMusicAudioComponent;
-
 /**
  * 
  */
@@ -18,13 +16,12 @@ class BATTLENETWORK_API ABNGameModeBase : public AGameModeBase
 
 protected:
 
-    UPROPERTY(VisibleAnywhere, Replicated)
-    TObjectPtr<UBNGameMusicAudioComponent> GameMusicAudioComponent;
+    TArray<APlayerController*> PlayerControllers;
 
 public:
 
     ABNGameModeBase();
 
-    void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+    void PostLogin(APlayerController* NewPlayer) override;
 
 };
