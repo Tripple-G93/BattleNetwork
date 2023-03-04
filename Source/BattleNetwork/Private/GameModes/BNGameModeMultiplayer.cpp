@@ -32,9 +32,6 @@ void ABNGameModeMultiplayer::PostLogin(APlayerController* NewPlayer)
 {
     Super::PostLogin(NewPlayer);
 
-    // Test to see if I can change this from the one that is inherited from instead.
-    MultiPlayerControllers.Add(NewPlayer);
-
     ABNBasePlayerController* BasePlayerController = Cast<ABNBasePlayerController>(NewPlayer);
     if (BasePlayerController)
     {
@@ -42,12 +39,12 @@ void ABNGameModeMultiplayer::PostLogin(APlayerController* NewPlayer)
     }
     // I think for now we want to be able to  play the music through here but when we have an offical start to the game mode we want ot iterate through all the added controllers
 
-    if (MultiPlayerControllers.Num() == 1)
+    if (PlayerControllers.Num() == 1)
     {
         GridActor->SpawnPlayer1(NewPlayer);
         GridActor->GetPlayer1Pawn()->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "GameHasEnded");
     }
-    else if (MultiPlayerControllers.Num() == 2)
+    else if (PlayerControllers.Num() == 2)
     {
         GridActor->SpawnPlayer2(NewPlayer);
         GridActor->GetPlayer2Pawn()->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "GameHasEnded");
@@ -66,15 +63,15 @@ void ABNGameModeMultiplayer::GameHasEnded(AController* Controller)
         return;
     }
 
-    for (int index = 0; index < MultiPlayerControllers.Num(); ++index)
+    for (int index = 0; index < PlayerControllers.Num(); ++index)
     {
-        if (Controller != MultiPlayerControllers[index])
+        if (Controller != PlayerControllers[index])
         {
-            Cast<ABNPlayerController>(MultiPlayerControllers[index])->DisplayWinResultUI();
+            Cast<ABNPlayerController>(PlayerControllers[index])->DisplayWinResultUI();
         }
         else
         {
-            Cast<ABNPlayerController>(MultiPlayerControllers[index])->DisplayLossResultUI();
+            Cast<ABNPlayerController>(PlayerControllers[index])->DisplayLossResultUI();
         }
     }
 }
