@@ -64,7 +64,7 @@ void UBNGA_FireBullet::OnCompleted(FGameplayTag EventTag, FGameplayEventData Eve
 				SpawnLocationX -= BulletSpawnLocation.GetLocation().X;
 			}
 			
-			const FVector SpawnLocation(SpawnLocationX, GetOwningActorFromActorInfo()->GetActorLocation().Y, BulletSpawnLocation.GetLocation().Z + FlipBookLocation.Z);
+			const FVector SpawnLocation(SpawnLocationX, FlipBookLocation.Y, BulletSpawnLocation.GetLocation().Z + FlipBookLocation.Z);
 			
 			const float BulletDamage = EntityPawn->GetBaseAttributeSet()->GetBulletDamage();
 
