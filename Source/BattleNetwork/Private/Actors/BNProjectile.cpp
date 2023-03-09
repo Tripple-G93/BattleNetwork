@@ -27,7 +27,7 @@ ABNProjectile::ABNProjectile(const FObjectInitializer& ObjectInitializer) : Supe
 	PaperFlipbookComponent->SetupAttachment(SceneComponent);
 
 	CollisionCapsuleComponent = ObjectInitializer.CreateDefaultSubobject<UCapsuleComponent>(this, TEXT("CapsuleComponent"));
-	CollisionCapsuleComponent->SetupAttachment(PaperFlipbookComponent);
+	CollisionCapsuleComponent->SetupAttachment(SceneComponent);
 	
 	ProjectileMovementComponent = ObjectInitializer.CreateDefaultSubobject<UProjectileMovementComponent>(this, TEXT("ProjectileMovementComponent"));
 

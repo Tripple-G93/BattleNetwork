@@ -52,7 +52,7 @@ void ABNGridActor::SpawnPlayer1_Implementation(APlayerController* PlayerControll
 	{
 		const int32 CenterX = 0;
 		const int32 CenterY = GridHeight / 2;
-		const FRotator Rotation;
+        const FRotator Rotation = { 0, 0, 0 };
 
 		ABNPanelActor* Panel = Grid[CenterX][CenterY];
 		const FVector Location = Panel->GetActorLocation();
