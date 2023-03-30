@@ -3,64 +3,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameModes/BNGameModeBase.h"
+#include "GameModes/BNGameModeInitial.h"
 #include "BNGameModeMultiplayer.generated.h"
-
-class ABNGridActor;
-class ABNProjectilePool;
 
 /**
  * 
  */
 UCLASS()
-class BATTLENETWORK_API ABNGameModeMultiplayer : public ABNGameModeBase
+class BATTLENETWORK_API ABNGameModeMultiplayer : public ABNGameModeInitial
 {
 	GENERATED_BODY()
-	
-        protected:
-
-	UPROPERTY(EditDefaultsOnly, Category="BN|SubClasses")
-	TSubclassOf<ABNGridActor> GridActorSubClass;
-
-	UPROPERTY(EditDefaultsOnly, Category="BN|SubClasses")
-	TSubclassOf<ABNProjectilePool> BulletProjectilePoolSubClass;
-
-	UPROPERTY(EditDefaultsOnly, Category="BN|Values")
-	int MaxPlayersOnGrid;
-	
-	TObjectPtr<ABNGridActor> GridActor;
-
-	TObjectPtr<ABNProjectilePool> BulletProjectilePool;
 
 public:
 
     ABNGameModeMultiplayer();
-
-	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 	
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 
 	UFUNCTION()
 	void GameHasEnded(AController* Controller);
 
-	/*
-	 *	Getters
-	 */
-
-	int GetMaxPlayersOnGrid() const;
-	
-	TArray<APlayerController*>& GetPlayerControllers();
-
-	TObjectPtr<ABNProjectilePool> GetBulletProjectilePool();
-
-	ABNGridActor* GetGridActor();
-	
-protected:
-
-    void BeginPlay() override;
-
-private:
-
-	void SpawnGrid();
-	void SpawnObjectPool();
 };

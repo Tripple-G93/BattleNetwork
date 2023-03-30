@@ -5,28 +5,13 @@
 
 #include "Actors/BNGridActor.h"
 #include "Actors/BNProjectilePool.h"
-#include "ActorComponents/BNGameMusicAudioComponent.h"
 #include "Attributes/BNBaseAttributeSet.h"
 #include "Controllers/BNPlayerController.h"
 #include "Engine/World.h"
 #include "Subsystems/BNSessionSubsystem.h"
 
 ABNGameModeMultiplayer::ABNGameModeMultiplayer()
-{
-    MaxPlayersOnGrid = 2;
-}
-
-
-void ABNGameModeMultiplayer::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
-{
-    Super::InitGame(MapName, Options, ErrorMessage);
-
-    SpawnGrid();
-
-    SpawnObjectPool();
-
-    GridActor->CreateGrid();
-}
+{}
 
 void ABNGameModeMultiplayer::PostLogin(APlayerController* NewPlayer)
 {
@@ -76,51 +61,3 @@ void ABNGameModeMultiplayer::GameHasEnded(AController* Controller)
     }
 }
 
-void ABNGameModeMultiplayer::BeginPlay()
-{
-    Super::BeginPlay();  
-}
-
-int ABNGameModeMultiplayer::GetMaxPlayersOnGrid() const
-{
-    return MaxPlayersOnGrid;
-}
-
-TArray<APlayerController*>& ABNGameModeMultiplayer::GetPlayerControllers()
-{
-    return PlayerControllers;
-}
-
-TObjectPtr<ABNProjectilePool> ABNGameModeMultiplayer::GetBulletProjectilePool()
-{
-    return BulletProjectilePool;
-}
-
-ABNGridActor* ABNGameModeMultiplayer::GetGridActor()
-{
-    return GridActor;
-}
-
-void ABNGameModeMultiplayer::SpawnGrid()
-{
-    if (ensure(GridActorSubClass))
-    {
-        FActorSpawnParameters SpawnParameters;
-        SpawnParameters.Owner = this;
-        SpawnParameters.OverrideLevel = GetLevel();
-
-        GridActor = GetWorld()->SpawnActor<ABNGridActor>(GridActorSubClass, FVector(0, 0, 0), FRotator(0, 0, 0), SpawnParameters);
-    }
-}
-
-void ABNGameModeMultiplayer::SpawnObjectPool()
-{
-    if (ensure(BulletProjectilePoolSubClass))
-    {
-        FActorSpawnParameters SpawnParameters;
-        SpawnParameters.Owner = this;
-        SpawnParameters.OverrideLevel = GetLevel();
-
-        BulletProjectilePool = GetWorld()->SpawnActor<ABNProjectilePool>(BulletProjectilePoolSubClass, SpawnParameters);
-    }
-}
