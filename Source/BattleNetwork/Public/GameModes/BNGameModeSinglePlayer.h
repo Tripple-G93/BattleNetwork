@@ -14,4 +14,10 @@ class BATTLENETWORK_API ABNGameModeSinglePlayer : public ABNGameModeInitial
 {
 	GENERATED_BODY()
 	
+public:
+
+    virtual void PostLogin(APlayerController* NewPlayer) override;
+
+    UFUNCTION()
+	void GameHasEnded(AController* Controller);
 };
