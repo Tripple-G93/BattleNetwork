@@ -45,4 +45,7 @@ private:
 
 	UFUNCTION()
 	void CreateLocalMultiplayerGame();
+
+    UFUNCTION()
+    void CreateSinglePlayerGame();
 };
