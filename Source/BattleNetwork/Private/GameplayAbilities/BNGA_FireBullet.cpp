@@ -6,7 +6,7 @@
 #include "Attributes/BNBaseAttributeSet.h"
 #include "AbilityTasks/BNAT_PlayFlipbookAndWaitForEvent.h"
 #include "Actors/BNProjectilePool.h"
-#include "GameModes/BNGameModeMultiplayer.h"
+#include "GameModes/BNGameModeInitial.h"
 #include "PaperFlipbookComponent.h"
 #include "Pawns/BNEntityPawn.h"
 
@@ -72,7 +72,7 @@ void UBNGA_FireBullet::OnCompleted(FGameplayTag EventTag, FGameplayEventData Eve
 			FGameplayEffectSpecHandle GameplayEffectSpecHandle = MakeOutgoingGameplayEffectSpec(DamageGameplayEffect, GetAbilityLevel());
 			GameplayEffectSpecHandle.Data.Get()->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Data.Damage")), BulletDamage);
 			
-			ABNGameModeMultiplayer* GameModeBase = Cast<ABNGameModeMultiplayer>(GetWorld()->GetAuthGameMode());
+			ABNGameModeInitial* GameModeBase = Cast<ABNGameModeInitial>(GetWorld()->GetAuthGameMode());
 			GameModeBase->GetBulletProjectilePool()->CreateProjectile(SpawnLocation, EntityPawn->GetTeamTag(), GameplayEffectSpecHandle);
 		}
 	}
