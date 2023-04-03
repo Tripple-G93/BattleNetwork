@@ -53,8 +53,6 @@ void UBNMainMenuActivatableWidget::CreateSinglePlayerGame()
     UWorld* World = GetWorld();
     if (World)
     {
-        // This is a blocking call, but since we're in a menu we can do that.
-        // If we were in game we'd have to do this differently.
         UGameplayStatics::OpenLevel(World, "SinglePlayer");
     }
 
