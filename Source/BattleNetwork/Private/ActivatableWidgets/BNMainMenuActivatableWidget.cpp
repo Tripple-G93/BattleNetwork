@@ -4,6 +4,7 @@
 #include "ActivatableWidgets/BNMainMenuActivatableWidget.h"
 
 #include "Components/Button.h"
+#include <Kismet/GameplayStatics.h>
 #include "Subsystems/BNSessionSubsystem.h"
 #include "Widgets/CommonActivatableWidgetContainer.h"
 
@@ -20,6 +21,11 @@ void UBNMainMenuActivatableWidget::NativeConstruct()
 	{
 		ButtonFindGame->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::FindSessionWidgetFlow);
 	}
+
+    if (IsValid(ButtonCreateSinglePlayerGame))
+    {
+        ButtonCreateSinglePlayerGame->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::CreateSinglePlayerGame);
+    }
 }
 
 void UBNMainMenuActivatableWidget::FindSessionWidgetFlow()
@@ -40,6 +46,17 @@ void UBNMainMenuActivatableWidget::CreateLocalMultiplayerGame()
 	GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->CreateSession(2, true, MultiplayerMapName);
 
 	SetInputModeToGameplay();
+}
+
+void UBNMainMenuActivatableWidget::CreateSinglePlayerGame()
+{
+    UWorld* World = GetWorld();
+    if (World)
+    {
+        UGameplayStatics::OpenLevel(World, "SinglePlayer");
+    }
+
+    SetInputModeToGameplay();
 }
 
 void UBNMainMenuActivatableWidget::SetInputModeToGameplay() const

@@ -13,3 +13,9 @@ void ABNGameModeBase::PostLogin(APlayerController* NewPlayer)
 
     PlayerControllers.Add(NewPlayer);
 }
+
+TArray<APlayerController*>& ABNGameModeBase::GetPlayerControllers()
+{
+    return PlayerControllers;
+
+}

@@ -24,4 +24,5 @@ public:
 
     void PostLogin(APlayerController* NewPlayer) override;
 
+    TArray<APlayerController*>& GetPlayerControllers();
 };

@@ -4,23 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "GameModes/BNGameModeInitial.h"
-#include "BNGameModeMultiplayer.generated.h"
+#include "BNGameModeSinglePlayer.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BATTLENETWORK_API ABNGameModeMultiplayer : public ABNGameModeInitial
+class BATTLENETWORK_API ABNGameModeSinglePlayer : public ABNGameModeInitial
 {
 	GENERATED_BODY()
-
+	
 public:
 
-    ABNGameModeMultiplayer();
-	
-	virtual void PostLogin(APlayerController* NewPlayer) override;
+    virtual void PostLogin(APlayerController* NewPlayer) override;
 
-	UFUNCTION()
+    UFUNCTION()
 	void GameHasEnded(AController* Controller);
-
 };
