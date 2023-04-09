@@ -64,12 +64,15 @@ void ABNProjectilePool::SpawnProjectiles()
 void ABNProjectilePool::LinkProjectiles()
 {
 	FirstAvailableProjectile = Projectiles[0];
-	Projectiles[PoolSize - 1]->SetNextAvailableProjectile(nullptr);
+	FirstAvailableProjectile->MarkProjectileInObjectPool();
 
 	for(int i = 0; i < PoolSize - 1; ++i)
 	{
-		Projectiles[i]->SetNextAvailableProjectile(Projectiles[i+1]);
+		Projectiles[i]->SetNextAvailableProjectile(Projectiles[i + 1]);
+		Projectiles[i]->MarkProjectileInObjectPool();
 	}
+
+    Projectiles[Projectiles.Max() - 1]->SetNextAvailableProjectile(nullptr);
 }
 
 void ABNProjectilePool::Tick(float DeltaTime)
@@ -81,14 +84,16 @@ void ABNProjectilePool::Tick(float DeltaTime)
 
 void ABNProjectilePool::UpdateObjectPool()
 {
-	for(int i = 0; i < PoolSize; ++i)
+    // auto for loop
+
+	for(auto projectile : Projectiles)
 	{
-		if(Projectiles[i]->DoesProjectileNeedToBeAddedToTheObjectPool())
-		{
-			Projectiles[i]->SetNextAvailableProjectile(FirstAvailableProjectile);
-			FirstAvailableProjectile = Projectiles[i];
-			FirstAvailableProjectile->MarkProjectileInObjectPool();
-		}
+        if (projectile->DoesProjectileNeedToBeAddedToTheObjectPool())
+        {
+            projectile->SetNextAvailableProjectile(FirstAvailableProjectile);
+            FirstAvailableProjectile = projectile;
+            projectile->MarkProjectileInObjectPool();
+        }
 	}
 }
 
