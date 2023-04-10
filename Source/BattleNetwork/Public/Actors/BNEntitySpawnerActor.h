@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
+#include "GameplayTagContainer.h"
+
 #include "BNEntitySpawnerActor.generated.h"
 
 class ABNEntityPawn;
@@ -24,6 +27,8 @@ protected:
 public:	
 	// Sets default values for this actor's properties
 	ABNEntitySpawnerActor();
+
+    ABNEntityPawn* SpawnEntity(FGameplayTag EntityTag);
 
 protected:
 	// Called when the game starts or when spawned

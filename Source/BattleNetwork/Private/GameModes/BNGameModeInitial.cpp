@@ -14,7 +14,7 @@ void ABNGameModeInitial::InitGame(const FString& MapName, const FString& Options
 
     SpawnObjectPool();
 
-    GridActor->CreateGrid();
+    GridActor->InitializeGrid();
 }
 
 void ABNGameModeInitial::SpawnGridActor()

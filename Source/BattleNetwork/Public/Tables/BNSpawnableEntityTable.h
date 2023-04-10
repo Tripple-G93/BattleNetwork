@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
-#include "GameplayTagContainer.h"
 #include "BNSpawnableEntityTable.generated.h"
 
 class ABNEntityPawn;
@@ -16,9 +15,6 @@ USTRUCT(BlueprintType)
 struct FBNSpawnableEntityTableInfoRow : public FTableRowBase
 {
 	GENERATED_BODY()
-
-	UPROPERTY(EditDefaultsOnly)
-	FGameplayTag EntityType;
 
     UPROPERTY(EditDefaultsOnly)
     TSubclassOf<ABNEntityPawn> EntityPawn;

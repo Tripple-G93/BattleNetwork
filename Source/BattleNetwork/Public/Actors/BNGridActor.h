@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Pawns/BNPlayerPawn.h"
+#include "GameplayTagContainer.h"
 #include "BNGridActor.generated.h"
 
 class ABNEntityPawn;
@@ -44,13 +44,10 @@ class BATTLENETWORK_API ABNGridActor : public AActor
 	ABNPlayerPawn* Player2Pawn;
 protected:
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "BN|Class References")
 	TSubclassOf<ABNPanelActor> PanelActorSubclass;
 
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ABNPlayerPawn> PlayerPawnSubclass;
-
-    UPROPERTY(EditDefaultsOnly)
+    UPROPERTY(EditDefaultsOnly, Category = "BN|Class References")
     TSubclassOf<ABNEntitySpawnerActor> EntitySpawnerActorClass;
 
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
@@ -79,8 +76,15 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	int32 PanelSpacingHeight;
-	
-	int32 PlayerSpawnOffset;
+
+    UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
+    FGameplayTag Team1Tag;
+
+    UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
+    FGameplayTag Team2Tag;
+
+    UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
+	FGameplayTag PlayerEntityTag;
 
     ABNEntitySpawnerActor* EntitySpawnerActor;
 	
@@ -91,10 +95,6 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
     void InitializeGrid();
-
-	void CreateGrid();
-
-    void CreateEntitySpawner();
 
 	bool CanEntityMoveLeft(const ABNEntityPawn* EntityPawn);
 
@@ -125,6 +125,10 @@ public:
 	
 protected:
 	
+    void CreateGrid();
+
+    void CreateEntitySpawner();
+
 	void SpawnPanel(const int32 XIndex, const int32 YIndex);
 
 };
