@@ -8,6 +8,7 @@
 #include "BNGridActor.generated.h"
 
 class ABNEntityPawn;
+class ABNEntitySpawnerActor;
 class ABNPanelActor;
 class ABNPlayerPawn;
 class UCameraComponent;
@@ -49,6 +50,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ABNPlayerPawn> PlayerPawnSubclass;
 
+    UPROPERTY(EditDefaultsOnly)
+    TSubclassOf<ABNEntitySpawnerActor> EntitySpawnerActorClass;
+
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> CameraComponent;
 
@@ -77,6 +81,8 @@ protected:
 	int32 PanelSpacingHeight;
 	
 	int32 PlayerSpawnOffset;
+
+    ABNEntitySpawnerActor* EntitySpawnerActor;
 	
 public:	
 
@@ -84,7 +90,11 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+    void InitializeGrid();
+
 	void CreateGrid();
+
+    void CreateEntitySpawner();
 
 	bool CanEntityMoveLeft(const ABNEntityPawn* EntityPawn);
 

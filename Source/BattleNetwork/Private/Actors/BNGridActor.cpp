@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Actors/BNGridActor.h"
+
+#include "Actors/BNEntitySpawnerActor.h"
 #include "AbilitySystemComponent.h"
 #include "Actors/BNPanelActor.h"
 #include "Camera/CameraComponent.h"
@@ -36,6 +37,40 @@ ABNGridActor::ABNGridActor(const FObjectInitializer& ObjectInitializer) : Super(
 	PanelSpacingHeight = 40;
 
 	PlayerSpawnOffset = 0;
+}
+
+void ABNGridActor::InitializeGrid()
+{
+    CreateEntitySpawner();
+
+    CreateGrid();
+}
+
+void ABNGridActor::CreateGrid()
+{
+    if (ensure(PanelActorSubclass))
+    {
+        for (int32 XIndex = 0; XIndex < GridWidth; ++XIndex)
+        {
+            Grid.Add(FBNPannel2DArray());
+            for (int32 YIndex = 0; YIndex < GridHeight; ++YIndex)
+            {
+                SpawnPanel(XIndex, YIndex);
+            }
+        }
+    }
+}
+
+void ABNGridActor::CreateEntitySpawner()
+{
+    if (ensure(EntitySpawnerActorClass))
+    {
+        FActorSpawnParameters SpawnParameters;
+        SpawnParameters.Owner = this;
+        SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+        EntitySpawnerActor = GetWorld()->SpawnActor<ABNEntitySpawnerActor>(EntitySpawnerActorClass, SpawnParameters);
+    }
 }
 
 void ABNGridActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -95,21 +130,6 @@ void ABNGridActor::SpawnPlayer2_Implementation(APlayerController* PlayerControll
 		Player2Pawn->SetTeamTag(FGameplayTag::RequestGameplayTag("Team2"));
 		Player2Pawn->SetGridActorReference(this);
 		Player2Pawn->SetServerGridLocation(FBNGridLocation(CenterX, CenterY));
-	}
-}
-
-void ABNGridActor::CreateGrid()
-{
-	if (ensure(PanelActorSubclass))
-	{
-		for (int32 XIndex = 0; XIndex < GridWidth; ++XIndex)
-		{
-			Grid.Add(FBNPannel2DArray());
-			for (int32 YIndex = 0; YIndex < GridHeight; ++YIndex)
-			{
-				SpawnPanel(XIndex, YIndex);
-			}
-		}
 	}
 }
 
