@@ -7,7 +7,7 @@
 #include "GameplayTagContainer.h"
 #include "BNSpawnableEntityTable.generated.h"
 
-class USoundCue;
+class ABNEntityPawn;
 
 /**
  * 
@@ -19,4 +19,7 @@ struct FBNSpawnableEntityTableInfoRow : public FTableRowBase
 
 	UPROPERTY(EditDefaultsOnly)
 	FGameplayTag EntityType;
+
+    UPROPERTY(EditDefaultsOnly)
+    TSubclassOf<ABNEntityPawn> EntityPawn;
 };
