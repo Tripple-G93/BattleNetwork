@@ -92,6 +92,9 @@ public:
 
 	TObjectPtr<UPaperFlipbookComponent> GetPaperFlipbookComponent();
 
+
+    void SetActorHiddenInGame(bool bNewHidden) override;
+
 protected:
 
 	virtual void BeginPlay() override;

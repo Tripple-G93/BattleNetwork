@@ -84,7 +84,7 @@ void ABNEntitySpawnerActor::SpawnEntity(FGameplayTag EntityTag)
             ABNEntityPawn* NewEntity = GetWorld()->SpawnActor<ABNEntityPawn>(Row->EntityPawn);
             if (ensure(NewEntity))
             {
-                NewEntity->SetHidden(true);
+                NewEntity->SetActorHiddenInGame(true);
                 Entities.Add(NewEntity);
             }
         }

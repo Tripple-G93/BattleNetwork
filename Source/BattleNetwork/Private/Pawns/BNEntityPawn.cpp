@@ -127,6 +127,20 @@ TObjectPtr<UPaperFlipbookComponent> ABNEntityPawn::GetPaperFlipbookComponent()
 	return PaperFlipbookComponent;
 }
 
+void ABNEntityPawn::SetActorHiddenInGame(bool bNewHidden)
+{
+    Super::SetActorHiddenInGame(bNewHidden);
+
+    if (bNewHidden)
+    {
+        BoxComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    }
+    else
+    {
+        BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    }
+}
+
 /*
  * End Getters
  */

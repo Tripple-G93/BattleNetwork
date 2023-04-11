@@ -102,7 +102,7 @@ void ABNGridActor::SpawnPlayer1_Implementation(APlayerController* PlayerControll
 	const FVector Location = Panel->GetActorLocation();
 
     Player1Pawn = Cast<ABNPlayerPawn>(EntitySpawnerActor->GetEntityFromSpawner(PlayerEntityTag));
-    Player1Pawn->SetHidden(false);
+    Player1Pawn->SetActorHiddenInGame(false);
 	Player1Pawn->SetActorLocation(Location + Player1Pawn->GetSpriteOffset());
     Player1Pawn->SetOwner(PlayerController);
 	PlayerController->Possess(Player1Pawn);
@@ -129,7 +129,7 @@ void ABNGridActor::SpawnPlayer2_Implementation(APlayerController* PlayerControll
     const FVector Location = Panel->GetActorLocation();
 
     Player2Pawn = Cast<ABNPlayerPawn>(EntitySpawnerActor->GetEntityFromSpawner(PlayerEntityTag));
-    Player2Pawn->SetHidden(false);
+    Player2Pawn->SetActorHiddenInGame(false);
     Player2Pawn->SetActorLocation(Location + Player2Pawn->GetSpriteOffset());
     Player2Pawn->SetActorRotation(Rotation);
     Player2Pawn->SetOwner(PlayerController);
