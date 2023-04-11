@@ -13,12 +13,69 @@
 ABNEntitySpawnerActor::ABNEntitySpawnerActor()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 }
 
-ABNEntityPawn* ABNEntitySpawnerActor::SpawnEntity(FGameplayTag EntityTag)
+// TODO Helper function for finding the start and end index for the search
+ABNEntityPawn* ABNEntitySpawnerActor::GetEntityFromSpawner(FGameplayTag EntityTag)
 {
+    int startIndex = 0;
+    for (const auto& EntityAmount : SpawnableEntityAmount)
+    {
+        if (EntityAmount.Key == EntityTag)
+        {
+            break;
+        }
+
+        startIndex += EntityAmount.Value;
+    }
+
+    int endIndex = 0;
+    for (const auto& EntityAmount : SpawnableEntityAmount)
+    {
+        endIndex += EntityAmount.Value;
+
+        if (EntityAmount.Key == EntityTag)
+        {
+            break;
+        }
+    }
+
+    ABNEntityPawn* Entity = nullptr;
+    for (int i = startIndex; i < endIndex; ++i)
+    {
+        ABNEntityPawn* SpawnedEntity = Entities[i];
+        if (SpawnedEntity->IsHidden())
+        {
+            Entity = SpawnedEntity;
+            break;
+        }
+    }
+
+    return Entity;
+}
+
+void ABNEntitySpawnerActor::SpawnEntities()
+{
+    for (const auto& EntityAmount : SpawnableEntityAmount)
+    {
+        for (int i = 0; i < EntityAmount.Value; ++i)
+        {
+            SpawnEntity(EntityAmount.Key);
+        }
+    }
+}
+
+void ABNEntitySpawnerActor::SpawnEntity(FGameplayTag EntityTag)
+{
+    int totalAmountOfSpawnableEntities = 0;
+    for (const auto& EntityAmount : SpawnableEntityAmount)
+    {
+        totalAmountOfSpawnableEntities += EntityAmount.Value;
+    }
+
+    Entities.Reserve(totalAmountOfSpawnableEntities);
     if (ensure(SpawnableEntityDataTable))
     {
         FBNSpawnableEntityTableInfoRow* Row = SpawnableEntityDataTable->FindRow<FBNSpawnableEntityTableInfoRow>(EntityTag.GetTagName(), TEXT("Trying to spawn an entity"));
@@ -27,26 +84,10 @@ ABNEntityPawn* ABNEntitySpawnerActor::SpawnEntity(FGameplayTag EntityTag)
             ABNEntityPawn* NewEntity = GetWorld()->SpawnActor<ABNEntityPawn>(Row->EntityPawn);
             if (ensure(NewEntity))
             {
+                NewEntity->SetHidden(true);
                 Entities.Add(NewEntity);
-                return NewEntity;
             }
         }
     }
-
-    return nullptr;
-}
-
-// Called when the game starts or when spawned
-void ABNEntitySpawnerActor::BeginPlay()
-{
-	Super::BeginPlay();
-
-}
-
-// Called every frame
-void ABNEntitySpawnerActor::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 

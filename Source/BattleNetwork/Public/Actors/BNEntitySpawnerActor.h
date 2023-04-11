@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 
+#include "Containers/Map.h"
 #include "GameplayTagContainer.h"
 
 #include "BNEntitySpawnerActor.generated.h"
@@ -19,8 +20,11 @@ class BATTLENETWORK_API ABNEntitySpawnerActor : public AActor
 	
 protected:
 
-    UPROPERTY(EditDefaultsOnly)
+    UPROPERTY(EditDefaultsOnly, Category = "BN|Spawner")
 	TObjectPtr<UDataTable> SpawnableEntityDataTable;
+
+    UPROPERTY(EditAnywhere, Category = "BN|Spawner")
+    TMap<FGameplayTag, int> SpawnableEntityAmount;
 
     TArray<ABNEntityPawn*> Entities;
 
@@ -28,14 +32,12 @@ public:
 	// Sets default values for this actor's properties
 	ABNEntitySpawnerActor();
 
-    ABNEntityPawn* SpawnEntity(FGameplayTag EntityTag);
+    void SpawnEntities();
+
+    ABNEntityPawn* GetEntityFromSpawner(FGameplayTag EntityTag);
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+    void SpawnEntity(FGameplayTag EntityTag);
 
 };

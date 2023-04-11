@@ -129,6 +129,8 @@ protected:
 
     void CreateEntitySpawner();
 
+    void SpawnEntities();
+
 	void SpawnPanel(const int32 XIndex, const int32 YIndex);
 
 };

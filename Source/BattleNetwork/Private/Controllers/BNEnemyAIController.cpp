@@ -3,11 +3,9 @@
 
 #include "Controllers/BNEnemyAIController.h"
 
-void ABNEnemyAIController::BeginPlay()
+void ABNEnemyAIController::RunOwnBehaviorTree()
 {
-    Super::BeginPlay();
-    
-    if(ensure(BehaviorTree))
+    if (ensure(BehaviorTree))
     {
         RunBehaviorTree(BehaviorTree);
     }

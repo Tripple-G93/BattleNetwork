@@ -21,6 +21,7 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category="BN|BehaviorTree")
     TObjectPtr<UBehaviorTree> BehaviorTree;
 
-    void BeginPlay() override;
+public:
 
+    void RunOwnBehaviorTree();
 };
