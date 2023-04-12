@@ -40,4 +40,8 @@ protected:
 
     void SpawnEntity(FGameplayTag EntityTag);
 
+    int GetStartEntitiesIndex(FGameplayTag EntityTag);
+    
+    int GetEndEntitiesIndex(FGameplayTag EntityTag);
+
 };

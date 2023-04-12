@@ -20,27 +20,8 @@ ABNEntitySpawnerActor::ABNEntitySpawnerActor()
 // TODO Helper function for finding the start and end index for the search
 ABNEntityPawn* ABNEntitySpawnerActor::GetEntityFromSpawner(FGameplayTag EntityTag)
 {
-    int startIndex = 0;
-    for (const auto& EntityAmount : SpawnableEntityAmount)
-    {
-        if (EntityAmount.Key == EntityTag)
-        {
-            break;
-        }
-
-        startIndex += EntityAmount.Value;
-    }
-
-    int endIndex = 0;
-    for (const auto& EntityAmount : SpawnableEntityAmount)
-    {
-        endIndex += EntityAmount.Value;
-
-        if (EntityAmount.Key == EntityTag)
-        {
-            break;
-        }
-    }
+    int startIndex = GetStartEntitiesIndex(EntityTag);
+    int endIndex = GetEndEntitiesIndex(EntityTag);
 
     ABNEntityPawn* Entity = nullptr;
     for (int i = startIndex; i < endIndex; ++i)
@@ -54,6 +35,39 @@ ABNEntityPawn* ABNEntitySpawnerActor::GetEntityFromSpawner(FGameplayTag EntityTa
     }
 
     return Entity;
+}
+
+int ABNEntitySpawnerActor::GetStartEntitiesIndex(FGameplayTag EntityTag)
+{
+    int startIndex = 0;
+    for (const auto& EntityAmount : SpawnableEntityAmount)
+    {
+        if (EntityAmount.Key == EntityTag)
+        {
+            break;
+        }
+
+        startIndex += EntityAmount.Value;
+    }
+
+    return startIndex;
+}
+
+
+int ABNEntitySpawnerActor::GetEndEntitiesIndex(FGameplayTag EntityTag)
+{
+    int endIndex = 0;
+    for (const auto& EntityAmount : SpawnableEntityAmount)
+    {
+        endIndex += EntityAmount.Value;
+
+        if (EntityAmount.Key == EntityTag)
+        {
+            break;
+        }
+    }
+
+    return endIndex;
 }
 
 void ABNEntitySpawnerActor::SpawnEntities()
@@ -90,4 +104,3 @@ void ABNEntitySpawnerActor::SpawnEntity(FGameplayTag EntityTag)
         }
     }
 }
-
