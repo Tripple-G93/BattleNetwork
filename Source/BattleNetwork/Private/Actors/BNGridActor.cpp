@@ -80,7 +80,6 @@ void ABNGridActor::SpawnEntities()
     {
         EntitySpawnerActor->SpawnEntities();
     }
-
 }
 
 void ABNGridActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -235,6 +234,35 @@ ABNPlayerPawn* ABNGridActor::GetPlayer1Pawn()
 ABNPlayerPawn* ABNGridActor::GetPlayer2Pawn()
 {
 	return Player2Pawn;
+}
+
+ABNEntityPawn* ABNGridActor::CreateEntity(FGameplayTag EntityTypeTag, int XGridPosition, int YGridPosition)
+{
+    ABNPanelActor* Panel = Grid[XGridPosition][YGridPosition];
+    const FVector Location = Panel->GetActorLocation();
+
+    ABNEntityPawn* entityPawn = EntitySpawnerActor->GetEntityFromSpawner(EntityTypeTag);
+    entityPawn->SetActorHiddenInGame(false);
+    entityPawn->SetActorLocation(Location + entityPawn->GetSpriteOffset());
+
+    FRotator Rotation;
+    if (XGridPosition >= GridWidth / 2)
+    {
+        entityPawn->SetTeamTag(Team2Tag);
+        Rotation.Yaw = 180;
+    }
+    else
+    {
+        entityPawn->SetTeamTag(Team1Tag);
+    }
+
+    entityPawn->SetActorRotation(Rotation);
+
+    Panel->SetEntityPawn(entityPawn);
+
+    entityPawn->SetServerGridLocation(FBNGridLocation(XGridPosition, YGridPosition));
+
+    return entityPawn;
 }
 
 void ABNGridActor::SpawnPanel(const int32 XIndex, const int32 YIndex)

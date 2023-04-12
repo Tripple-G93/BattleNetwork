@@ -8,6 +8,7 @@
 #include "Attributes/BNBaseAttributeSet.h"
 #include "Controllers/BNPlayerController.h"
 #include "Engine/World.h"
+#include "Pawns/BNPlayerPawn.h"
 #include "Subsystems/BNSessionSubsystem.h"
 
 void ABNGameModeSinglePlayer::PostLogin(APlayerController* NewPlayer)
@@ -20,6 +21,8 @@ void ABNGameModeSinglePlayer::PostLogin(APlayerController* NewPlayer)
 
     GridActor->SpawnPlayer1(NewPlayer);
     GridActor->GetPlayer1Pawn()->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "GameHasEnded");
+
+    GridActor->CreateEntity(EnemyEntityTag, 4, 1);
 }
 
 void ABNGameModeSinglePlayer::GameHasEnded(AController* Controller)

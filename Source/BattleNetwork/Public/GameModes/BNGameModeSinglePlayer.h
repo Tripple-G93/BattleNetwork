@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameModes/BNGameModeInitial.h"
+#include "GameplayTagContainer.h"
 #include "BNGameModeSinglePlayer.generated.h"
 
 /**
@@ -14,6 +15,12 @@ class BATTLENETWORK_API ABNGameModeSinglePlayer : public ABNGameModeInitial
 {
 	GENERATED_BODY()
 	
+protected:
+
+    // TODO: Remove this and use a table that represents what enemies you will be going up against. 
+    UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
+	FGameplayTag EnemyEntityTag;
+
 public:
 
     virtual void PostLogin(APlayerController* NewPlayer) override;
