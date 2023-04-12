@@ -55,7 +55,7 @@ void ABNEntityPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 void ABNEntityPawn::UpdateAnimation(FGameplayTag AnimationTag)
 {
 	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
-CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, AnimationTag);
+        CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, AnimationTag);
 }
 
 void ABNEntityPawn::PlayAnimationSoundEffect() const
@@ -70,7 +70,6 @@ void ABNEntityPawn::PlayAnimationSoundEffect() const
 	{
 		UE_LOG(LogTemp, Error, TEXT("Can't play Gameplay Tag animation sound effect %s"), *CurrentFlipbookAnimationTableInfoRow->AnimationGameplayTag.ToString());
 	}
-	
 }
 
 /*
