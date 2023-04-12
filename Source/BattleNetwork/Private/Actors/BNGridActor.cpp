@@ -132,7 +132,6 @@ void ABNGridActor::SpawnPlayer2_Implementation(APlayerController* PlayerControll
     Player2Pawn->SetActorHiddenInGame(false);
     Player2Pawn->SetActorLocation(Location + Player2Pawn->GetSpriteOffset());
     Player2Pawn->SetActorRotation(Rotation);
-    Player2Pawn->FlipEntity();
     Player2Pawn->SetOwner(PlayerController);
     PlayerController->Possess(Player2Pawn);
     PlayerController->SetViewTarget(this);
