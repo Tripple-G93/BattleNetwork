@@ -45,9 +45,9 @@ void ABNGameModeInitial::SpawnObjectPool()
     }
 }
 
-void ABNGameModeInitial::CreatePlayer(APlayerController* NewPlayer)
+void ABNGameModeInitial::CreatePlayer(APlayerController* NewPlayer, int XGridLocation, int YGridLocation)
 {
-    ABNEntityPawn* entityPawn = GridActor->CreateEntity(PlayerEntityTag, 1, 1);
+    ABNEntityPawn* entityPawn = GridActor->CreateEntity(PlayerEntityTag, XGridLocation, YGridLocation);
     entityPawn->SetOwner(NewPlayer);
 
     NewPlayer->Possess(entityPawn);

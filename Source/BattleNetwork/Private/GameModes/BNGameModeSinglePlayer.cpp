@@ -18,7 +18,7 @@ void ABNGameModeSinglePlayer::PostLogin(APlayerController* NewPlayer)
         BasePlayerController->RandomlyPlayGameMusic();
     }
 
-    CreatePlayer(NewPlayer);
+    CreatePlayer(NewPlayer, 1, 1);
 
     GridActor->CreateEntity(EnemyEntityTag, 4, 1);
 }

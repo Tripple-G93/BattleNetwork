@@ -55,5 +55,5 @@ protected:
 
     void SpawnObjectPool();
 
-    void CreatePlayer(APlayerController* NewPlayer);
+    void CreatePlayer(APlayerController* NewPlayer, int XGridLocation, int YGridLocation);
 };
