@@ -5,6 +5,10 @@
 
 #include "Actors/BNGridActor.h"
 #include "Actors/BNProjectilePool.h"
+#include "Controllers/BNPlayerController.h"
+#include "Attributes/BNBaseAttributeSet.h"
+#include "Pawns/BNEntityPawn.h"
+#include "Subsystems/BNSessionSubsystem.h"
 
 void ABNGameModeInitial::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
@@ -38,6 +42,42 @@ void ABNGameModeInitial::SpawnObjectPool()
         SpawnParameters.OverrideLevel = GetLevel();
 
         BulletProjectilePool = GetWorld()->SpawnActor<ABNProjectilePool>(BulletProjectilePoolSubClass, SpawnParameters);
+    }
+}
+
+void ABNGameModeInitial::CreatePlayer(APlayerController* NewPlayer)
+{
+    ABNEntityPawn* entityPawn = GridActor->CreateEntity(PlayerEntityTag, 1, 1);
+    entityPawn->SetOwner(NewPlayer);
+
+    NewPlayer->Possess(entityPawn);
+    NewPlayer->SetViewTarget(GridActor);
+
+    entityPawn->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "GameHasEnded");
+}
+
+void ABNGameModeInitial::GameHasEnded(AController* Controller)
+{
+    // We want to end the multiplayer session here
+    UBNSessionSubsystem* SessionSubsystem = GetGameInstance()->GetSubsystem<UBNSessionSubsystem>();
+    SessionSubsystem->EndSession();
+
+    // Do a check if player controller is null then return and honestly do an ensure because that should not be the case
+    if (!ensure(Controller))
+    {
+        return;
+    }
+
+    for (int index = 0; index < PlayerControllers.Num(); ++index)
+    {
+        if (Controller != PlayerControllers[index])
+        {
+            Cast<ABNPlayerController>(PlayerControllers[index])->DisplayWinResultUI();
+        }
+        else
+        {
+            Cast<ABNPlayerController>(PlayerControllers[index])->DisplayLossResultUI();
+        }
     }
 }
 
