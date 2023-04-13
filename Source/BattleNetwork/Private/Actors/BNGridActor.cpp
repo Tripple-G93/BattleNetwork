@@ -96,7 +96,7 @@ bool ABNGridActor::CanEntityMoveLeft(const ABNEntityPawn* EntityPawn)
 	const int32 XIndex = GridLocation.XIndex;
 	const int32 YIndex = GridLocation.YIndex;
 	
-	if(EntityPawn->GetTeamTag() == FGameplayTag::RequestGameplayTag(FName("Team1")))
+	if(EntityPawn->GetTeamTag() == FGameplayTag::RequestGameplayTag(Team1Tag))
 	{
 		return XIndex > 0 && Grid[XIndex - 1][YIndex]->GetEntityPawn() == nullptr;
 	}
@@ -113,7 +113,7 @@ bool ABNGridActor::CanEntityMoveRight(const ABNEntityPawn* EntityPawn)
 	const int32 XIndex = GridLocation.XIndex;
 	const int32 YIndex = GridLocation.YIndex;
 
-	if(EntityPawn->GetTeamTag() == FGameplayTag::RequestGameplayTag(FName("Team1")))
+	if(EntityPawn->GetTeamTag() == FGameplayTag::RequestGameplayTag(Team1Tag))
 	{
 		return XIndex < GridDividerIndex && Grid[XIndex + 1][YIndex]->GetEntityPawn() == nullptr;
 	}
