@@ -96,7 +96,7 @@ bool ABNGridActor::CanEntityMoveLeft(const ABNEntityPawn* EntityPawn)
 	const int32 XIndex = GridLocation.XIndex;
 	const int32 YIndex = GridLocation.YIndex;
 	
-	if(EntityPawn->GetTeamTag() == FGameplayTag::RequestGameplayTag(Team1Tag))
+	if(EntityPawn->GetTeamTag() == Team1Tag)
 	{
 		return XIndex > 0 && Grid[XIndex - 1][YIndex]->GetEntityPawn() == nullptr;
 	}
@@ -113,7 +113,7 @@ bool ABNGridActor::CanEntityMoveRight(const ABNEntityPawn* EntityPawn)
 	const int32 XIndex = GridLocation.XIndex;
 	const int32 YIndex = GridLocation.YIndex;
 
-	if(EntityPawn->GetTeamTag() == FGameplayTag::RequestGameplayTag(Team1Tag))
+	if(EntityPawn->GetTeamTag() == Team1Tag)
 	{
 		return XIndex < GridDividerIndex && Grid[XIndex + 1][YIndex]->GetEntityPawn() == nullptr;
 	}
@@ -180,8 +180,6 @@ ABNEntityPawn* ABNGridActor::CreateEntity(FGameplayTag EntityTypeTag, int XGridP
     const FVector Location = Panel->GetActorLocation();
 
     ABNEntityPawn* entityPawn = EntitySpawnerActor->GetEntityFromSpawner(EntityTypeTag);
-    entityPawn->SetActorHiddenInGame(false);
-    entityPawn->SetActorLocation(Location + entityPawn->GetSpriteOffset());
 
     FRotator Rotation;
     if (XGridPosition >= GridWidth / 2)
@@ -194,11 +192,13 @@ ABNEntityPawn* ABNGridActor::CreateEntity(FGameplayTag EntityTypeTag, int XGridP
         entityPawn->SetTeamTag(Team1Tag);
     }
 
+    entityPawn->SetActorHiddenInGame(false);
+    entityPawn->SetActorLocation(Location + entityPawn->GetSpriteOffset());
     entityPawn->SetActorRotation(Rotation);
+    entityPawn->SetServerGridLocation(FBNGridLocation(XGridPosition, YGridPosition));
+    entityPawn->SetGridActorReference(this);
 
     Panel->SetEntityPawn(entityPawn);
-
-    entityPawn->SetServerGridLocation(FBNGridLocation(XGridPosition, YGridPosition));
 
     return entityPawn;
 }
