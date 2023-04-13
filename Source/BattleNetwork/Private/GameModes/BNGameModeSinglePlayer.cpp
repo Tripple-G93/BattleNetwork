@@ -4,11 +4,7 @@
 #include "GameModes/BNGameModeSinglePlayer.h"
 
 #include "Actors/BNGridActor.h"
-#include "Actors/BNProjectilePool.h"
-#include "Attributes/BNBaseAttributeSet.h"
 #include "Controllers/BNPlayerController.h"
-#include "Engine/World.h"
-#include "Pawns/BNPlayerPawn.h"
 
 void ABNGameModeSinglePlayer::PostLogin(APlayerController* NewPlayer)
 {

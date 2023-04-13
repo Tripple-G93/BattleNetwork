@@ -110,21 +110,7 @@ public:
 
 	float GetRightMostPanelXLocation();
 
-	ABNPlayerPawn* GetPlayer1Pawn();
-	ABNPlayerPawn* GetPlayer2Pawn();
-
     ABNEntityPawn* CreateEntity(FGameplayTag EntityTypeTag, int XGridPosition, int YGridPosition);
-
-	/*
-     * Server Calls
-     */
-	
-    // DO we even need these?
-	UFUNCTION(Server, Reliable)
-	void SpawnPlayer1(APlayerController* PlayerController);
-
-	UFUNCTION(Server, Reliable)
-	void SpawnPlayer2(APlayerController* PlayerController);
 	
 protected:
 	
