@@ -62,9 +62,11 @@ void ABNGameModeInitial::GameHasEnded(AController* Controller)
     UBNSessionSubsystem* SessionSubsystem = GetGameInstance()->GetSubsystem<UBNSessionSubsystem>();
     SessionSubsystem->EndSession();
 
-    // Do a check if player controller is null then return and honestly do an ensure because that should not be the case
-    if (!ensure(Controller))
+    // Do a check if player controller is null because that means it was an enemy ai
+    // (This will change once we establish real game rules and establish who has won)
+    if (!Controller)
     {
+        Cast<ABNPlayerController>(PlayerControllers[0])->DisplayWinResultUI();
         return;
     }
 

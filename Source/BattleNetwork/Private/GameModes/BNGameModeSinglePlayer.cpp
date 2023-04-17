@@ -4,10 +4,14 @@
 #include "GameModes/BNGameModeSinglePlayer.h"
 
 #include "Actors/BNGridActor.h"
+#include "Pawns/BNEntityPawn.h"
+#include "Attributes/BNBaseAttributeSet.h"
 #include "Controllers/BNPlayerController.h"
 
 void ABNGameModeSinglePlayer::PostLogin(APlayerController* NewPlayer)
 {
+    Super::PostLogin(NewPlayer);
+
     ABNBasePlayerController* BasePlayerController = Cast<ABNBasePlayerController>(NewPlayer);
     if (BasePlayerController)
     {
@@ -16,5 +20,6 @@ void ABNGameModeSinglePlayer::PostLogin(APlayerController* NewPlayer)
 
     CreatePlayer(NewPlayer, 1, 1);
 
-    GridActor->CreateEntity(EnemyEntityTag, 4, 1);
+    ABNEntityPawn* Enemy = GridActor->CreateEntity(EnemyEntityTag, 4, 1);
+    Enemy->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "GameHasEnded");
 }
