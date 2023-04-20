@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Pawns/BNPlayerPawn.h"
+#include "GameplayTagContainer.h"
 #include "BNGridActor.generated.h"
 
 class ABNEntityPawn;
+class ABNEntitySpawnerActor;
 class ABNPanelActor;
 class ABNPlayerPawn;
 class UCameraComponent;
@@ -43,11 +44,11 @@ class BATTLENETWORK_API ABNGridActor : public AActor
 	ABNPlayerPawn* Player2Pawn;
 protected:
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "BN|Class References")
 	TSubclassOf<ABNPanelActor> PanelActorSubclass;
 
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ABNPlayerPawn> PlayerPawnSubclass;
+    UPROPERTY(EditDefaultsOnly, Category = "BN|Class References")
+    TSubclassOf<ABNEntitySpawnerActor> EntitySpawnerActorClass;
 
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> CameraComponent;
@@ -75,8 +76,17 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	int32 PanelSpacingHeight;
-	
-	int32 PlayerSpawnOffset;
+
+    UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
+    FGameplayTag Team1Tag;
+
+    UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
+    FGameplayTag Team2Tag;
+
+    UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
+	FGameplayTag PlayerEntityTag;
+
+    ABNEntitySpawnerActor* EntitySpawnerActor;
 	
 public:	
 
@@ -84,7 +94,7 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	void CreateGrid();
+    void InitializeGrid();
 
 	bool CanEntityMoveLeft(const ABNEntityPawn* EntityPawn);
 
@@ -100,21 +110,16 @@ public:
 
 	float GetRightMostPanelXLocation();
 
-	ABNPlayerPawn* GetPlayer1Pawn();
-	ABNPlayerPawn* GetPlayer2Pawn();
-
-	/*
-     * Server Calls
-     */
-	
-	UFUNCTION(Server, Reliable)
-	void SpawnPlayer1(APlayerController* PlayerController);
-
-	UFUNCTION(Server, Reliable)
-	void SpawnPlayer2(APlayerController* PlayerController);
+    ABNEntityPawn* CreateEntity(FGameplayTag EntityTypeTag, int XGridPosition, int YGridPosition);
 	
 protected:
 	
+    void CreateGrid();
+
+    void CreateEntitySpawner();
+
+    void SpawnEntities();
+
 	void SpawnPanel(const int32 XIndex, const int32 YIndex);
 
 };

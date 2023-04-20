@@ -43,17 +43,6 @@ ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Supe
 	bCanMove = true;
 }
 
-void ABNEntityPawn::FlipEntity()
-{
-	FVector LocationOffset = PaperFlipbookComponent->GetRelativeLocation();
-	LocationOffset.Y *= -1;
-	PaperFlipbookComponent->SetRelativeLocation(LocationOffset);
-
-	LocationOffset = EntityWidgetSceneComponent->GetRelativeLocation();
-	LocationOffset.X *= -1;
-	EntityWidgetSceneComponent->SetRelativeLocation(LocationOffset);
-}
-
 void ABNEntityPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -66,7 +55,7 @@ void ABNEntityPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 void ABNEntityPawn::UpdateAnimation(FGameplayTag AnimationTag)
 {
 	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
-CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, AnimationTag);
+        CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, AnimationTag);
 }
 
 void ABNEntityPawn::PlayAnimationSoundEffect() const
@@ -81,7 +70,6 @@ void ABNEntityPawn::PlayAnimationSoundEffect() const
 	{
 		UE_LOG(LogTemp, Error, TEXT("Can't play Gameplay Tag animation sound effect %s"), *CurrentFlipbookAnimationTableInfoRow->AnimationGameplayTag.ToString());
 	}
-	
 }
 
 /*
@@ -127,6 +115,20 @@ TObjectPtr<UPaperFlipbookComponent> ABNEntityPawn::GetPaperFlipbookComponent()
 	return PaperFlipbookComponent;
 }
 
+void ABNEntityPawn::SetActorHiddenInGame(bool bNewHidden)
+{
+    Super::SetActorHiddenInGame(bNewHidden);
+
+    if (bNewHidden)
+    {
+        BoxComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    }
+    else
+    {
+        BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    }
+}
+
 /*
  * End Getters
  */
@@ -134,11 +136,6 @@ TObjectPtr<UPaperFlipbookComponent> ABNEntityPawn::GetPaperFlipbookComponent()
 void ABNEntityPawn::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if(TeamTag == FGameplayTag::RequestGameplayTag("Team2"))
-	{
-		FlipEntity();
-	}
 	
 	PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::UpdateIdleAnimation);
 }

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameModes/BNGameModeBase.h"
+#include "GameplayTagContainer.h"
 #include "BNGameModeInitial.generated.h"
 
 class ABNGridActor;
@@ -27,6 +28,14 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category="BN|SubClasses")
 	TSubclassOf<ABNProjectilePool> BulletProjectilePoolSubClass;
 
+        // TODO: Remove this and use a table that represents what enemies you will be going up against. 
+    UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
+	FGameplayTag EnemyEntityTag;
+
+        // TODO: Remove this and use a table that represents what enemies you will be going up against. 
+    UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
+	FGameplayTag PlayerEntityTag;
+
     TObjectPtr<ABNProjectilePool> BulletProjectilePool;
 
 public:
@@ -39,7 +48,12 @@ public:
 
 protected:
 
+    UFUNCTION()
+	void GameHasEnded(AController* Controller);
+
     void SpawnGridActor();
 
     void SpawnObjectPool();
+
+    void CreatePlayer(APlayerController* NewPlayer, int XGridLocation, int YGridLocation);
 };

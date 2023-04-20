@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Actors/BNGridActor.h"
+
+#include "Actors/BNEntitySpawnerActor.h"
 #include "AbilitySystemComponent.h"
 #include "Actors/BNPanelActor.h"
 #include "Camera/CameraComponent.h"
@@ -9,6 +10,7 @@
 #include "Engine/World.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "Pawns/BNPlayerPawn.h"
 
 // Sets default values
 ABNGridActor::ABNGridActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -34,8 +36,50 @@ ABNGridActor::ABNGridActor(const FObjectInitializer& ObjectInitializer) : Super(
 
 	PanelSpacingWidth = 24;
 	PanelSpacingHeight = 40;
+}
 
-	PlayerSpawnOffset = 0;
+void ABNGridActor::InitializeGrid()
+{
+    CreateEntitySpawner();
+
+    SpawnEntities();
+
+    CreateGrid();
+}
+
+void ABNGridActor::CreateGrid()
+{
+    if (ensure(PanelActorSubclass))
+    {
+        for (int32 XIndex = 0; XIndex < GridWidth; ++XIndex)
+        {
+            Grid.Add(FBNPannel2DArray());
+            for (int32 YIndex = 0; YIndex < GridHeight; ++YIndex)
+            {
+                SpawnPanel(XIndex, YIndex);
+            }
+        }
+    }
+}
+
+void ABNGridActor::CreateEntitySpawner()
+{
+    if (ensure(EntitySpawnerActorClass))
+    {
+        FActorSpawnParameters SpawnParameters;
+        SpawnParameters.Owner = this;
+        SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+        EntitySpawnerActor = GetWorld()->SpawnActor<ABNEntitySpawnerActor>(EntitySpawnerActorClass, SpawnParameters);
+    }
+}
+
+void ABNGridActor::SpawnEntities()
+{
+    if (ensure(EntitySpawnerActor))
+    {
+        EntitySpawnerActor->SpawnEntities();
+    }
 }
 
 void ABNGridActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -45,74 +89,6 @@ void ABNGridActor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(ABNGridActor, Grid);
 }
 
-void ABNGridActor::SpawnPlayer1_Implementation(APlayerController* PlayerController)
-{
-	// TODO BN: When you actually handle player spawning be sure to unify the similarity between the spawn player functions
-	if(ensure(PlayerPawnSubclass))
-	{
-		const int32 CenterX = 0;
-		const int32 CenterY = GridHeight / 2;
-        const FRotator Rotation = { 0, 0, 0 };
-
-		ABNPanelActor* Panel = Grid[CenterX][CenterY];
-		const FVector Location = Panel->GetActorLocation();
-		FActorSpawnParameters SpawnParameters;
-		SpawnParameters.Owner = PlayerController;
-
-		Player1Pawn = GetWorld()->SpawnActor<ABNPlayerPawn>(PlayerPawnSubclass, Location, Rotation, SpawnParameters);
-		Player1Pawn->SetActorLocation(Location + Player1Pawn->GetSpriteOffset());
-		PlayerController->Possess(Player1Pawn);
-		PlayerController->SetViewTarget(this);
-		Panel->SetEntityPawn(Player1Pawn);
-		Player1Pawn->SetTeamTag(FGameplayTag::RequestGameplayTag("Team1"));
-		Player1Pawn->SetGridActorReference(this);
-		Player1Pawn->SetServerGridLocation(FBNGridLocation(CenterX, CenterY));
-	}
-}
-
-void ABNGridActor::SpawnPlayer2_Implementation(APlayerController* PlayerController)
-{
-	// TODO BN: When you actually handle player spawning be sure to unify the similarity between the spawn player functions
-	if(ensure(PlayerPawnSubclass))
-	{
-		const int32 CenterX = GridWidth - 1;
-		int32 CenterY = GridHeight / 2;
-		CenterY = GridHeight - CenterY - 1;
-		
-		FRotator Rotation;
-		Rotation.Yaw = 180;
-
-		ABNPanelActor* Panel = Grid[CenterX][CenterY];
-		const FVector Location = Panel->GetActorLocation();
-		FActorSpawnParameters SpawnParameters;
-		SpawnParameters.Owner = PlayerController;
-
-		Player2Pawn  = GetWorld()->SpawnActor<ABNPlayerPawn>(PlayerPawnSubclass, Location, Rotation, SpawnParameters);
-		Player2Pawn->SetActorLocation(Location + Player2Pawn->GetSpriteOffset());
-		PlayerController->Possess(Player2Pawn);
-		PlayerController->SetViewTarget(this);
-		Panel->SetEntityPawn(Player2Pawn);
-		Player2Pawn->SetTeamTag(FGameplayTag::RequestGameplayTag("Team2"));
-		Player2Pawn->SetGridActorReference(this);
-		Player2Pawn->SetServerGridLocation(FBNGridLocation(CenterX, CenterY));
-	}
-}
-
-void ABNGridActor::CreateGrid()
-{
-	if (ensure(PanelActorSubclass))
-	{
-		for (int32 XIndex = 0; XIndex < GridWidth; ++XIndex)
-		{
-			Grid.Add(FBNPannel2DArray());
-			for (int32 YIndex = 0; YIndex < GridHeight; ++YIndex)
-			{
-				SpawnPanel(XIndex, YIndex);
-			}
-		}
-	}
-}
-
 bool ABNGridActor::CanEntityMoveLeft(const ABNEntityPawn* EntityPawn)
 {
 	const FBNGridLocation GridLocation = EntityPawn->GetServerGridLocation();
@@ -120,7 +96,7 @@ bool ABNGridActor::CanEntityMoveLeft(const ABNEntityPawn* EntityPawn)
 	const int32 XIndex = GridLocation.XIndex;
 	const int32 YIndex = GridLocation.YIndex;
 	
-	if(EntityPawn->GetTeamTag() == FGameplayTag::RequestGameplayTag(FName("Team1")))
+	if(EntityPawn->GetTeamTag() == Team1Tag)
 	{
 		return XIndex > 0 && Grid[XIndex - 1][YIndex]->GetEntityPawn() == nullptr;
 	}
@@ -137,7 +113,7 @@ bool ABNGridActor::CanEntityMoveRight(const ABNEntityPawn* EntityPawn)
 	const int32 XIndex = GridLocation.XIndex;
 	const int32 YIndex = GridLocation.YIndex;
 
-	if(EntityPawn->GetTeamTag() == FGameplayTag::RequestGameplayTag(FName("Team1")))
+	if(EntityPawn->GetTeamTag() == Team1Tag)
 	{
 		return XIndex < GridDividerIndex && Grid[XIndex + 1][YIndex]->GetEntityPawn() == nullptr;
 	}
@@ -198,14 +174,33 @@ float ABNGridActor::GetRightMostPanelXLocation()
 	return Grid[GridWidth - 1][0]->GetActorLocation().X + PanelSpacingWidth;	
 }
 
-ABNPlayerPawn* ABNGridActor::GetPlayer1Pawn()
+ABNEntityPawn* ABNGridActor::CreateEntity(FGameplayTag EntityTypeTag, int XGridPosition, int YGridPosition)
 {
-	return Player1Pawn;
-}
+    ABNPanelActor* Panel = Grid[XGridPosition][YGridPosition];
+    const FVector Location = Panel->GetActorLocation();
 
-ABNPlayerPawn* ABNGridActor::GetPlayer2Pawn()
-{
-	return Player2Pawn;
+    ABNEntityPawn* entityPawn = EntitySpawnerActor->GetEntityFromSpawner(EntityTypeTag);
+
+    FRotator Rotation;
+    if (XGridPosition >= GridWidth / 2)
+    {
+        entityPawn->SetTeamTag(Team2Tag);
+        Rotation.Yaw = 180;
+    }
+    else
+    {
+        entityPawn->SetTeamTag(Team1Tag);
+    }
+
+    entityPawn->SetActorHiddenInGame(false);
+    entityPawn->SetActorLocation(Location + entityPawn->GetSpriteOffset());
+    entityPawn->SetActorRotation(Rotation);
+    entityPawn->SetServerGridLocation(FBNGridLocation(XGridPosition, YGridPosition));
+    entityPawn->SetGridActorReference(this);
+
+    Panel->SetEntityPawn(entityPawn);
+
+    return entityPawn;
 }
 
 void ABNGridActor::SpawnPanel(const int32 XIndex, const int32 YIndex)
