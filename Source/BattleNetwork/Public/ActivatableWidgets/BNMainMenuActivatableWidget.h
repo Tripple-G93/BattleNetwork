@@ -27,8 +27,20 @@ protected:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UButton> ButtonFindGame;
 
+    UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+    TObjectPtr<UButton> ButtonWhatIsNew;
+
+    UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+    TObjectPtr<UButton> ButtonCredits;
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "BN|UI")
 	TSubclassOf<UCommonActivatableWidget> FindSessionActivatableWidgetClass;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "BN|UI")
+	TSubclassOf<UCommonActivatableWidget> WhatIsNewActivatableWidgetClass;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "BN|UI")
+	TSubclassOf<UCommonActivatableWidget> CreditsActivatableWidgetClass;
 
 	UPROPERTY(EditAnywhere, Category = "BN|MapName")
 	FName MultiplayerMapName;
@@ -38,7 +50,11 @@ protected:
 
 private:
 
+    void AddWidgetToStack(TSubclassOf<UCommonActivatableWidget> ActivatableWidgetClass);
+
 	void SetInputModeToGameplay() const;
+
+    void BindButtonWidgets();
 	
 	UFUNCTION()
 	void FindSessionWidgetFlow();
@@ -48,4 +64,10 @@ private:
 
     UFUNCTION()
     void CreateSinglePlayerGame();
+
+    UFUNCTION()
+    void WhatIsNewWidgetFlow();
+
+    UFUNCTION()
+    void CreditsWidgetFlow();
 };

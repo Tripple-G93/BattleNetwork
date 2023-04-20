@@ -12,33 +12,43 @@ void UBNMainMenuActivatableWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	if(IsValid(ButtonCreateLocalMultiplayerGame))
-	{
-		ButtonCreateLocalMultiplayerGame->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::CreateLocalMultiplayerGame);
-	}
+    BindButtonWidgets();
+}
 
-	if(IsValid(ButtonFindGame))
-	{
-		ButtonFindGame->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::FindSessionWidgetFlow);
-	}
+void UBNMainMenuActivatableWidget::BindButtonWidgets()
+{
+    if (IsValid(ButtonCreateLocalMultiplayerGame))
+    {
+        ButtonCreateLocalMultiplayerGame->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::CreateLocalMultiplayerGame);
+    }
+
+    if (IsValid(ButtonFindGame))
+    {
+        ButtonFindGame->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::FindSessionWidgetFlow);
+    }
 
     if (IsValid(ButtonCreateSinglePlayerGame))
     {
         ButtonCreateSinglePlayerGame->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::CreateSinglePlayerGame);
     }
+
+    if (IsValid(ButtonWhatIsNew))
+    {
+        ButtonWhatIsNew->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::CreateSinglePlayerGame);
+    }
+
+    if (IsValid(ButtonCredits))
+    {
+        ButtonCreateSinglePlayerGame->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::CreateSinglePlayerGame);
+    }
 }
+
 
 void UBNMainMenuActivatableWidget::FindSessionWidgetFlow()
 {
 	GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->FindSessions(10, true);
 	
-	if(ensure(CommonActivatableWidgetStackReference))
-	{
-		if(ensure(FindSessionActivatableWidgetClass))
-		{
-			CommonActivatableWidgetStackReference->AddWidget(FindSessionActivatableWidgetClass);
-		}
-	}
+    AddWidgetToStack(FindSessionActivatableWidgetClass);
 }
 
 void UBNMainMenuActivatableWidget::CreateLocalMultiplayerGame()
@@ -57,6 +67,27 @@ void UBNMainMenuActivatableWidget::CreateSinglePlayerGame()
     }
 
     SetInputModeToGameplay();
+}
+
+void UBNMainMenuActivatableWidget::WhatIsNewWidgetFlow()
+{
+    AddWidgetToStack(WhatIsNewActivatableWidgetClass);
+}
+
+void UBNMainMenuActivatableWidget::CreditsWidgetFlow()
+{
+    AddWidgetToStack(CreditsActivatableWidgetClass);
+}
+
+void UBNMainMenuActivatableWidget::AddWidgetToStack(TSubclassOf<UCommonActivatableWidget> ActivatableWidgetClass)
+{
+    if (ensure(CommonActivatableWidgetStackReference))
+    {
+        if (ensure(ActivatableWidgetClass))
+        {
+            CommonActivatableWidgetStackReference->AddWidget(ActivatableWidgetClass);
+        }
+    }
 }
 
 void UBNMainMenuActivatableWidget::SetInputModeToGameplay() const
