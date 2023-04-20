@@ -14,10 +14,8 @@ ABNEntitySpawnerActor::ABNEntitySpawnerActor()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
 }
 
-// TODO Helper function for finding the start and end index for the search
 ABNEntityPawn* ABNEntitySpawnerActor::GetEntityFromSpawner(FGameplayTag EntityTag)
 {
     int startIndex = GetStartEntitiesIndex(EntityTag);
