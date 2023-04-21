@@ -34,12 +34,12 @@ void UBNMainMenuActivatableWidget::BindButtonWidgets()
 
     if (IsValid(ButtonWhatIsNew))
     {
-        ButtonWhatIsNew->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::CreateSinglePlayerGame);
+        ButtonWhatIsNew->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::WhatIsNewWidgetFlow);
     }
 
     if (IsValid(ButtonCredits))
     {
-        ButtonCreateSinglePlayerGame->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::CreateSinglePlayerGame);
+        ButtonCredits->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::CreditsWidgetFlow);
     }
 }
 
