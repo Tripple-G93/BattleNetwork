@@ -18,11 +18,6 @@ void UBNFindSessionActivatableWidget::NativeConstruct()
 	}
 	
 	ButtonJoinFirstResult->SetIsEnabled(false);
-
-	if(!ButtonBack->OnPressed.Contains(this, "DeactivateWidget"))
-	{
-		ButtonBack->OnPressed.AddDynamic(this, &UBNFindSessionActivatableWidget::DeactivateWidget);
-	}
 }
 
 void UBNFindSessionActivatableWidget::JoinFirstSession()
