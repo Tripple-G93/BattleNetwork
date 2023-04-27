@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ActivatableWidgets/BNStackActivatableWidget.h"
+#include "ActivatableWidgets/BNBackActivatableWidget.h"
 #include "BNFindSessionActivatableWidget.generated.h"
 
 class UButton;
@@ -12,14 +12,11 @@ class UButton;
  * 
  */
 UCLASS()
-class BATTLENETWORK_API UBNFindSessionActivatableWidget : public UBNStackActivatableWidget
+class BATTLENETWORK_API UBNFindSessionActivatableWidget : public UBNBackActivatableWidget
 {
 	GENERATED_BODY()
 
 protected:
-
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UButton> ButtonBack;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UButton> ButtonJoinFirstResult;
