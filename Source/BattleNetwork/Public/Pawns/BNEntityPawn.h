@@ -95,6 +95,25 @@ public:
 
     void SetActorHiddenInGame(bool bNewHidden) override;
 
+     /*
+	 * Server
+	 */
+
+	UFUNCTION(Server, Unreliable)
+	void UpdateMoveAnimationRPC();
+	
+	UFUNCTION(Server, Reliable, WithValidation)
+	void MoveEntityLeftRPC();
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void MoveEntityRightRPC();
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void MoveEntityUpRPC();
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void MoveEntityDownRPC();
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -117,25 +136,6 @@ protected:
 
 	UFUNCTION()
 	void ClientCallMoveEntityDownRPC();
-
-	/*
-	 * Server
-	 */
-
-	UFUNCTION(Server, Unreliable)
-	void UpdateMoveAnimationRPC();
-	
-	UFUNCTION(Server, Reliable, WithValidation)
-	void MoveEntityLeftRPC();
-
-	UFUNCTION(Server, Reliable, WithValidation)
-	void MoveEntityRightRPC();
-
-	UFUNCTION(Server, Reliable, WithValidation)
-	void MoveEntityUpRPC();
-
-	UFUNCTION(Server, Reliable, WithValidation)
-	void MoveEntityDownRPC();
 	
 	/*
 	 * OnRep_Notify
