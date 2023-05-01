@@ -4,25 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTDecorator.h"
-#include "BNBTDecoratorCanAttack.generated.h"
+#include "BNBTDecoratorSameRowAsEnemy.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BATTLENETWORK_API UBNBTDecoratorCanAttack : public UBTDecorator
+class BATTLENETWORK_API UBNBTDecoratorSameRowAsEnemy : public UBTDecorator
 {
 	GENERATED_BODY()
 	
-protected:
-
-    UPROPERTY(EditAnywhere, Category="BN|BlackBoardVariables")
-    FName TimeRemainingToAttackName;
-
-public:
-
-    UBNBTDecoratorCanAttack(const FObjectInitializer& ObjectInitializer);
-
 protected:
 
     bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;
