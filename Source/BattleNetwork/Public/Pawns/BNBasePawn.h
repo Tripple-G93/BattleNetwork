@@ -22,16 +22,16 @@ class BATTLENETWORK_API ABNBasePawn : public APawn, public IAbilitySystemInterfa
 protected:
 
 	// Default abilities for this Character. These will be removed on Character death and regiven if Character respawns.
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GAS|Abilities")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "BN|Abilities")
 	TArray<TSubclassOf<UBNBaseGameplayAbility>> CharacterAbilities;
 
 	// Default attributes for a character for initializing on spawn/respawn.
 	// This is an instant GE that overrides the values for attributes that get reset on spawn/respawn.
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GAS|Abilities")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "BN|Abilities")
 	TSubclassOf<UGameplayEffect> DefaultAttributes;
 
 	// These effects are only applied one time on startup
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GAS|Abilities")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "BN|Abilities")
 	TArray<TSubclassOf<UGameplayEffect>> StartupEffects;
 
 	// Reference to the ASC. It will live on the PlayerState or here if the character doesn't have a PlayerState.
