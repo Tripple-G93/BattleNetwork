@@ -54,6 +54,8 @@ void ABNGameModeInitial::CreatePlayer(APlayerController* NewPlayer, int XGridLoc
     NewPlayer->SetViewTarget(GridActor);
 
     entityPawn->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "GameHasEnded");
+
+    PlayerPawn = entityPawn;
 }
 
 void ABNGameModeInitial::GameHasEnded(AController* Controller)
@@ -91,4 +93,9 @@ TObjectPtr<ABNProjectilePool> ABNGameModeInitial::GetBulletProjectilePool()
 ABNGridActor* ABNGameModeInitial::GetGridActor()
 {
     return GridActor;
+}
+
+ABNEntityPawn* ABNGameModeInitial::GetPlayerPawn()
+{
+    return PlayerPawn;
 }

@@ -21,7 +21,19 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category="BN|BehaviorTree")
     TObjectPtr<UBehaviorTree> BehaviorTree;
 
+    UPROPERTY(EditDefaultsOnly, Category="BN|BlackBoardVariables")
+    FName TimeRemainingToAttackName;
+
+    UPROPERTY(EditDefaultsOnly, Category="BN|BlackBoardVariables")
+    float TimeRemainingToAttackValue;
+
 public:
 
+    ABNEnemyAIController(const FObjectInitializer& ObjectInitializer);
+
     void RunOwnBehaviorTree();
+
+protected:
+
+    void BeginPlay() override;
 };

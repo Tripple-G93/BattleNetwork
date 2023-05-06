@@ -8,6 +8,7 @@
 #include "BNGameModeInitial.generated.h"
 
 class ABNGridActor;
+class ABNEntityPawn;
 class ABNProjectilePool;
 
 /**
@@ -38,6 +39,9 @@ protected:
 
     TObjectPtr<ABNProjectilePool> BulletProjectilePool;
 
+    // TODO: Will need a proper container for this for now using it for the behavior tree
+    ABNEntityPawn* PlayerPawn;
+
 public:
 
     virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
@@ -45,6 +49,8 @@ public:
     TObjectPtr<ABNProjectilePool> GetBulletProjectilePool();
 
     ABNGridActor* GetGridActor();
+
+    ABNEntityPawn* GetPlayerPawn();
 
 protected:
 

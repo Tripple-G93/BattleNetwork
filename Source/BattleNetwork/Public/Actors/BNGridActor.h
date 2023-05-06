@@ -40,8 +40,6 @@ class BATTLENETWORK_API ABNGridActor : public AActor
 {
 	GENERATED_BODY()
 
-	ABNPlayerPawn* Player1Pawn;
-	ABNPlayerPawn* Player2Pawn;
 protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "BN|Class References")
