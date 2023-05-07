@@ -18,7 +18,7 @@ public:
 	
 public:
 
-	UBNGA_FireBullet();
+	UBNGA_FireBullet(const FObjectInitializer& ObjectInitializer);
 	
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 

@@ -10,16 +10,16 @@
 #include "PaperFlipbookComponent.h"
 #include "Pawns/BNEntityPawn.h"
 
-UBNGA_FireBullet::UBNGA_FireBullet()
+UBNGA_FireBullet::UBNGA_FireBullet(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
-	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
-	
-	FGameplayTag Skill1Tag = FGameplayTag::RequestGameplayTag(FName("Entity.Ability.Skill1"));
-	AbilityTags.AddTag(Skill1Tag);
-	ActivationOwnedTags.AddTag(Skill1Tag);
+    InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 
-	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Entity.Ability")));
-	ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Entity.Move")));
+    FGameplayTag Skill1Tag = FGameplayTag::RequestGameplayTag(FName("Entity.Ability.Skill1"));
+    AbilityTags.AddTag(Skill1Tag);
+    ActivationOwnedTags.AddTag(Skill1Tag);
+
+    ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Entity.Ability")));
+    ActivationBlockedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Entity.Move")));
 }
 
 void UBNGA_FireBullet::ActivateAbility(const FGameplayAbilitySpecHandle Handle,

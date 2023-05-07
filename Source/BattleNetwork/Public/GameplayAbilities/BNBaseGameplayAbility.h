@@ -16,7 +16,7 @@ class BATTLENETWORK_API UBNBaseGameplayAbility : public UGameplayAbility
 	GENERATED_BODY()
 
 public:
-	UBNBaseGameplayAbility();
+	UBNBaseGameplayAbility(const FObjectInitializer& ObjectInitializerconst);
 
 	// Abilities with this set will automatically activate when the input is pressed
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Ability")
