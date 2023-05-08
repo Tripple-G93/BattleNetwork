@@ -28,5 +28,8 @@ public:
 protected:
 
     UFUNCTION()
-	void OnCompleted(FGameplayTag EventTag, FGameplayEventData EventData, FTransform BulletSpawnLocation);
+    void OnCompleted(FTransform BulletSpawnLocation);
+
+    UFUNCTION()
+    void OnFireProjectile(FTransform BulletSpawnLocation);
 };
