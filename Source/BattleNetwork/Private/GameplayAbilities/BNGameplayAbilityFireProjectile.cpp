@@ -14,7 +14,7 @@ void UBNGameplayAbilityFireProjectile::ActivateAbility(const FGameplayAbilitySpe
 {
     if (ensure(!AbilityTags.IsEmpty()) && !CommitAbility(Handle, ActorInfo, ActivationInfo))
     {
-        UBNAbilityTaskFireAnimation* abilitytaskFireAnimation = UBNAbilityTaskFireAnimation::PlayFlipBookFireAnimationAndWaitForEvent(this, NAME_None, AbilityTags.First());
+        UBNAbilityTaskFireAnimation* abilitytaskFireAnimation = UBNAbilityTaskFireAnimation::PlayFlipBookFireAnimationAndWaitForEvent(this, NAME_None, AbilityTags.First(), PaperSpriteSocketName);
         abilitytaskFireAnimation->OnCompleted.AddDynamic(this, &UBNGameplayAbilityFireProjectile::OnCompleted);
         abilitytaskFireAnimation->OnFireProjectile.AddDynamic(this, &UBNGameplayAbilityFireProjectile::OnFireProjectile);
         abilitytaskFireAnimation->ReadyForActivation();

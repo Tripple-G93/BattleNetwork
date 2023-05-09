@@ -16,8 +16,11 @@ class BATTLENETWORK_API UBNGameplayAbilityFireProjectile : public UBNBaseGamepla
 	
 protected:
 
-    UPROPERTY(BlueprintReadOnly, EditAnywhere)
+    UPROPERTY(EditDefaultsOnly, Category="BN")
 	TSubclassOf<UGameplayEffect> DamageGameplayEffect;
+
+    UPROPERTY(EditDefaultsOnly, Category="BN")
+    FName PaperSpriteSocketName;
 
 public:
 

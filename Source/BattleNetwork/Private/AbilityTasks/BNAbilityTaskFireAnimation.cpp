@@ -5,6 +5,7 @@
 #include "ActorComponents/BNAbilitySystemComponent.h"
 #include "PaperFlipbook.h"
 #include "PaperFlipbookComponent.h"
+#include "PaperSprite.h"
 #include "Pawns/BNEntityPawn.h"
 
 UBNAbilityTaskFireAnimation::UBNAbilityTaskFireAnimation(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -12,10 +13,11 @@ UBNAbilityTaskFireAnimation::UBNAbilityTaskFireAnimation(const FObjectInitialize
 
 }
 
-UBNAbilityTaskFireAnimation* UBNAbilityTaskFireAnimation::PlayFlipBookFireAnimationAndWaitForEvent(UGameplayAbility* OwningAbility, FName TaskInstanceName, FGameplayTag NewFireFlipBookAnimationTag)
+UBNAbilityTaskFireAnimation* UBNAbilityTaskFireAnimation::PlayFlipBookFireAnimationAndWaitForEvent(UGameplayAbility* OwningAbility, FName TaskInstanceName, FGameplayTag NewFireFlipBookAnimationTag, FName NewPaperSpriteSocketName)
 {
     UBNAbilityTaskFireAnimation* abilityTaskFireAnimation = NewAbilityTask<UBNAbilityTaskFireAnimation>(OwningAbility, TaskInstanceName);
     abilityTaskFireAnimation->FireFlipBookAnimationTag = NewFireFlipBookAnimationTag;
+    abilityTaskFireAnimation->PaperSpriteSocketName = NewPaperSpriteSocketName;
 
     return abilityTaskFireAnimation;
 }
@@ -24,29 +26,70 @@ void UBNAbilityTaskFireAnimation::Activate()
 {
     if (AbilitySystemComponent->IsValidLowLevel())
     {
-        const FGameplayAbilityActorInfo* ActorInfo = Ability->GetCurrentActorInfo();
-        ABNEntityPawn* EntityPawn = Cast<ABNEntityPawn>(ActorInfo->AvatarActor);
+        ABNEntityPawn* EntityPawn = GetEntityPawn();
         if (ensure(EntityPawn))
         {
             EntityPawn->UpdateAnimation(FireFlipBookAnimationTag);
 
-            UPaperFlipbookComponent* PaperFlipbookComponent = EntityPawn->GetPaperFlipbookComponent();
-            PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &UBNAbilityTaskFireAnimation::BoradCastComplete);
-            // We want to set up a binding for when the paper 2d animation has finished
-                // So we go ahead and fire up the completed event. 
-            // We want to find out how long it takes to run one UPaperSprite within the Paper 2D
-            // We then want to start the animation for the paper 2d component
-            // After that we will start the timer to run with that value we got at the beginning
-            // We will update the timer for when there are variable frames for the sprite (Some last longer than others)
-                // We will check to see if that sprite has a socket and if it does
-                // We close the timer and also fire the event of the socket location to fire off the projectile
+            // TODO: Use in its own function to get the frame duration
+            UPaperFlipbookComponent* paperFlipbookComponent = EntityPawn->GetPaperFlipbookComponent();
+            paperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &UBNAbilityTaskFireAnimation::BroadCastComplete);
+
+            // We do not need to do this on the client side at all
+            UPaperFlipbook* paperFlipbook = paperFlipbookComponent->GetFlipbook();
+            
+            float flipbookLength = paperFlipbook->GetTotalDuration();
+            
+            int32 numFrames = paperFlipbook->GetNumKeyFrames();
+            
+            float frameDuration = flipbookLength / static_cast<float>(numFrames);
+            frameDuration *= paperFlipbookComponent->GetPlayRate();
+
+            StartTimeForTimeHandle = GetWorld()->GetTimeSeconds();
+            EntityPawn->GetWorldTimerManager().SetTimer(CheckPaperSocketTimerHandle, this, &UBNAbilityTaskFireAnimation::CheckForBulletLocationSocket, frameDuration, true);
         }
     }
-    // Here we will need to get the flip book component bind it to know when it ends and when we move onto the next animation.
-    // When we have it with the socket then we want to fire off the event for that
 }
 
-void UBNAbilityTaskFireAnimation::BoradCastComplete()
+void UBNAbilityTaskFireAnimation::OnDestroy(bool AbilityEnded)
+{
+    if (AbilityEnded)
+    {
+        ABNEntityPawn* EntityPawn = GetEntityPawn();
+        if (ensure(EntityPawn))
+        {
+            EntityPawn->GetWorldTimerManager().ClearTimer(CheckPaperSocketTimerHandle);
+        }
+    }
+
+    Super::OnDestroy(AbilityEnded);
+}
+
+// Change the name from bullet to projectile
+void UBNAbilityTaskFireAnimation::CheckForBulletLocationSocket()
+{
+    ABNEntityPawn* EntityPawn = GetEntityPawn();
+    if (ensure(EntityPawn))
+    {
+        UPaperFlipbookComponent* paperFlipbookComponent = EntityPawn->GetPaperFlipbookComponent();
+        UPaperFlipbook* paperFlipbook = paperFlipbookComponent->GetFlipbook();
+
+        float currentTime = GetWorld()->GetTimeSeconds();
+        float ElapsedTime = currentTime - StartTimeForTimeHandle;
+        UPaperSprite* paperSprite = paperFlipbook->GetSpriteAtTime(ElapsedTime);
+        if (ensure(paperSprite))
+        {
+            if (paperSprite->HasAnySockets())
+            {
+                FPaperSpriteSocket* paperSpriteSocket = paperSprite->FindSocket(PaperSpriteSocketName);
+                OnFireProjectile.Broadcast(paperSpriteSocket->LocalTransform);
+                CheckPaperSocketTimerHandle.Invalidate();
+            }
+        }
+    }
+}
+
+void UBNAbilityTaskFireAnimation::BroadCastComplete()
 {
     if (ShouldBroadcastAbilityTaskDelegates())
     {
@@ -54,4 +97,11 @@ void UBNAbilityTaskFireAnimation::BoradCastComplete()
     }
 
     EndTask();
+}
+
+ABNEntityPawn* UBNAbilityTaskFireAnimation::GetEntityPawn()
+{
+    const FGameplayAbilityActorInfo* ActorInfo = Ability->GetCurrentActorInfo();
+    ABNEntityPawn* EntityPawn = Cast<ABNEntityPawn>(ActorInfo->AvatarActor);
+    return EntityPawn;
 }
