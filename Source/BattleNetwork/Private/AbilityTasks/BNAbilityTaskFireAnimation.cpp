@@ -8,11 +8,6 @@
 #include "PaperSprite.h"
 #include "Pawns/BNEntityPawn.h"
 
-UBNAbilityTaskFireAnimation::UBNAbilityTaskFireAnimation(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
-{
-
-}
-
 UBNAbilityTaskFireAnimation* UBNAbilityTaskFireAnimation::PlayFlipBookFireAnimationAndWaitForEvent(UGameplayAbility* OwningAbility, FName TaskInstanceName, FGameplayTag NewFireFlipBookAnimationTag, FName NewPaperSpriteSocketName)
 {
     UBNAbilityTaskFireAnimation* abilityTaskFireAnimation = NewAbilityTask<UBNAbilityTaskFireAnimation>(OwningAbility, TaskInstanceName);
@@ -31,60 +26,9 @@ void UBNAbilityTaskFireAnimation::Activate()
         {
             EntityPawn->UpdateAnimation(FireFlipBookAnimationTag);
 
-            // TODO: Use in its own function to get the frame duration
             UPaperFlipbookComponent* paperFlipbookComponent = EntityPawn->GetPaperFlipbookComponent();
             paperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &UBNAbilityTaskFireAnimation::BroadCastComplete);
-
-            // We do not need to do this on the client side at all
-            UPaperFlipbook* paperFlipbook = paperFlipbookComponent->GetFlipbook();
-            
-            float flipbookLength = paperFlipbook->GetTotalDuration();
-            
-            int32 numFrames = paperFlipbook->GetNumKeyFrames();
-            
-            float frameDuration = flipbookLength / static_cast<float>(numFrames);
-            frameDuration *= paperFlipbookComponent->GetPlayRate();
-
-            StartTimeForTimeHandle = GetWorld()->GetTimeSeconds();
-            EntityPawn->GetWorldTimerManager().SetTimer(CheckPaperSocketTimerHandle, this, &UBNAbilityTaskFireAnimation::CheckForBulletLocationSocket, frameDuration, true);
-        }
-    }
-}
-
-void UBNAbilityTaskFireAnimation::OnDestroy(bool AbilityEnded)
-{
-    if (AbilityEnded)
-    {
-        ABNEntityPawn* EntityPawn = GetEntityPawn();
-        if (ensure(EntityPawn))
-        {
-            EntityPawn->GetWorldTimerManager().ClearTimer(CheckPaperSocketTimerHandle);
-        }
-    }
-
-    Super::OnDestroy(AbilityEnded);
-}
-
-// Change the name from bullet to projectile
-void UBNAbilityTaskFireAnimation::CheckForBulletLocationSocket()
-{
-    ABNEntityPawn* EntityPawn = GetEntityPawn();
-    if (ensure(EntityPawn))
-    {
-        UPaperFlipbookComponent* paperFlipbookComponent = EntityPawn->GetPaperFlipbookComponent();
-        UPaperFlipbook* paperFlipbook = paperFlipbookComponent->GetFlipbook();
-
-        float currentTime = GetWorld()->GetTimeSeconds();
-        float ElapsedTime = currentTime - StartTimeForTimeHandle;
-        UPaperSprite* paperSprite = paperFlipbook->GetSpriteAtTime(ElapsedTime);
-        if (ensure(paperSprite))
-        {
-            if (paperSprite->HasAnySockets())
-            {
-                FPaperSpriteSocket* paperSpriteSocket = paperSprite->FindSocket(PaperSpriteSocketName);
-                OnFireProjectile.Broadcast(paperSpriteSocket->LocalTransform);
-                CheckPaperSocketTimerHandle.Invalidate();
-            }
+            paperFlipbookComponent->PlayFromStart();
         }
     }
 }
@@ -93,7 +37,15 @@ void UBNAbilityTaskFireAnimation::BroadCastComplete()
 {
     if (ShouldBroadcastAbilityTaskDelegates())
     {
-        OnCompleted.Broadcast(FTransform());
+        ABNEntityPawn* EntityPawn = GetEntityPawn();
+        if (ensure(EntityPawn))
+        {
+            UPaperFlipbookComponent* paperFlipbookComponent = EntityPawn->GetPaperFlipbookComponent();
+            paperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &UBNAbilityTaskFireAnimation::BroadCastComplete);
+
+            FTransform projectileTransform = paperFlipbookComponent->GetSocketTransform(PaperSpriteSocketName);
+            OnCompleted.Broadcast(projectileTransform);
+        }
     }
 
     EndTask();

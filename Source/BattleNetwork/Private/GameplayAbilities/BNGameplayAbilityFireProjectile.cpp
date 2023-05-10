@@ -12,7 +12,7 @@ UBNGameplayAbilityFireProjectile::UBNGameplayAbilityFireProjectile(const FObject
 
 void UBNGameplayAbilityFireProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
-    if (ensure(!AbilityTags.IsEmpty()) && !CommitAbility(Handle, ActorInfo, ActivationInfo))
+    if (ensure(!AbilityTags.IsEmpty()) && CommitAbility(Handle, ActorInfo, ActivationInfo))
     {
         UBNAbilityTaskFireAnimation* abilitytaskFireAnimation = UBNAbilityTaskFireAnimation::PlayFlipBookFireAnimationAndWaitForEvent(this, NAME_None, AbilityTags.First(), PaperSpriteSocketName);
         abilitytaskFireAnimation->OnCompleted.AddDynamic(this, &UBNGameplayAbilityFireProjectile::OnCompleted);
