@@ -30,24 +30,13 @@ protected:
 
     FName PaperSpriteSocketName;
 
-    FTimerHandle CheckPaperSocketTimerHandle;
-
-    float StartTimeForTimeHandle;
-
 public:
-
-    UBNAbilityTaskFireAnimation(const FObjectInitializer& ObjectInitializer);
 
     static UBNAbilityTaskFireAnimation* PlayFlipBookFireAnimationAndWaitForEvent(UGameplayAbility* OwningAbility, FName TaskInstanceName, FGameplayTag NewFireFlipBookAnimationTag, FName NewPaperSpriteSocketName);
 
     virtual void Activate() override;
 
-    virtual void OnDestroy(bool AbilityEnded) override;
-
 protected:
-
-    UFUNCTION()
-    void CheckForBulletLocationSocket();
 
     UFUNCTION()
     void BroadCastComplete();
