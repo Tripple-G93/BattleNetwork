@@ -17,6 +17,9 @@ class BATTLENETWORK_API ABNProjectilePool : public AActor
 	
 protected:
 
+    UPROPERTY(EditDefaultsOnly, Category="BN")
+	TObjectPtr<UDataTable> SpawnProjectileDataTable;
+
 	UPROPERTY(EditDefaultsOnly, Category="BN|ObjectPool")
 	int32 PoolSize;
 
