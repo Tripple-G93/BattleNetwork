@@ -28,7 +28,7 @@ void UBNGameplayAbilityFireProjectile::ActivateAbility(const FGameplayAbilitySpe
 
 void UBNGameplayAbilityFireProjectile::OnCompleted(FTransform BulletSpawnLocation)
 {
-    EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, true);
+    EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
 }
 
 void UBNGameplayAbilityFireProjectile::OnFireProjectile(FTransform BulletSpawnLocation)

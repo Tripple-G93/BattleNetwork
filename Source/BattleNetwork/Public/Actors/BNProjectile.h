@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "GameFramework/Actor.h"
-#include "GameplayEffect.h"
+#include <GameplayEffectTypes.h>
 #include "BNProjectile.generated.h"
 
 class ABNProjectile;
@@ -21,7 +22,7 @@ class BATTLENETWORK_API ABNProjectile : public AActor
 
 protected:
 
-	UPROPERTY(EditAnywhere, Category="BN|Values")
+	UPROPERTY(EditAnywhere, Category="BN")
 	FVector ProjectileVelocity;
 
 	UPROPERTY(VisibleAnywhere)
@@ -36,12 +37,11 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCapsuleComponent> CollisionCapsuleComponent;
 
-	UPROPERTY(BlueprintReadWrite, Meta = (ExposeOnSpawn = true))
-	FGameplayEffectSpecHandle DamageEffectSpecHandle;
-
 	TObjectPtr<ABNProjectile> NextAvailableProjectile;
 
 	FGameplayTag TeamFiredGameplayTag;
+
+    FGameplayTag ProjectileTypeGameplayTag;
 
 	FGameplayEffectSpecHandle GameplayEffectSpecHandle;
 	
@@ -67,6 +67,9 @@ public:
 	void MarkProjectileInObjectPool();
 
 	bool DoesProjectileNeedToBeAddedToTheObjectPool() const;
+
+    void SetProjectileTypeGameplayTag(FGameplayTag newProjectileTypeGameplayTag);
+    FGameplayTag GetProjectileTypeGameplayTag();
 
 protected:
 	// Called when the game starts or when spawned

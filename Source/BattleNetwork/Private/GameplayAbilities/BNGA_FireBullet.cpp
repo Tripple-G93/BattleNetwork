@@ -50,6 +50,8 @@ void UBNGA_FireBullet::OnCompleted(FGameplayTag EventTag, FGameplayEventData Eve
 {
 	if (GetOwningActorFromActorInfo()->GetLocalRole() == ROLE_Authority)
 	{
+        // TODO: Delete this class since it is no longer needed
+        /*
 		ABNEntityPawn* EntityPawn = Cast<ABNEntityPawn>(CurrentActorInfo->AvatarActor);
 		if(ensure(EntityPawn))
 		{
@@ -74,7 +76,8 @@ void UBNGA_FireBullet::OnCompleted(FGameplayTag EventTag, FGameplayEventData Eve
 			
 			ABNGameModeInitial* GameModeBase = Cast<ABNGameModeInitial>(GetWorld()->GetAuthGameMode());
 			GameModeBase->GetBulletProjectilePool()->CreateProjectile(SpawnLocation, EntityPawn->GetTeamTag(), GameplayEffectSpecHandle);
-		}
+            */
+		//}
 	}
 	
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);

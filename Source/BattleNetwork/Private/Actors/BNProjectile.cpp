@@ -165,3 +165,13 @@ bool ABNProjectile::DoesProjectileNeedToBeAddedToTheObjectPool() const
 	return bNeedsToBeAddedInTheObjectPool;
 }
 
+void ABNProjectile::SetProjectileTypeGameplayTag(FGameplayTag newProjectileTypeGameplayTag)
+{
+    ProjectileTypeGameplayTag = newProjectileTypeGameplayTag;
+}
+
+FGameplayTag ABNProjectile::GetProjectileTypeGameplayTag()
+{
+    return ProjectileTypeGameplayTag;
+}
+

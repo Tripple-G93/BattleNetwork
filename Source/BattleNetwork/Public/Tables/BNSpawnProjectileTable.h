@@ -21,7 +21,7 @@ struct FBNSpawnProjectileTableInfoRow : public FTableRowBase
 	FGameplayTag ProjectileTypeGameplayTag;
 
 	UPROPERTY(EditDefaultsOnly)
-	int SpawnAmount;
+	int32 SpawnAmount;
 
     UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ABNProjectile> ProjectileClass;
