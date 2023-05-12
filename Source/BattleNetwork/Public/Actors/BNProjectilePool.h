@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "GameFramework/Actor.h"
-#include "GameplayEffect.h"
+#include <GameplayEffectTypes.h>
 #include "BNProjectilePool.generated.h"
 
 class ABNProjectile;
@@ -20,22 +20,16 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category="BN")
 	TObjectPtr<UDataTable> SpawnProjectileDataTable;
 
-	UPROPERTY(EditDefaultsOnly, Category="BN|ObjectPool")
-	int32 PoolSize;
+    TMap<FGameplayTag, TArray<ABNProjectile*>> Projectiles;
 
-	UPROPERTY(EditDefaultsOnly, Category="BN|ObjectPool|Projectile")
-	TSubclassOf<ABNProjectile> ProjectileClass;
-	
-	TArray<TObjectPtr<ABNProjectile>> Projectiles;
-
-	TObjectPtr<ABNProjectile> FirstAvailableProjectile;
+    TMap<FGameplayTag, ABNProjectile*> FirstAvailableProjectiles;
 
 public:
 
 	// Sets default values for this actor's properties
 	ABNProjectilePool();
 	
-	void CreateProjectile(FVector SpawnLocation, FGameplayTag TeamGameplayTag, FGameplayEffectSpecHandle NewGameplayEffectSpecHandle);
+	void CreateProjectile(FGameplayTag projectileTypeGameplayTag, FVector SpawnLocation, FGameplayTag TeamGameplayTag, FGameplayEffectSpecHandle NewGameplayEffectSpecHandle);
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
