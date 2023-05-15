@@ -7,6 +7,7 @@
 #include "BNAbilityTaskFireAnimation.generated.h"
 
 class ABNEntityPawn;
+class UPaperFlipbookComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBNAbilityTaskFireAnimation, FTransform, BulletSpawnLocation);
 
@@ -30,6 +31,8 @@ protected:
 
     FName PaperSpriteSocketName;
 
+    FTransform BulletSpawnLocation;
+
 public:
 
     static UBNAbilityTaskFireAnimation* PlayFlipBookFireAnimationAndWaitForEvent(UGameplayAbility* OwningAbility, FName TaskInstanceName, FGameplayTag NewFireFlipBookAnimationTag, FName NewPaperSpriteSocketName);
@@ -40,6 +43,8 @@ protected:
 
     UFUNCTION()
     void BroadCastComplete();
+
+    void SetBulletSpawnLocation(UPaperFlipbookComponent* PaperFlipBookComponent);
 
     ABNEntityPawn* GetEntityPawn();
 

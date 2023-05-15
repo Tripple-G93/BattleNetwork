@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayAbilities/BNBaseGameplayAbility.h"
+#include <GameplayTagContainer.h>
 #include "BNGameplayAbilityFireProjectile.generated.h"
 
 /**
@@ -22,6 +23,15 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category="BN")
     FName PaperSpriteSocketName;
 
+    UPROPERTY(EditDefaultsOnly, Category="BN|Gameplay Tags")
+    FGameplayTag DefaultTeamComparisonGameplayTag;
+
+    UPROPERTY(EditDefaultsOnly, Category="BN|Gameplay Tags")
+    FGameplayTag DamageGameplayTag;
+
+    UPROPERTY(EditDefaultsOnly, Category="BN|Gameplay Tags")
+    FGameplayTag ProjectileTypeGameplayTag;
+
 public:
 
     UBNGameplayAbilityFireProjectile(const FObjectInitializer& ObjectInitializer);
@@ -33,6 +43,4 @@ protected:
     UFUNCTION()
     void OnCompleted(FTransform BulletSpawnLocation);
 
-    UFUNCTION()
-    void OnFireProjectile(FTransform BulletSpawnLocation);
 };

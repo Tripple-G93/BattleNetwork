@@ -4,6 +4,13 @@
 #include "GameplayAbilities/BNGameplayAbilityFireProjectile.h"
 
 #include "AbilityTasks/BNAbilityTaskFireAnimation.h"
+#include "Actors/BNProjectilePool.h"
+#include "Attributes/BNBaseAttributeSet.h"
+#include "GameModes/BNGameModeInitial.h"
+#include "PaperFlipbookComponent.h"
+#include "Pawns/BNEntityPawn.h"
+
+#include <GameplayEffectTypes.h>
 
 UBNGameplayAbilityFireProjectile::UBNGameplayAbilityFireProjectile(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -16,7 +23,6 @@ void UBNGameplayAbilityFireProjectile::ActivateAbility(const FGameplayAbilitySpe
     {
         UBNAbilityTaskFireAnimation* abilitytaskFireAnimation = UBNAbilityTaskFireAnimation::PlayFlipBookFireAnimationAndWaitForEvent(this, NAME_None, AbilityTags.First(), PaperSpriteSocketName);
         abilitytaskFireAnimation->OnCompleted.AddDynamic(this, &UBNGameplayAbilityFireProjectile::OnCompleted);
-        abilitytaskFireAnimation->OnFireProjectile.AddDynamic(this, &UBNGameplayAbilityFireProjectile::OnFireProjectile);
         abilitytaskFireAnimation->ReadyForActivation();
     }
     else
@@ -28,10 +34,26 @@ void UBNGameplayAbilityFireProjectile::ActivateAbility(const FGameplayAbilitySpe
 
 void UBNGameplayAbilityFireProjectile::OnCompleted(FTransform BulletSpawnLocation)
 {
+    if (GetOwningActorFromActorInfo()->GetLocalRole() == ROLE_Authority)
+    {
+        ABNEntityPawn* EntityPawn = Cast<ABNEntityPawn>(CurrentActorInfo->AvatarActor);
+        if (ensure(EntityPawn))
+        {
+            FVector SpawnLocation = BulletSpawnLocation.GetLocation();
+            if (EntityPawn->GetTeamTag() != DefaultTeamComparisonGameplayTag)
+            {
+                SpawnLocation.X *= -1;
+            }
+
+            const float BulletDamage = EntityPawn->GetBaseAttributeSet()->GetBulletDamage();
+
+            FGameplayEffectSpecHandle GameplayEffectSpecHandle = MakeOutgoingGameplayEffectSpec(DamageGameplayEffect, GetAbilityLevel());
+            GameplayEffectSpecHandle.Data.Get()->SetSetByCallerMagnitude(DamageGameplayTag, BulletDamage);
+
+            ABNGameModeInitial* GameModeBase = Cast<ABNGameModeInitial>(GetWorld()->GetAuthGameMode());
+            GameModeBase->GetBulletProjectilePool()->CreateProjectile(ProjectileTypeGameplayTag, SpawnLocation, EntityPawn->GetTeamTag(), GameplayEffectSpecHandle);
+        }
+    }
+
     EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
-}
-
-void UBNGameplayAbilityFireProjectile::OnFireProjectile(FTransform BulletSpawnLocation)
-{
-
 }

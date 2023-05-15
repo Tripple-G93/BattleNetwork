@@ -27,6 +27,7 @@ void UBNAbilityTaskFireAnimation::Activate()
             EntityPawn->UpdateAnimation(FireFlipBookAnimationTag);
 
             UPaperFlipbookComponent* paperFlipbookComponent = EntityPawn->GetPaperFlipbookComponent();
+            SetBulletSpawnLocation(paperFlipbookComponent);
             paperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &UBNAbilityTaskFireAnimation::BroadCastComplete);
             paperFlipbookComponent->PlayFromStart();
         }
@@ -43,12 +44,23 @@ void UBNAbilityTaskFireAnimation::BroadCastComplete()
             UPaperFlipbookComponent* paperFlipbookComponent = EntityPawn->GetPaperFlipbookComponent();
             paperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &UBNAbilityTaskFireAnimation::BroadCastComplete);
 
-            FTransform projectileTransform = paperFlipbookComponent->GetSocketTransform(PaperSpriteSocketName);
-            OnCompleted.Broadcast(projectileTransform);
+            OnCompleted.Broadcast(BulletSpawnLocation);
         }
     }
 
     EndTask();
+}
+
+void UBNAbilityTaskFireAnimation::SetBulletSpawnLocation(UPaperFlipbookComponent* PaperFlipBookComponent)
+{
+    for (int i = 0; i < PaperFlipBookComponent->GetFlipbookLengthInFrames(); ++i)
+    {
+        if (PaperFlipBookComponent->GetFlipbook()->FindSocket(PaperSpriteSocketName, i, BulletSpawnLocation))
+        {
+            BulletSpawnLocation *= PaperFlipBookComponent->GetComponentTransform();
+            break;
+        }
+    }
 }
 
 ABNEntityPawn* UBNAbilityTaskFireAnimation::GetEntityPawn()
