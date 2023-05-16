@@ -4,10 +4,9 @@
 #include "AbilityTasks/BNAbilityTaskFireAnimation.h"
 #include "ActorComponents/BNAbilitySystemComponent.h"
 #include "ActorComponents/BNPaperFlipbookComponent.h"
-#include "PaperFlipbook.h"
-#include "PaperFlipbookComponent.h"
-#include "PaperSprite.h"
 #include "Pawns/BNEntityPawn.h"
+
+#include <PaperFlipbookComponent.h>
 
 UBNAbilityTaskFireAnimation* UBNAbilityTaskFireAnimation::PlayFlipBookFireAnimationAndWaitForEvent(UGameplayAbility* OwningAbility, FName TaskInstanceName, FGameplayTag NewFireFlipBookAnimationTag, FName NewPaperSpriteSocketName)
 {
@@ -27,8 +26,6 @@ void UBNAbilityTaskFireAnimation::Activate()
         {
             EntityPawn->UpdateAnimation(FireFlipBookAnimationTag);
 
-            // We want to get our own custom paper flip book so we can bind to the socket transform location to then fire off the projectile
-            // Once we have received the message similar to what we were trying to do before with the separate fire projectile and complete function
             UBNPaperFlipbookComponent* PaperFlipbookComponent = EntityPawn->GetBNPaperFlipbookComponent();
             PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &UBNAbilityTaskFireAnimation::BroadCastComplete);
             PaperFlipbookComponent->OnFoundSocket.AddDynamic(this, &UBNAbilityTaskFireAnimation::BroadCastFireProjectile);
