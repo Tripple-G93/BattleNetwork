@@ -4,7 +4,7 @@
 #include "GameplayAbilities/BNBaseGameplayAbility.h"
 #include "AbilitySystemComponent.h"
 
-UBNBaseGameplayAbility::UBNBaseGameplayAbility()
+UBNBaseGameplayAbility::UBNBaseGameplayAbility(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	// Default to Instance Per Actor
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;

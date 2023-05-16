@@ -3,30 +3,28 @@
 
 #include "Actors/BNProjectilePool.h"
 #include "Actors/BNProjectile.h"
-#include "Engine/World.h"
+#include "Tables/BNSpawnProjectileTable.h"
 
-// Sets default values
+#include <Engine/World.h>
+
 ABNProjectilePool::ABNProjectilePool()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	FirstAvailableProjectile = nullptr;
-	PoolSize = 0;
 }
 
-void ABNProjectilePool::CreateProjectile(FVector SpawnLocation, FGameplayTag TeamGameplayTag, FGameplayEffectSpecHandle NewGameplayEffectSpecHandle)
+void ABNProjectilePool::CreateProjectile(FGameplayTag projectileTypeGameplayTag, FVector SpawnLocation, FGameplayTag TeamGameplayTag, FGameplayEffectSpecHandle NewGameplayEffectSpecHandle)
 {
-	if(FirstAvailableProjectile != nullptr)
+    ABNProjectile* currentProjectile = FirstAvailableProjectiles[projectileTypeGameplayTag];
+	if(currentProjectile != nullptr)
 	{
-		ABNProjectile* CurrentProjectile = FirstAvailableProjectile;
-		CurrentProjectile->SetActorHiddenInGame(false);
-		CurrentProjectile->SetActorLocation(SpawnLocation);
-		CurrentProjectile->SetProjectilesVelocity(TeamGameplayTag);
-		CurrentProjectile->SetGameplayEffectSpecHandle(NewGameplayEffectSpecHandle);
+        currentProjectile->SetActorHiddenInGame(false);
+        currentProjectile->SetActorLocation(SpawnLocation);
+        currentProjectile->SetProjectilesVelocity(TeamGameplayTag);
+        currentProjectile->SetGameplayEffectSpecHandle(NewGameplayEffectSpecHandle);
 
-		FirstAvailableProjectile = CurrentProjectile->GetNextNextAvailableProjectile();
-		CurrentProjectile->SetNextAvailableProjectile(nullptr);
+        FirstAvailableProjectiles[projectileTypeGameplayTag] = currentProjectile->GetNextNextAvailableProjectile();
+        currentProjectile->SetNextAvailableProjectile(nullptr);
 	}
 	else
 	{
@@ -39,40 +37,55 @@ void ABNProjectilePool::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if(ensure(ProjectileClass) && PoolSize > 0)
-	{
-		SpawnProjectiles();
+	SpawnProjectiles();
 
-		LinkProjectiles();
-	}
+	LinkProjectiles();
 }
 
 void ABNProjectilePool::SpawnProjectiles()
 {
-	Projectiles.Reserve(PoolSize);
-	for(int i = 0; i < PoolSize; ++i)
-	{
-		FActorSpawnParameters SpawnParameters;
-		SpawnParameters.Owner = this;
-		UWorld* World = GetWorld();
+    TArray<FBNSpawnProjectileTableInfoRow*> DataRows;
+    SpawnProjectileDataTable->GetAllRows<FBNSpawnProjectileTableInfoRow>("", DataRows);
+    for (FBNSpawnProjectileTableInfoRow* DataRow : DataRows)
+    {
+        FGameplayTag ProjectileTypeGameplayTag = DataRow->ProjectileTypeGameplayTag;
+        TSubclassOf<ABNProjectile> ProjectileClass = DataRow->ProjectileClass;
+        int32 PoolSize = DataRow->SpawnAmount;
+        Projectiles.Add(ProjectileTypeGameplayTag, TArray<ABNProjectile*>());
+        Projectiles[ProjectileTypeGameplayTag].Reserve(PoolSize);
+        for (int32 i = 0; i < PoolSize; ++i)
+        {
+            FActorSpawnParameters SpawnParameters;
+            SpawnParameters.Owner = this;
+            UWorld* World = GetWorld();
 
-		Projectiles.Add(World->SpawnActor<ABNProjectile>(ProjectileClass, SpawnParameters));
-		Projectiles[i]->SetActorHiddenInGame(true);
-	}
+            Projectiles[ProjectileTypeGameplayTag].Add(World->SpawnActor<ABNProjectile>(ProjectileClass, SpawnParameters));
+            Projectiles[ProjectileTypeGameplayTag][i]->SetProjectileTypeGameplayTag(ProjectileTypeGameplayTag);
+            Projectiles[ProjectileTypeGameplayTag][i]->SetActorHiddenInGame(true);
+        }
+    }
 }
 
 void ABNProjectilePool::LinkProjectiles()
 {
-	FirstAvailableProjectile = Projectiles[0];
-	FirstAvailableProjectile->MarkProjectileInObjectPool();
+    TArray<FBNSpawnProjectileTableInfoRow*> DataRows;
+    SpawnProjectileDataTable->GetAllRows<FBNSpawnProjectileTableInfoRow>("", DataRows);
+    for (FBNSpawnProjectileTableInfoRow* DataRow : DataRows)
+    {
+        FGameplayTag ProjectileTypeGameplayTag = DataRow->ProjectileTypeGameplayTag;
 
-	for(int i = 0; i < PoolSize - 1; ++i)
-	{
-		Projectiles[i]->SetNextAvailableProjectile(Projectiles[i + 1]);
-		Projectiles[i]->MarkProjectileInObjectPool();
-	}
+        FirstAvailableProjectiles.Add(ProjectileTypeGameplayTag, Projectiles[ProjectileTypeGameplayTag][0]);
+        FirstAvailableProjectiles[ProjectileTypeGameplayTag]->MarkProjectileInObjectPool();
 
-    Projectiles[Projectiles.Max() - 1]->SetNextAvailableProjectile(nullptr);
+        int32 poolSize = DataRow->SpawnAmount;
+        for (int32 i = 0; i < poolSize - 1; ++i)
+        {
+            Projectiles[ProjectileTypeGameplayTag][i]->SetNextAvailableProjectile(Projectiles[ProjectileTypeGameplayTag][i + 1]);
+            Projectiles[ProjectileTypeGameplayTag][i]->MarkProjectileInObjectPool();
+        }
+
+        Projectiles[ProjectileTypeGameplayTag][Projectiles[ProjectileTypeGameplayTag].Max() - 1]->SetNextAvailableProjectile(nullptr);
+    }
 }
 
 void ABNProjectilePool::Tick(float DeltaTime)
@@ -84,16 +97,18 @@ void ABNProjectilePool::Tick(float DeltaTime)
 
 void ABNProjectilePool::UpdateObjectPool()
 {
-    // auto for loop
-
-	for(auto projectile : Projectiles)
-	{
-        if (projectile->DoesProjectileNeedToBeAddedToTheObjectPool())
+    for (auto& ProjectilePair : Projectiles)
+    {
+        for (ABNProjectile* Projectile : ProjectilePair.Value)
         {
-            projectile->SetNextAvailableProjectile(FirstAvailableProjectile);
-            FirstAvailableProjectile = projectile;
-            projectile->MarkProjectileInObjectPool();
+            if (Projectile->DoesProjectileNeedToBeAddedToTheObjectPool())
+            {
+                FGameplayTag ProjectileTypeGameplayTag = Projectile->GetProjectileTypeGameplayTag();
+                Projectile->SetNextAvailableProjectile(FirstAvailableProjectiles[ProjectileTypeGameplayTag]);
+                FirstAvailableProjectiles[ProjectileTypeGameplayTag] = Projectile;
+                Projectile->MarkProjectileInObjectPool();
+            }
         }
-	}
+    }
 }
 
