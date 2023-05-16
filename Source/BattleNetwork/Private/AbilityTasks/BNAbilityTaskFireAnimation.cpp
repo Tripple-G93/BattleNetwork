@@ -3,6 +3,7 @@
 
 #include "AbilityTasks/BNAbilityTaskFireAnimation.h"
 #include "ActorComponents/BNAbilitySystemComponent.h"
+#include "ActorComponents/BNPaperFlipbookComponent.h"
 #include "PaperFlipbook.h"
 #include "PaperFlipbookComponent.h"
 #include "PaperSprite.h"
@@ -28,10 +29,11 @@ void UBNAbilityTaskFireAnimation::Activate()
 
             // We want to get our own custom paper flip book so we can bind to the socket transform location to then fire off the projectile
             // Once we have received the message similar to what we were trying to do before with the separate fire projectile and complete function
-            UPaperFlipbookComponent* paperFlipbookComponent = EntityPawn->GetPaperFlipbookComponent();
-            SetBulletSpawnLocation(paperFlipbookComponent);
-            paperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &UBNAbilityTaskFireAnimation::BroadCastComplete);
-            paperFlipbookComponent->PlayFromStart();
+            UBNPaperFlipbookComponent* PaperFlipbookComponent = EntityPawn->GetBNPaperFlipbookComponent();
+            PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &UBNAbilityTaskFireAnimation::BroadCastComplete);
+            PaperFlipbookComponent->OnFoundSocket.AddDynamic(this, &UBNAbilityTaskFireAnimation::BroadCastFireProjectile);
+            PaperFlipbookComponent->SocketToLookFor(PaperSpriteSocketName);
+            PaperFlipbookComponent->PlayFromStart();
         }
     }
 }
@@ -43,26 +45,20 @@ void UBNAbilityTaskFireAnimation::BroadCastComplete()
         ABNEntityPawn* EntityPawn = GetEntityPawn();
         if (ensure(EntityPawn))
         {
-            UPaperFlipbookComponent* paperFlipbookComponent = EntityPawn->GetPaperFlipbookComponent();
+            UBNPaperFlipbookComponent* paperFlipbookComponent = EntityPawn->GetBNPaperFlipbookComponent();
             paperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &UBNAbilityTaskFireAnimation::BroadCastComplete);
+            paperFlipbookComponent->OnFoundSocket.RemoveDynamic(this, &UBNAbilityTaskFireAnimation::BroadCastFireProjectile);
 
-            OnCompleted.Broadcast(BulletSpawnLocation);
+            OnCompleted.Broadcast();
         }
     }
 
     EndTask();
 }
 
-void UBNAbilityTaskFireAnimation::SetBulletSpawnLocation(UPaperFlipbookComponent* PaperFlipBookComponent)
+void UBNAbilityTaskFireAnimation::BroadCastFireProjectile(FTransform BulletSpawnLocation)
 {
-    for (int i = 0; i < PaperFlipBookComponent->GetFlipbookLengthInFrames(); ++i)
-    {
-        if (PaperFlipBookComponent->GetFlipbook()->FindSocket(PaperSpriteSocketName, i, BulletSpawnLocation))
-        {
-            BulletSpawnLocation *= PaperFlipBookComponent->GetComponentTransform();
-            break;
-        }
-    }
+    OnFireProjectile.Broadcast(BulletSpawnLocation);
 }
 
 ABNEntityPawn* UBNAbilityTaskFireAnimation::GetEntityPawn()

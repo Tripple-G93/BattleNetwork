@@ -30,6 +30,7 @@ void UBNAT_PlayFlipbookAndWaitForEvent::Activate()
 	
 	if(AbilitySystemComponent.IsValid())
 	{
+        /*
 		const FGameplayAbilityActorInfo* ActorInfo = Ability->GetCurrentActorInfo();
 		ABNEntityPawn* EntityPawn = Cast<ABNEntityPawn>(ActorInfo->AvatarActor);
 		if(ensure(EntityPawn))
@@ -51,7 +52,8 @@ void UBNAT_PlayFlipbookAndWaitForEvent::Activate()
 
 			// TODO BN: This needs to be called for now because we can not be reliant on dynamic binding through replication 
 			OnPaperFlipBookAnimationLoopEnded();
-		}
+
+		}*/
 	}
 	else
 	{

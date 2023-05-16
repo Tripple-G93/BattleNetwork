@@ -13,7 +13,7 @@ class UAudioComponent;
 class UBoxComponent;
 class UBNEntityWidgetSceneComponent;
 class UDataTable;
-class UPaperFlipbookComponent;
+class UBNPaperFlipbookComponent;
 class USceneComponent;
 
 UCLASS()
@@ -30,7 +30,7 @@ protected:
 	TObjectPtr<UDataTable> FlipbookAnimationDataTable;
 	
 	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UPaperFlipbookComponent> PaperFlipbookComponent;
+	TObjectPtr<UBNPaperFlipbookComponent> BNPaperFlipbookComponent;
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> SceneComponent;
@@ -90,8 +90,7 @@ public:
 	
 	FBNGridLocation GetServerGridLocation() const;
 
-	TObjectPtr<UPaperFlipbookComponent> GetPaperFlipbookComponent();
-
+	UBNPaperFlipbookComponent* GetBNPaperFlipbookComponent();
 
     void SetActorHiddenInGame(bool bNewHidden) override;
 

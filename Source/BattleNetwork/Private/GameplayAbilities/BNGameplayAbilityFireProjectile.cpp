@@ -23,6 +23,7 @@ void UBNGameplayAbilityFireProjectile::ActivateAbility(const FGameplayAbilitySpe
     {
         UBNAbilityTaskFireAnimation* abilitytaskFireAnimation = UBNAbilityTaskFireAnimation::PlayFlipBookFireAnimationAndWaitForEvent(this, NAME_None, AbilityTags.First(), PaperSpriteSocketName);
         abilitytaskFireAnimation->OnCompleted.AddDynamic(this, &UBNGameplayAbilityFireProjectile::OnCompleted);
+        abilitytaskFireAnimation->OnFireProjectile.AddDynamic(this, &UBNGameplayAbilityFireProjectile::OnFireProjectile);
         abilitytaskFireAnimation->ReadyForActivation();
     }
     else
@@ -32,7 +33,12 @@ void UBNGameplayAbilityFireProjectile::ActivateAbility(const FGameplayAbilitySpe
     
 }
 
-void UBNGameplayAbilityFireProjectile::OnCompleted(FTransform BulletSpawnLocation)
+void UBNGameplayAbilityFireProjectile::OnCompleted()
+{
+    EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+}
+
+void UBNGameplayAbilityFireProjectile::OnFireProjectile(FTransform BulletSpawnLocation)
 {
     if (GetOwningActorFromActorInfo()->GetLocalRole() == ROLE_Authority)
     {
@@ -50,6 +56,4 @@ void UBNGameplayAbilityFireProjectile::OnCompleted(FTransform BulletSpawnLocatio
             GameModeBase->GetBulletProjectilePool()->CreateProjectile(ProjectileTypeGameplayTag, SpawnLocation, EntityPawn->GetTeamTag(), GameplayEffectSpecHandle);
         }
     }
-
-    EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
 }

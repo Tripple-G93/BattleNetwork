@@ -41,6 +41,9 @@ public:
 protected:
 
     UFUNCTION()
-    void OnCompleted(FTransform BulletSpawnLocation);
+    void OnCompleted();
+
+    UFUNCTION()
+    void OnFireProjectile(FTransform BulletSpawnLocation);
 
 };

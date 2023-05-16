@@ -3,8 +3,8 @@
 
 #include "Pawns/BNPlayerPawn.h"
 
-#include "PaperFlipbookComponent.h"
 #include "ActorComponents/BNAbilitySystemComponent.h"
+#include "ActorComponents/BNPaperFlipbookComponent.h"
 #include "BattleNetwork/BattleNetwork.h"
 #include "PlayerStates/BNPlayerState.h"
 
@@ -48,7 +48,7 @@ void ABNPlayerPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
 				bCanMove = false;
 				UpdateMoveAnimationRPC();
 				UpdateMoveAnimationRPC_Implementation();
-				PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityLeftRPC);
+				BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityLeftRPC);
 			}
 		}
 		else if(Value > 0)
@@ -58,7 +58,7 @@ void ABNPlayerPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
 				bCanMove = false;
 				UpdateMoveAnimationRPC();
 				UpdateMoveAnimationRPC_Implementation();
-				PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityRightRPC);
+				BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityRightRPC);
 			}
 		}
 	}
@@ -76,7 +76,7 @@ void ABNPlayerPawn::AttemptToMovePlayerEntityVertically(const float Value)
 				bCanMove = false;
 				UpdateMoveAnimationRPC();
 				UpdateMoveAnimationRPC_Implementation();
-				PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityUpRPC);
+				BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityUpRPC);
 			}
 		}
 		else if(Value < 0)
@@ -86,7 +86,7 @@ void ABNPlayerPawn::AttemptToMovePlayerEntityVertically(const float Value)
 				bCanMove = false;
 				UpdateMoveAnimationRPC();
 				UpdateMoveAnimationRPC_Implementation();
-				PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityDownRPC);
+				BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityDownRPC);
 			}
 		}
 	}

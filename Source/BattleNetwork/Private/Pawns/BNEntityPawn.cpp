@@ -3,16 +3,17 @@
 
 #include "Pawns/BNEntityPawn.h"
 
-#include "AbilitySystemComponent.h"
 #include "Actors/BNGridActor.h"
+#include "ActorComponents/BNPaperFlipbookComponent.h"
+#include "Attributes/BNBaseAttributeSet.h"
+#include "Objects/BNUtilityStatics.h"
+#include "SceneComponents/BNEntityWidgetSceneComponent.h"
+
+#include "AbilitySystemComponent.h"
 #include "Components/AudioComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/SceneComponent.h"
-#include "Objects/BNUtilityStatics.h"
-#include "PaperFlipbookComponent.h"
-#include "Attributes/BNBaseAttributeSet.h"
 #include "Net/UnrealNetwork.h"
-#include "SceneComponents/BNEntityWidgetSceneComponent.h"
 #include "Sound/SoundCue.h"
 
 ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -23,13 +24,13 @@ ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Supe
 	SceneComponent = ObjectInitializer.CreateDefaultSubobject<USceneComponent>(this, TEXT("SceneComponent"));
 	SetRootComponent(SceneComponent);
 	
-	PaperFlipbookComponent = ObjectInitializer.CreateDefaultSubobject<UPaperFlipbookComponent>(this, TEXT("PaperFlipbookComponent"));
-	PaperFlipbookComponent->SetupAttachment(SceneComponent);
-	PaperFlipbookComponent->bReplicatePhysicsToAutonomousProxy = false;
-	PaperFlipbookComponent->SetIsReplicated(true);
+	BNPaperFlipbookComponent = ObjectInitializer.CreateDefaultSubobject<UBNPaperFlipbookComponent>(this, TEXT("BNPaperFlipbookComponent"));
+	BNPaperFlipbookComponent->SetupAttachment(SceneComponent);
+	BNPaperFlipbookComponent->bReplicatePhysicsToAutonomousProxy = false;
+	BNPaperFlipbookComponent->SetIsReplicated(true);
 
 	EntityWidgetSceneComponent = ObjectInitializer.CreateDefaultSubobject<UBNEntityWidgetSceneComponent>(this, TEXT("EntityWidgetSceneComponent"));
-	EntityWidgetSceneComponent->SetupAttachment(PaperFlipbookComponent);
+	EntityWidgetSceneComponent->SetupAttachment(BNPaperFlipbookComponent);
 
 	BoxComponent = ObjectInitializer.CreateDefaultSubobject<UBoxComponent>(this, TEXT("BoxComponent"));
 	BoxComponent->SetupAttachment(EntityWidgetSceneComponent);
@@ -55,7 +56,7 @@ void ABNEntityPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 void ABNEntityPawn::UpdateAnimation(FGameplayTag AnimationTag)
 {
 	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
-        CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, AnimationTag);
+        CurrentFlipbookAnimationTableInfoRow, BNPaperFlipbookComponent, AnimationTag);
 }
 
 void ABNEntityPawn::PlayAnimationSoundEffect() const
@@ -110,9 +111,9 @@ FBNGridLocation ABNEntityPawn::GetServerGridLocation() const
 	return ServerGridLocation;
 }
 
-TObjectPtr<UPaperFlipbookComponent> ABNEntityPawn::GetPaperFlipbookComponent()
+UBNPaperFlipbookComponent* ABNEntityPawn::GetBNPaperFlipbookComponent()
 {
-	return PaperFlipbookComponent;
+	return BNPaperFlipbookComponent;
 }
 
 void ABNEntityPawn::SetActorHiddenInGame(bool bNewHidden)
@@ -137,7 +138,7 @@ void ABNEntityPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	PaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::UpdateIdleAnimation);
+	BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::UpdateIdleAnimation);
 }
 
 void ABNEntityPawn::InitializeAttributes()
@@ -146,7 +147,7 @@ void ABNEntityPawn::InitializeAttributes()
 
 	EntityWidgetSceneComponent->InitializeEntityUserWidget();
 
-	PaperFlipbookComponent->SetPlayRate(AttributeSetBase->GetSpeedPercentRate());
+	BNPaperFlipbookComponent->SetPlayRate(AttributeSetBase->GetSpeedPercentRate());
 }
 
 void ABNEntityPawn::EnableMovementIfStandaloneMode()
@@ -160,8 +161,8 @@ void ABNEntityPawn::EnableMovementIfStandaloneMode()
 void ABNEntityPawn::UpdateIdleAnimation()
 {
 	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
-CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, FGameplayTag::RequestGameplayTag(FName("Entity.Idle")));
-	PaperFlipbookComponent->PlayFromStart();
+CurrentFlipbookAnimationTableInfoRow, BNPaperFlipbookComponent, FGameplayTag::RequestGameplayTag(FName("Entity.Idle")));
+	BNPaperFlipbookComponent->PlayFromStart();
 
 	const FGameplayTag MoveGameplayTag = FGameplayTag::RequestGameplayTag(FName("Entity.Move"));
 	if(GetAbilitySystemComponent()->HasMatchingGameplayTag(MoveGameplayTag))
@@ -172,28 +173,28 @@ CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, FGameplayTag::Requ
 
 void ABNEntityPawn::ClientCallMoveEntityLeftRPC()
 {
-	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityLeftRPC);
+	BNPaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityLeftRPC);
 
 	MoveEntityLeftRPC();
 }
 
 void ABNEntityPawn::ClientCallMoveEntityRightRPC()
 {
-	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityRightRPC);
+	BNPaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityRightRPC);
 
 	MoveEntityRightRPC();
 }
 
 void ABNEntityPawn::ClientCallMoveEntityUpRPC()
 {
-	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityUpRPC);
+	BNPaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityUpRPC);
 
 	MoveEntityUpRPC();
 }
 
 void ABNEntityPawn::ClientCallMoveEntityDownRPC()
 {
-	PaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityDownRPC);
+	BNPaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityDownRPC);
 
 	MoveEntityDownRPC();
 }
@@ -211,9 +212,9 @@ void ABNEntityPawn::UpdateMoveAnimationRPC_Implementation()
 	}
 	
 	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
-	CurrentFlipbookAnimationTableInfoRow, PaperFlipbookComponent, MoveGameplayTag);
+	CurrentFlipbookAnimationTableInfoRow, BNPaperFlipbookComponent, MoveGameplayTag);
 	
-	PaperFlipbookComponent->PlayFromStart();
+	BNPaperFlipbookComponent->PlayFromStart();
 }
 
 void ABNEntityPawn::MoveEntityLeftRPC_Implementation()
