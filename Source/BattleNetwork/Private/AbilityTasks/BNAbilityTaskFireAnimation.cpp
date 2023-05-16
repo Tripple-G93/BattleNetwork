@@ -26,6 +26,8 @@ void UBNAbilityTaskFireAnimation::Activate()
         {
             EntityPawn->UpdateAnimation(FireFlipBookAnimationTag);
 
+            // We want to get our own custom paper flip book so we can bind to the socket transform location to then fire off the projectile
+            // Once we have received the message similar to what we were trying to do before with the separate fire projectile and complete function
             UPaperFlipbookComponent* paperFlipbookComponent = EntityPawn->GetPaperFlipbookComponent();
             SetBulletSpawnLocation(paperFlipbookComponent);
             paperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &UBNAbilityTaskFireAnimation::BroadCastComplete);

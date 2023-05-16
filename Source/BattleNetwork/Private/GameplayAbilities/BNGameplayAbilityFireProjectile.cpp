@@ -40,10 +40,6 @@ void UBNGameplayAbilityFireProjectile::OnCompleted(FTransform BulletSpawnLocatio
         if (ensure(EntityPawn))
         {
             FVector SpawnLocation = BulletSpawnLocation.GetLocation();
-            if (EntityPawn->GetTeamTag() != DefaultTeamComparisonGameplayTag)
-            {
-                SpawnLocation.X *= -1;
-            }
 
             const float BulletDamage = EntityPawn->GetBaseAttributeSet()->GetBulletDamage();
 

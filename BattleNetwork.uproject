@@ -14,7 +14,8 @@
 				"CoreUObject",
 				"UMG",
 				"CommonUI",
-				"AIModule"
+				"AIModule",
+				"Paper2D"
 			]
 		}
 	],
