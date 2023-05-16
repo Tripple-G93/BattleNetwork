@@ -3,10 +3,10 @@
 
 #include "Actors/BNProjectilePool.h"
 #include "Actors/BNProjectile.h"
-#include "Engine/World.h"
 #include "Tables/BNSpawnProjectileTable.h"
 
-// Sets default values
+#include <Engine/World.h>
+
 ABNProjectilePool::ABNProjectilePool()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.

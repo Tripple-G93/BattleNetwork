@@ -7,7 +7,6 @@
 #include "Actors/BNProjectilePool.h"
 #include "Attributes/BNBaseAttributeSet.h"
 #include "GameModes/BNGameModeInitial.h"
-#include "PaperFlipbookComponent.h"
 #include "Pawns/BNEntityPawn.h"
 
 #include <GameplayEffectTypes.h>
@@ -30,7 +29,6 @@ void UBNGameplayAbilityFireProjectile::ActivateAbility(const FGameplayAbilitySpe
     {
         EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, true);
     }
-    
 }
 
 void UBNGameplayAbilityFireProjectile::OnCompleted()
