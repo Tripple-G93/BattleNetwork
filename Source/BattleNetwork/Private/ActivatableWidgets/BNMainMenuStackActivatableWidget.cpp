@@ -4,7 +4,8 @@
 #include "ActivatableWidgets/BNMainMenuStackActivatableWidget.h"
 
 #include "ActivatableWidgets/BNStackActivatableWidget.h"
-#include "Widgets/CommonActivatableWidgetContainer.h"
+
+#include <Widgets/CommonActivatableWidgetContainer.h>
 
 void UBNMainMenuStackActivatableWidget::NativeConstruct()
 {

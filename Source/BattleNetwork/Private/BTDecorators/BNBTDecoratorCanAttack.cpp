@@ -3,7 +3,7 @@
 
 #include "BTDecorators/BNBTDecoratorCanAttack.h"
 
-#include "BehaviorTree/BlackboardComponent.h"
+#include <BehaviorTree/BlackboardComponent.h>
 
 UBNBTDecoratorCanAttack::UBNBTDecoratorCanAttack(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {

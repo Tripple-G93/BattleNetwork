@@ -4,7 +4,8 @@
 #include "Controllers/BNBasePlayerController.h"
 
 #include "ActorComponents/BNGameMusicAudioComponent.h"
-#include "Net/UnrealNetwork.h"
+
+#include <Net/UnrealNetwork.h>
 
 ABNBasePlayerController::ABNBasePlayerController()
 {

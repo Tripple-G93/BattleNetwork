@@ -2,7 +2,8 @@
 
 
 #include "GameplayAbilities/BNBaseGameplayAbility.h"
-#include "AbilitySystemComponent.h"
+
+#include <AbilitySystemComponent.h>
 
 UBNBaseGameplayAbility::UBNBaseGameplayAbility(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {

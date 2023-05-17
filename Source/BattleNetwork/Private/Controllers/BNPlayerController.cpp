@@ -5,8 +5,9 @@
 
 #include "ActorComponents/BNAbilitySystemComponent.h"
 #include "ActivatableWidgets/BNGameResultActivatableWidget.h"
-#include "CommonActivatableWidget.h"
 #include "PlayerStates/BNPlayerState.h"
+
+#include <CommonActivatableWidget.h>
 
 void ABNPlayerController::OnPossess(APawn* InPawn)
 {

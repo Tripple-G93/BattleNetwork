@@ -3,7 +3,7 @@
 
 #include "BTTaskNodes/BNBTTaskNodeResetAttackTimer.h"
 
-#include "BehaviorTree/BlackboardComponent.h"
+#include <BehaviorTree/BlackboardComponent.h>
 
 UBNBTTaskNodeResetAttackTimer::UBNBTTaskNodeResetAttackTimer(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {

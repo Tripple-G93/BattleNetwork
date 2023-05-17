@@ -2,6 +2,7 @@
 
 
 #include "GameplayEffects/BNDamageExecCalculation.h"
+
 #include "ActorComponents/BNAbilitySystemComponent.h"
 #include "Attributes/BNBaseAttributeSet.h"
 

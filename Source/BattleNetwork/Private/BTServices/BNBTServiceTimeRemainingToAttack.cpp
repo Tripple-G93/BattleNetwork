@@ -3,7 +3,7 @@
 
 #include "BTServices/BNBTServiceTimeRemainingToAttack.h"
 
-#include "BehaviorTree/BlackboardComponent.h"
+#include <BehaviorTree/BlackboardComponent.h>
 
 UBNBTServiceTimeRemainingToAttack::UBNBTServiceTimeRemainingToAttack(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {

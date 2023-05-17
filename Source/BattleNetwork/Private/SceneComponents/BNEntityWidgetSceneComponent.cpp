@@ -3,8 +3,9 @@
 
 #include "SceneComponents/BNEntityWidgetSceneComponent.h"
 
-#include "Blueprint/UserWidget.h"
 #include "UserWidgets/BNEntityUserWidget.h"
+
+#include <Blueprint/UserWidget.h>
 
 // Sets default values for this component's properties
 UBNEntityWidgetSceneComponent::UBNEntityWidgetSceneComponent()

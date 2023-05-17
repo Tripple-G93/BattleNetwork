@@ -3,11 +3,12 @@
 
 #include "Actors/BNEntitySpawnerActor.h"
 
-#include "GameFramework/Actor.h"
-#include "Kismet/GameplayStatics.h"
-#include "Kismet/KismetSystemLibrary.h"
 #include "Pawns/BNEntityPawn.h"
 #include "Tables/BNSpawnableEntityTable.h"
+
+#include <GameFramework/Actor.h>
+#include <Kismet/GameplayStatics.h>
+#include <Kismet/KismetSystemLibrary.h>
 
 // Sets default values
 ABNEntitySpawnerActor::ABNEntitySpawnerActor()

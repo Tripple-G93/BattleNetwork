@@ -3,10 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
 #include "Interfaces/OnlineSessionInterface.h"
-#include "Subsystems/GameInstanceSubsystem.h"
-
+#include <Subsystems/GameInstanceSubsystem.h>
 #include "BNSessionSubsystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBNOnCreateSessionComplete, bool, Successful);

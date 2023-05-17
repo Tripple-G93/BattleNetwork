@@ -3,9 +3,10 @@
 
 #include "BTDecorators/BNBTDecoratorSameRowAsEnemy.h"
 
-#include "AIController.h"
 #include "GameModes/BNGameModeInitial.h"
 #include "Pawns/BNEntityPawn.h"
+
+#include <AIController.h>
 
 bool UBNBTDecoratorSameRowAsEnemy::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const
 {

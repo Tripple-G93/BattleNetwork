@@ -3,10 +3,11 @@
 
 #include "ActivatableWidgets/BNFindSessionActivatableWidget.h"
 
-#include "OnlineSessionSettings.h"
-#include "Components/Button.h"
-#include "Components/CheckBox.h"
 #include "Subsystems/BNSessionSubsystem.h"
+
+#include <OnlineSessionSettings.h>
+#include <Components/Button.h>
+#include <Components/CheckBox.h>
 
 void UBNFindSessionActivatableWidget::NativeConstruct()
 {

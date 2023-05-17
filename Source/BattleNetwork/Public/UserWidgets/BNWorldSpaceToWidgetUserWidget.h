@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Components/Overlay.h"
+#include <Components/Overlay.h>
 #include "BNWorldSpaceToWidgetUserWidget.generated.h"
 
 class UOverlay;

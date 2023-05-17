@@ -3,10 +3,11 @@
 
 #include "ActivatableWidgets/BNMainMenuActivatableWidget.h"
 
-#include "Components/Button.h"
-#include <Kismet/GameplayStatics.h>
 #include "Subsystems/BNSessionSubsystem.h"
-#include "Widgets/CommonActivatableWidgetContainer.h"
+
+#include <Components/Button.h>
+#include <Kismet/GameplayStatics.h>
+#include <Widgets/CommonActivatableWidgetContainer.h>
 
 void UBNMainMenuActivatableWidget::NativeConstruct()
 {

@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayTagContainer.h"
 #include "GameFramework/Actor.h"
 #include <GameplayEffectTypes.h>
+#include <GameplayTagContainer.h>
 #include "BNProjectilePool.generated.h"
 
 class ABNProjectile;

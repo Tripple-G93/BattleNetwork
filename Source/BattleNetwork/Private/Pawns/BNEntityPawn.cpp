@@ -9,12 +9,12 @@
 #include "Objects/BNUtilityStatics.h"
 #include "SceneComponents/BNEntityWidgetSceneComponent.h"
 
-#include "AbilitySystemComponent.h"
-#include "Components/AudioComponent.h"
-#include "Components/BoxComponent.h"
-#include "Components/SceneComponent.h"
-#include "Net/UnrealNetwork.h"
-#include "Sound/SoundCue.h"
+#include <AbilitySystemComponent.h>
+#include <Components/AudioComponent.h>
+#include <Components/BoxComponent.h>
+#include <Components/SceneComponent.h>
+#include <Net/UnrealNetwork.h>
+#include <Sound/SoundCue.h>
 
 ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {

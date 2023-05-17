@@ -5,8 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "Interfaces/OnlineSessionInterface.h"
-#include "Subsystems/GameInstanceSubsystem.h"
-
+#include <Subsystems/GameInstanceSubsystem.h>
 #include "BNNetworkSessionSubsystem.generated.h"
 
 /**

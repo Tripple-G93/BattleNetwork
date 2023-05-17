@@ -4,14 +4,14 @@
 #include "Actors/BNProjectile.h"
 
 #include "Actors/BNGridActor.h"
-#include "AbilitySystemComponent.h"
-#include "Components/CapsuleComponent.h"
-#include "GameFramework/ProjectileMovementComponent.h"
 #include "GameModes/BNGameModeInitial.h"
-#include "PaperFlipbookComponent.h"
 #include "Pawns/BNEntityPawn.h"
 
-// Sets default values
+#include <AbilitySystemComponent.h>
+#include <Components/CapsuleComponent.h>
+#include <GameFramework/ProjectileMovementComponent.h>
+#include <PaperFlipbookComponent.h>
+
 ABNProjectile::ABNProjectile(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.

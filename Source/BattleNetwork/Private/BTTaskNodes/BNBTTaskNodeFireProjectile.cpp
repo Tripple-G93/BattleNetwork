@@ -3,11 +3,11 @@
 
 #include "BTTaskNodes/BNBTTaskNodeFireProjectile.h"
 
-
-#include <AbilitySystemComponent.h>
-#include "AIController.h"
 #include "GameModes/BNGameModeInitial.h"
 #include "Pawns/BNEntityPawn.h"
+
+#include <AbilitySystemComponent.h>
+#include <AIController.h>
 
 EBTNodeResult::Type UBNBTTaskNodeFireProjectile::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {

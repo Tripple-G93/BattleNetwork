@@ -2,6 +2,7 @@
 
 
 #include "Actors/BNProjectilePool.h"
+
 #include "Actors/BNProjectile.h"
 #include "Tables/BNSpawnProjectileTable.h"
 

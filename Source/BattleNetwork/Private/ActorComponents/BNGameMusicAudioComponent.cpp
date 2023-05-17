@@ -2,7 +2,8 @@
 
 
 #include "ActorComponents/BNGameMusicAudioComponent.h"
-#include "Sound/SoundCue.h"
+
+#include <Sound/SoundCue.h>
 
 void UBNGameMusicAudioComponent::PlayGameMusic(FGameplayTag GameMusicGameplayTag)
 {

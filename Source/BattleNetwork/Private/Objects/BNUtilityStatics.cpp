@@ -2,8 +2,10 @@
 
 
 #include "Objects/BNUtilityStatics.h"
-#include "PaperFlipbookComponent.h"
+
 #include "Tables/BNFlipbookAnimationTable.h"
+
+#include <PaperFlipbookComponent.h>
 
 FBNFlipbookAnimationTableInfoRow* UBNUtilityStatics::UpdateAnimation(UDataTable* FlipbookAnimationDataTable,
 	FBNFlipbookAnimationTableInfoRow* CurrentFlipbookAnimationTableInfoRow, UPaperFlipbookComponent* PaperFlipbookComponent, FGameplayTag NewStatus )

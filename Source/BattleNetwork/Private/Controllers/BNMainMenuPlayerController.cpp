@@ -3,7 +3,7 @@
 
 #include "Controllers/BNMainMenuPlayerController.h"
 
-#include "CommonActivatableWidget.h"
+#include <CommonActivatableWidget.h>
 
 void ABNMainMenuPlayerController::CreateMainMenu()
 {
