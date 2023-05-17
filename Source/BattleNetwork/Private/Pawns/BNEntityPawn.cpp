@@ -73,6 +73,62 @@ void ABNEntityPawn::PlayAnimationSoundEffect() const
 	}
 }
 
+void ABNEntityPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
+{
+    const UAbilitySystemComponent* GameplayAbilitySystemComponent = GetAbilitySystemComponent();
+    if (bCanMove && GameplayAbilitySystemComponent && !GameplayAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Entity.Ability"))))
+    {
+        if (Value < 0)
+        {
+            if (MoveEntityLeftRPC_Validate())
+            {
+                bCanMove = false;
+                UpdateMoveAnimationRPC();
+                UpdateMoveAnimationRPC_Implementation();
+                BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::ClientCallMoveEntityLeftRPC);
+            }
+        }
+        else if (Value > 0)
+        {
+            if (MoveEntityRightRPC_Validate())
+            {
+                bCanMove = false;
+                UpdateMoveAnimationRPC();
+                UpdateMoveAnimationRPC_Implementation();
+                BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::ClientCallMoveEntityRightRPC);
+            }
+        }
+    }
+}
+
+void ABNEntityPawn::AttemptToMovePlayerEntityVertically(const float Value)
+{
+    const UAbilitySystemComponent* GameplayAbilitySystemComponent = GetAbilitySystemComponent();
+    if (bCanMove && GameplayAbilitySystemComponent && !GameplayAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Entity.Ability"))))
+    {
+        if (Value > 0)
+        {
+            if (MoveEntityUpRPC_Validate())
+            {
+                bCanMove = false;
+                UpdateMoveAnimationRPC();
+                UpdateMoveAnimationRPC_Implementation();
+                BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::ClientCallMoveEntityUpRPC);
+            }
+        }
+        else if (Value < 0)
+        {
+            if (MoveEntityDownRPC_Validate())
+            {
+                bCanMove = false;
+                UpdateMoveAnimationRPC();
+                UpdateMoveAnimationRPC_Implementation();
+                BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::ClientCallMoveEntityDownRPC);
+            }
+        }
+    }
+}
+
 /*
  * Setters
  */

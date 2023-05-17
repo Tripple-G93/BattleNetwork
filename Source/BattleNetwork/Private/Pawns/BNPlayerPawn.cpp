@@ -36,62 +36,6 @@ void ABNPlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	BindASCInput();
 }
 
-void ABNPlayerPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
-{
-	const UAbilitySystemComponent* GameplayAbilitySystemComponent = GetAbilitySystemComponent();
-	if(bCanMove && GameplayAbilitySystemComponent && !GameplayAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Entity.Ability"))))
-	{
-		if(Value < 0)
-		{
-			if(MoveEntityLeftRPC_Validate())
-			{
-				bCanMove = false;
-				UpdateMoveAnimationRPC();
-				UpdateMoveAnimationRPC_Implementation();
-				BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityLeftRPC);
-			}
-		}
-		else if(Value > 0)
-		{
-			if(MoveEntityRightRPC_Validate())
-			{
-				bCanMove = false;
-				UpdateMoveAnimationRPC();
-				UpdateMoveAnimationRPC_Implementation();
-				BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityRightRPC);
-			}
-		}
-	}
-}
-
-void ABNPlayerPawn::AttemptToMovePlayerEntityVertically(const float Value)
-{
-	const UAbilitySystemComponent* GameplayAbilitySystemComponent = GetAbilitySystemComponent();
-	if(bCanMove && GameplayAbilitySystemComponent && !GameplayAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Entity.Ability"))))
-	{
-		if(Value > 0)
-		{
-			if(MoveEntityUpRPC_Validate())
-			{
-				bCanMove = false;
-				UpdateMoveAnimationRPC();
-				UpdateMoveAnimationRPC_Implementation();
-				BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityUpRPC);
-			}
-		}
-		else if(Value < 0)
-		{
-			if(MoveEntityDownRPC_Validate())
-			{
-				bCanMove = false;
-				UpdateMoveAnimationRPC();
-				UpdateMoveAnimationRPC_Implementation();
-				BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNPlayerPawn::ClientCallMoveEntityDownRPC);
-			}
-		}
-	}
-}
-
 void ABNPlayerPawn::BindASCInput()
 {
 	if (!ASCInputBound && IsValid(AbilitySystemComponent) && IsValid(InputComponent))
