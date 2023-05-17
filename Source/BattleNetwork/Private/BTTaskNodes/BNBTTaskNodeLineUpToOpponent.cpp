@@ -3,9 +3,10 @@
 
 #include "BTTaskNodes/BNBTTaskNodeLineUpToOpponent.h"
 
-#include "AIController.h"
 #include "GameModes/BNGameModeInitial.h"
 #include "Pawns/BNEntityPawn.h"
+
+#include <AIController.h>
 
 EBTNodeResult::Type UBNBTTaskNodeLineUpToOpponent::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {

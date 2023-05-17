@@ -2,6 +2,7 @@
 
 
 #include "Actors/BNASCActor.h"
+
 #include "ActorComponents/BNAbilitySystemComponent.h"
 
 // Sets default values

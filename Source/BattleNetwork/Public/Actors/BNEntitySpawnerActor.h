@@ -4,10 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-
-#include "Containers/Map.h"
-#include "GameplayTagContainer.h"
-
+#include <Containers/Map.h>
+#include <GameplayTagContainer.h>
 #include "BNEntitySpawnerActor.generated.h"
 
 class ABNEntityPawn;

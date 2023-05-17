@@ -2,6 +2,7 @@
 
 
 #include "PlayerStates/BNPlayerState.h"
+
 #include "ActorComponents/BNAbilitySystemComponent.h"
 #include "Attributes/BNBaseAttributeSet.h"
 #include "Controllers/BNPlayerController.h"

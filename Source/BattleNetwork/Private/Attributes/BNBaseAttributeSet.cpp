@@ -5,9 +5,10 @@
 
 #include "Pawns/BNBasePawn.h"
 #include "Pawns/BNPlayerPawn.h"
-#include "GameplayEffect.h"
-#include "GameplayEffectExtension.h"
-#include "Net/UnrealNetwork.h"
+
+#include <GameplayEffect.h>
+#include <GameplayEffectExtension.h>
+#include <Net/UnrealNetwork.h>
 
 UBNBaseAttributeSet::UBNBaseAttributeSet()
 {

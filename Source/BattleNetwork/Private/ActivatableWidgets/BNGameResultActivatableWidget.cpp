@@ -3,11 +3,12 @@
 
 #include "ActivatableWidgets/BNGameResultActivatableWidget.h"
 
-#include "CommonTextBlock.h"
-#include "Components/Button.h"
-#include "Engine/World.h"
-#include "Kismet/GameplayStatics.h"
 #include "Subsystems/BNSessionSubsystem.h"
+
+#include <CommonTextBlock.h>
+#include <Components/Button.h>
+#include <Engine/World.h>
+#include <Kismet/GameplayStatics.h>
 
 
 void UBNGameResultActivatableWidget::SetResultTextBlock(FText Text)

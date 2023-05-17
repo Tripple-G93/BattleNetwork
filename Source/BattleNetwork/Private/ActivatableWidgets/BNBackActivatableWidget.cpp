@@ -3,7 +3,7 @@
 
 #include "ActivatableWidgets/BNBackActivatableWidget.h"
 
-#include "Components/Button.h"
+#include <Components/Button.h>
 
 void UBNBackActivatableWidget::NativeConstruct()
 {

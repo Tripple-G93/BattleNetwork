@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "GameplayTagContainer.h"
+#include <GameplayTagContainer.h>
 #include "BNUtilityStatics.generated.h"
 
 class UDataTable;

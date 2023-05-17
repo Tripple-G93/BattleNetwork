@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "GameplayTagContainer.h"
+#include <GameplayTagContainer.h>
 #include "BNBasePlayerController.generated.h"
 
 class UBNGameMusicAudioComponent;

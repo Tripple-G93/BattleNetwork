@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameModes/BNGameModeBase.h"
-#include "GameplayTagContainer.h"
+#include <GameplayTagContainer.h>
 #include "BNGameModeInitial.generated.h"
 
 class ABNGridActor;

@@ -3,16 +3,17 @@
 #include "Actors/BNGridActor.h"
 
 #include "Actors/BNEntitySpawnerActor.h"
-#include "AbilitySystemComponent.h"
 #include "Actors/BNPanelActor.h"
-#include "Camera/CameraComponent.h"
-#include "Components/SceneComponent.h"
-#include "Engine/World.h"
-#include "GameFramework/SpringArmComponent.h"
-#include "Net/UnrealNetwork.h"
 #include "Pawns/BNPlayerPawn.h"
 
-// Sets default values
+#include <AbilitySystemComponent.h>
+#include <Camera/CameraComponent.h>
+#include <Components/SceneComponent.h>
+#include <Engine/World.h>
+#include <GameFramework/SpringArmComponent.h>
+#include <Net/UnrealNetwork.h>
+
+
 ABNGridActor::ABNGridActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.

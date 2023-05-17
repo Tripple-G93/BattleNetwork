@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "GameplayTagContainer.h"
+#include <GameplayTagContainer.h>
 #include "BNGridActor.generated.h"
 
 class ABNEntityPawn;

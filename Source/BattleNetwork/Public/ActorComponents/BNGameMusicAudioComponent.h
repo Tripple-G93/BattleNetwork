@@ -3,11 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
 #include "Components/AudioComponent.h"
-
 #include "Tables/BNGameMusicTable.h"
-
 #include "BNGameMusicAudioComponent.generated.h"
 
 /**

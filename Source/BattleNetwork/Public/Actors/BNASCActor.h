@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "AbilitySystemInterface.h"
+#include <AbilitySystemInterface.h>
 #include "BNASCActor.generated.h"
 
 class UBNAbilitySystemComponent;

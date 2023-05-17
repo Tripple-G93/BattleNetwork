@@ -2,10 +2,12 @@
 
 
 #include "Actors/BNPanelActor.h"
-#include "Components/SceneComponent.h"
+
 #include "Objects/BNUtilityStatics.h"
-#include "PaperFlipbookComponent.h"
-#include "Net/UnrealNetwork.h"
+
+#include <Components/SceneComponent.h>
+#include <PaperFlipbookComponent.h>
+#include <Net/UnrealNetwork.h>
 
 // Sets default values
 ABNPanelActor::ABNPanelActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)

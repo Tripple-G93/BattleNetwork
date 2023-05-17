@@ -2,6 +2,7 @@
 
 
 #include "Pawns/BNBasePawn.h"
+
 #include "Attributes/BNBaseAttributeSet.h"
 #include "ActorComponents/BNAbilitySystemComponent.h"
 #include "GameplayAbilities/BNBaseGameplayAbility.h"
