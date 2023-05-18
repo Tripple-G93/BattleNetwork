@@ -17,7 +17,7 @@ class BATTLENETWORK_API UBNBTTaskNodeFireProjectile : public UBTTaskNode
 	
 protected:
 
-    UPROPERTY(EditAnywhere, Category="BN|Gameplay Tag")
+    UPROPERTY(EditAnywhere, Category = "BN|Gameplay Tag")
     FGameplayTag SkillGameplayTag;
 
 private:

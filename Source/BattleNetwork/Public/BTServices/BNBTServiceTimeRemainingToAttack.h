@@ -16,7 +16,7 @@ class BATTLENETWORK_API UBNBTServiceTimeRemainingToAttack : public UBTService
 	
 protected:
 
-    UPROPERTY(EditAnywhere, Category="BN|BlackBoardVariables")
+    UPROPERTY(EditAnywhere, Category = "BN|BlackBoardVariables")
     FName TimeRemainingToAttackName;
 
 public:

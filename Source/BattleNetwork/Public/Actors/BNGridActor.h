@@ -60,19 +60,19 @@ protected:
 	UPROPERTY(Replicated)
 	TArray<FBNPannel2DArray> Grid;
 	
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "BN|Grid Information")
 	int32 GridWidth;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "BN|Grid Information")
 	int32 GridHeight;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "BN|Grid Information")
 	int32 GridDividerIndex;
 	
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "BN|Grid Information")
 	int32 PanelSpacingWidth;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "BN|Grid Information")
 	int32 PanelSpacingHeight;
 
     UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")

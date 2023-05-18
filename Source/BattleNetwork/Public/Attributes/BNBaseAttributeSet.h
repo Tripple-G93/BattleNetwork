@@ -38,25 +38,25 @@ public:
 	// Current Health, when 0 we expect owner to die unless prevented by an ability. Capped by MaxHealth.
 	// Positive changes can directly use this.
 	// Negative changes to Health should go through Damage meta attribute.
-	UPROPERTY(BlueprintReadOnly, Category = "Health", ReplicatedUsing = OnRep_Health)
+	UPROPERTY(BlueprintReadOnly, Category = "BN|Attributes", ReplicatedUsing = OnRep_Health)
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UBNBaseAttributeSet, Health)
 	
-	UPROPERTY(BlueprintReadOnly, Category = "Health", ReplicatedUsing = OnRep_MaxHealth)
+	UPROPERTY(BlueprintReadOnly, Category = "BN|Attributes", ReplicatedUsing = OnRep_MaxHealth)
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(UBNBaseAttributeSet, MaxHealth)
 
-	UPROPERTY(BlueprintReadOnly, Category = "BulletDamage", ReplicatedUsing = OnRep_BulletDamage)
+	UPROPERTY(BlueprintReadOnly, Category = "BN|Attributes", ReplicatedUsing = OnRep_BulletDamage)
 	FGameplayAttributeData BulletDamage;
 	ATTRIBUTE_ACCESSORS(UBNBaseAttributeSet, BulletDamage)
 
 	// Damage is a meta attribute used by the DamageExecution to calculate final damage, which then turns into -Health
 	// Temporary value that only exists on the Server. Not replicated.
-	UPROPERTY(BlueprintReadOnly, Category = "CurrentDamage")
+	UPROPERTY(BlueprintReadOnly, Category = "BN|Attributes")
 	FGameplayAttributeData CurrentDamage;
 	ATTRIBUTE_ACCESSORS(UBNBaseAttributeSet, CurrentDamage)
 
-	UPROPERTY(BlueprintReadOnly, Category = "Rates", ReplicatedUsing = OnRep_SpeedPercentRate)
+	UPROPERTY(BlueprintReadOnly, Category = "BN|Attributes", ReplicatedUsing = OnRep_SpeedPercentRate)
 	FGameplayAttributeData SpeedPercentRate;
 	ATTRIBUTE_ACCESSORS(UBNBaseAttributeSet, SpeedPercentRate)
 	

@@ -21,12 +21,12 @@ class BATTLENETWORK_API ABNGameModeInitial : public ABNGameModeBase
 	
 protected:
 
-    UPROPERTY(EditDefaultsOnly, Category="BN|SubClasses")
+    UPROPERTY(EditDefaultsOnly, Category = "BN|SubClasses")
 	TSubclassOf<ABNGridActor> GridActorSubClass;
 
     TObjectPtr<ABNGridActor> GridActor;
 
-    UPROPERTY(EditDefaultsOnly, Category="BN|SubClasses")
+    UPROPERTY(EditDefaultsOnly, Category = "BN|SubClasses")
 	TSubclassOf<ABNProjectilePool> BulletProjectilePoolSubClass;
 
         // TODO: Remove this and use a table that represents what enemies you will be going up against. 
