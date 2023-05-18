@@ -28,11 +28,11 @@ EBTNodeResult::Type UBNBTTaskNodeLineUpToOpponent::ExecuteTask(UBehaviorTreeComp
             // Going to leave a note here because right now we have x and y swapped and y starts down instead of up
             if (entity->GetServerGridLocation().YIndex > player->GetServerGridLocation().YIndex)
             {
-                entity->MoveEntityDownRPC();
+                entity->AttemptToMovePlayerEntityVertically(-1);
             }
             else
             {
-                entity->MoveEntityUpRPC();
+                entity->AttemptToMovePlayerEntityVertically(1);
             }
 
             return EBTNodeResult::Succeeded;
