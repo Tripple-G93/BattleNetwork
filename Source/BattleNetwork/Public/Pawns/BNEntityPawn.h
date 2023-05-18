@@ -50,7 +50,7 @@ protected:
 	UPROPERTY(ReplicatedUsing = OnRep_UpdateClientLocation)
 	FBNGridLocation ServerGridLocation;
 
-	TObjectPtr<FBNFlipbookAnimationTableInfoRow> CurrentFlipbookAnimationTableInfoRow;
+	FBNFlipbookAnimationTableInfoRow* CurrentFlipbookAnimationTableInfoRow;
 
 	UPROPERTY(Replicated)
 	FGameplayTag TeamTag;

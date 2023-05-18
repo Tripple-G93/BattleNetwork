@@ -31,7 +31,7 @@ protected:
 	UPROPERTY(Replicated)
 	TObjectPtr<ABNEntityPawn> EntityPawn;
 	
-	TObjectPtr<FBNFlipbookAnimationTableInfoRow> CurrentFlipbookAnimationTableInfoRow;
+	FBNFlipbookAnimationTableInfoRow* CurrentFlipbookAnimationTableInfoRow;
 	
 public:	
 	// Sets default values for this actor's properties
