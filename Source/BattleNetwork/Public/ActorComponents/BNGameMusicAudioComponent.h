@@ -17,7 +17,7 @@ class BATTLENETWORK_API UBNGameMusicAudioComponent : public UAudioComponent
 
 protected:
 
-    UPROPERTY(EditDefaultsOnly)
+    UPROPERTY(EditDefaultsOnly, Category = "BN")
 	TObjectPtr<UDataTable> GameMusicDataTable;
 
 public:

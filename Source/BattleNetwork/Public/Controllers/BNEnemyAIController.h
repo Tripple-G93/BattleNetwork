@@ -18,13 +18,13 @@ class BATTLENETWORK_API ABNEnemyAIController : public AAIController
 	
 protected:
 
-    UPROPERTY(EditDefaultsOnly, Category="BN|BehaviorTree")
+    UPROPERTY(EditDefaultsOnly, Category = "BN|BehaviorTree")
     TObjectPtr<UBehaviorTree> BehaviorTree;
 
-    UPROPERTY(EditDefaultsOnly, Category="BN|BlackBoardVariables")
+    UPROPERTY(EditDefaultsOnly, Category = "BN|BlackBoardVariables")
     FName TimeRemainingToAttackName;
 
-    UPROPERTY(EditDefaultsOnly, Category="BN|BlackBoardVariables")
+    UPROPERTY(EditDefaultsOnly, Category = "BN|BlackBoardVariables")
     float TimeRemainingToAttackValue;
 
 public:

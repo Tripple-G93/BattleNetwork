@@ -76,7 +76,7 @@ void ABNEntityPawn::PlayAnimationSoundEffect() const
 void ABNEntityPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
 {
     const UAbilitySystemComponent* GameplayAbilitySystemComponent = GetAbilitySystemComponent();
-    if (bCanMove && GameplayAbilitySystemComponent && !GameplayAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Entity.Ability"))))
+    if (bCanMove && GameplayAbilitySystemComponent && !GameplayAbilitySystemComponent->HasMatchingGameplayTag(StopMovementGameplayTag))
     {
         if (Value < 0)
         {
@@ -104,7 +104,7 @@ void ABNEntityPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
 void ABNEntityPawn::AttemptToMovePlayerEntityVertically(const float Value)
 {
     const UAbilitySystemComponent* GameplayAbilitySystemComponent = GetAbilitySystemComponent();
-    if (bCanMove && GameplayAbilitySystemComponent && !GameplayAbilitySystemComponent->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Entity.Ability"))))
+    if (bCanMove && GameplayAbilitySystemComponent && !GameplayAbilitySystemComponent->HasMatchingGameplayTag(StopMovementGameplayTag))
     {
         if (Value > 0)
         {
@@ -217,13 +217,12 @@ void ABNEntityPawn::EnableMovementIfStandaloneMode()
 void ABNEntityPawn::UpdateIdleAnimation()
 {
 	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
-CurrentFlipbookAnimationTableInfoRow, BNPaperFlipbookComponent, FGameplayTag::RequestGameplayTag(FName("Entity.Idle")));
+CurrentFlipbookAnimationTableInfoRow, BNPaperFlipbookComponent, IdleAnimationGameplayTag);
 	BNPaperFlipbookComponent->PlayFromStart();
 
-	const FGameplayTag MoveGameplayTag = FGameplayTag::RequestGameplayTag(FName("Entity.Move"));
-	if(GetAbilitySystemComponent()->HasMatchingGameplayTag(MoveGameplayTag))
+	if(GetAbilitySystemComponent()->HasMatchingGameplayTag(MovementGameplayTag))
 	{
-		GetAbilitySystemComponent()->RemoveLooseGameplayTag(MoveGameplayTag);
+		GetAbilitySystemComponent()->RemoveLooseGameplayTag(MovementGameplayTag);
 	}
 }
 
@@ -261,14 +260,13 @@ void ABNEntityPawn::ClientCallMoveEntityDownRPC()
 
 void ABNEntityPawn::UpdateMoveAnimationRPC_Implementation()
 {
-	const FGameplayTag MoveGameplayTag = FGameplayTag::RequestGameplayTag(FName("Entity.Move"));
-	if(!GetAbilitySystemComponent()->HasMatchingGameplayTag(MoveGameplayTag))
+	if(!GetAbilitySystemComponent()->HasMatchingGameplayTag(MovementGameplayTag))
 	{
-		GetAbilitySystemComponent()->AddLooseGameplayTag(MoveGameplayTag);
+		GetAbilitySystemComponent()->AddLooseGameplayTag(MovementGameplayTag);
 	}
 	
 	CurrentFlipbookAnimationTableInfoRow = UBNUtilityStatics::UpdateAnimation(FlipbookAnimationDataTable,
-	CurrentFlipbookAnimationTableInfoRow, BNPaperFlipbookComponent, MoveGameplayTag);
+	CurrentFlipbookAnimationTableInfoRow, BNPaperFlipbookComponent, MovementGameplayTag);
 	
 	BNPaperFlipbookComponent->PlayFromStart();
 }

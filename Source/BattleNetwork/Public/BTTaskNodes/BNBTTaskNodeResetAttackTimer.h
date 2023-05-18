@@ -16,7 +16,7 @@ class BATTLENETWORK_API UBNBTTaskNodeResetAttackTimer : public UBTTaskNode
 	
 protected:
 
-    UPROPERTY(EditAnywhere, Category="BN|BlackBoardVariables")
+    UPROPERTY(EditAnywhere, Category = "BN|BlackBoardVariables")
     FName TimeRemainingToAttackName;
 
     UPROPERTY(EditAnywhere, Category = "BN");

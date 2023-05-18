@@ -25,7 +25,7 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USceneComponent> SceneComponent;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "BN")
 	TObjectPtr<UDataTable> FlipbookAnimationDataTable;
 
 	UPROPERTY(Replicated)

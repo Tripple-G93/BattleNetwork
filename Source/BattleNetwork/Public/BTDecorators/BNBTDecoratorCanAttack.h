@@ -16,7 +16,7 @@ class BATTLENETWORK_API UBNBTDecoratorCanAttack : public UBTDecorator
 	
 protected:
 
-    UPROPERTY(EditAnywhere, Category="BN|BlackBoardVariables")
+    UPROPERTY(EditAnywhere, Category = "BN|BlackBoardVariables")
     FName TimeRemainingToAttackName;
 
 public:
