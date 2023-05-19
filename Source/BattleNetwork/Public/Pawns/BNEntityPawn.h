@@ -23,11 +23,11 @@ class BATTLENETWORK_API ABNEntityPawn : public ABNBasePawn
 
 protected:
 
-	UPROPERTY(EditAnywhere, Category = "BN")
-	FVector3d SpriteOffset;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "BN")
-	TObjectPtr<UDataTable> FlipbookAnimationDataTable;
+    UPROPERTY(EditAnywhere, Category = "BN")
+    FVector3d SpriteOffset;
+
+    UPROPERTY(EditDefaultsOnly, Category = "BN")
+    TObjectPtr<UDataTable> FlipbookAnimationDataTable;
 	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UBNPaperFlipbookComponent> BNPaperFlipbookComponent;
@@ -63,6 +63,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
     FGameplayTag IdleAnimationGameplayTag;
+
+    UPROPERTY(EditDefaultsOnly, Category = "BN|Socket Names")
+    FName MoveSpriteSocketName;
 
 	UPROPERTY()
 	bool bCanMove;
