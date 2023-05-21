@@ -22,6 +22,9 @@ public:
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+    void AttemptToMovePlayerEntityHorizontally(const float Value);
+    void AttemptToMovePlayerEntityVertically(const float Value);
+
 protected:
 
 	// Called from both SetupPlayerInputComponent and OnRep_PlayerState because of a potential race condition where the PlayerController might

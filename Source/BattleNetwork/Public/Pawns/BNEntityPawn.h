@@ -88,10 +88,6 @@ public:
     void AttemptToMoveRight();
     void AttemptToMoveUp();
     void AttemptToMoveDown();
-	
-    // TODO: Will Re-work once I do movement based on socket instead of end of animation
-    void AttemptToMovePlayerEntityHorizontally(const float Value);
-    void AttemptToMovePlayerEntityVertically(const float Value);
 
 	/*
 	 * Setters

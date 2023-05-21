@@ -119,36 +119,6 @@ void ABNEntityPawn::AttemptToMoveDown()
     }
 }
 
-void ABNEntityPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
-{
-    if (CanEntityMove())
-    {
-        if (Value < 0)
-        {
-            AttemptToMoveLeft();
-        }
-        else if (Value > 0)
-        {
-            AttemptToMoveRight();
-        }
-    }
-}
-
-void ABNEntityPawn::AttemptToMovePlayerEntityVertically(const float Value)
-{
-    if (CanEntityMove())
-    {
-        if (Value > 0)
-        {
-            AttemptToMoveUp();
-        }
-        else if (Value < 0)
-        {
-            AttemptToMoveDown();
-        }
-    }
-}
-
 /*
  * Setters
  */
