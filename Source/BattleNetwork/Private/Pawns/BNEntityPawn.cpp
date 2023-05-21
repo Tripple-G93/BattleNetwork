@@ -73,20 +73,29 @@ void ABNEntityPawn::PlayAnimationSoundEffect() const
 	}
 }
 
-void ABNEntityPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
+bool ABNEntityPawn::CanEntityMove()
 {
     const UAbilitySystemComponent* GameplayAbilitySystemComponent = GetAbilitySystemComponent();
-    if (bCanMove && GameplayAbilitySystemComponent && !GameplayAbilitySystemComponent->HasMatchingGameplayTag(StopMovementGameplayTag))
+    return !GameplayAbilitySystemComponent->HasMatchingGameplayTag(AbilityGameplayTag) && !GameplayAbilitySystemComponent->HasMatchingGameplayTag(MovementGameplayTag);
+}
+
+void ABNEntityPawn::AttemptToMoveLeft()
+{
+    if (MoveEntityLeftRPC_Validate())
+    {
+        BNPaperFlipbookComponent->OnFoundSocket.AddDynamic(this, &ABNEntityPawn::ClientCallMoveEntityLeftRPC);
+        BNPaperFlipbookComponent->SocketToLookFor(MoveSpriteSocketName);
+        UpdateMoveAnimationRPC();
+    }
+}
+
+void ABNEntityPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
+{
+    if (CanEntityMove())
     {
         if (Value < 0)
         {
-            if (MoveEntityLeftRPC_Validate())
-            {
-                bCanMove = false;
-                UpdateMoveAnimationRPC();
-                UpdateMoveAnimationRPC_Implementation();
-                BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::ClientCallMoveEntityLeftRPC);
-            }
+            AttemptToMoveLeft();
         }
         else if (Value > 0)
         {
@@ -104,7 +113,7 @@ void ABNEntityPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
 void ABNEntityPawn::AttemptToMovePlayerEntityVertically(const float Value)
 {
     const UAbilitySystemComponent* GameplayAbilitySystemComponent = GetAbilitySystemComponent();
-    if (bCanMove && GameplayAbilitySystemComponent && !GameplayAbilitySystemComponent->HasMatchingGameplayTag(StopMovementGameplayTag))
+    if (bCanMove && GameplayAbilitySystemComponent && !GameplayAbilitySystemComponent->HasMatchingGameplayTag(AbilityGameplayTag))
     {
         if (Value > 0)
         {
@@ -226,9 +235,9 @@ CurrentFlipbookAnimationTableInfoRow, BNPaperFlipbookComponent, IdleAnimationGam
 	}
 }
 
-void ABNEntityPawn::ClientCallMoveEntityLeftRPC()
+void ABNEntityPawn::ClientCallMoveEntityLeftRPC(FTransform SocketTransform)
 {
-	BNPaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityLeftRPC);
+    BNPaperFlipbookComponent->OnFoundSocket.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityLeftRPC);
 
 	MoveEntityLeftRPC();
 }

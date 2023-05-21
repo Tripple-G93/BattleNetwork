@@ -59,7 +59,7 @@ protected:
     FGameplayTag MovementGameplayTag;
 
     UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
-    FGameplayTag StopMovementGameplayTag;
+    FGameplayTag AbilityGameplayTag;
 
     UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
     FGameplayTag IdleAnimationGameplayTag;
@@ -81,6 +81,10 @@ public:
 	virtual void UpdateAnimation(FGameplayTag AnimationTag);
 
 	void PlayAnimationSoundEffect() const;
+
+    bool CanEntityMove();
+
+    void AttemptToMoveLeft();
 	
     // TODO: Will Re-work once I do movement based on socket instead of end of animation
     void AttemptToMovePlayerEntityHorizontally(const float Value);
@@ -141,7 +145,7 @@ protected:
 	void UpdateIdleAnimation();
 
 	UFUNCTION()
-	void ClientCallMoveEntityLeftRPC();
+	void ClientCallMoveEntityLeftRPC(FTransform SocketTransform);
 
 	UFUNCTION()
 	void ClientCallMoveEntityRightRPC();
