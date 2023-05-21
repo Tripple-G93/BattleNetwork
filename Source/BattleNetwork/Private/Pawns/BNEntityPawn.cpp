@@ -89,6 +89,16 @@ void ABNEntityPawn::AttemptToMoveLeft()
     }
 }
 
+void ABNEntityPawn::AttemptToMoveRight()
+{
+    if (MoveEntityRightRPC_Validate())
+    {
+        BNPaperFlipbookComponent->OnFoundSocket.AddDynamic(this, &ABNEntityPawn::ClientCallMoveEntityRightRPC);
+        BNPaperFlipbookComponent->SocketToLookFor(MoveSpriteSocketName);
+        UpdateMoveAnimationRPC();
+    }
+}
+
 void ABNEntityPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
 {
     if (CanEntityMove())
@@ -99,13 +109,7 @@ void ABNEntityPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
         }
         else if (Value > 0)
         {
-            if (MoveEntityRightRPC_Validate())
-            {
-                bCanMove = false;
-                UpdateMoveAnimationRPC();
-                UpdateMoveAnimationRPC_Implementation();
-                BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::ClientCallMoveEntityRightRPC);
-            }
+            AttemptToMoveRight();
         }
     }
 }
@@ -242,9 +246,9 @@ void ABNEntityPawn::ClientCallMoveEntityLeftRPC(FTransform SocketTransform)
 	MoveEntityLeftRPC();
 }
 
-void ABNEntityPawn::ClientCallMoveEntityRightRPC()
+void ABNEntityPawn::ClientCallMoveEntityRightRPC(FTransform SocketTransform)
 {
-	BNPaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityRightRPC);
+	BNPaperFlipbookComponent->OnFoundSocket.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityRightRPC);
 
 	MoveEntityRightRPC();
 }
