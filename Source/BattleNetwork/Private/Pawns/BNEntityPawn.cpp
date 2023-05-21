@@ -73,58 +73,78 @@ void ABNEntityPawn::PlayAnimationSoundEffect() const
 	}
 }
 
-void ABNEntityPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
+bool ABNEntityPawn::CanEntityMove()
 {
     const UAbilitySystemComponent* GameplayAbilitySystemComponent = GetAbilitySystemComponent();
-    if (bCanMove && GameplayAbilitySystemComponent && !GameplayAbilitySystemComponent->HasMatchingGameplayTag(StopMovementGameplayTag))
+    return !GameplayAbilitySystemComponent->HasMatchingGameplayTag(AbilityGameplayTag) && !GameplayAbilitySystemComponent->HasMatchingGameplayTag(MovementGameplayTag);
+}
+
+void ABNEntityPawn::AttemptToMoveLeft()
+{
+    if (MoveEntityLeftRPC_Validate())
+    {
+        BNPaperFlipbookComponent->OnFoundSocket.AddDynamic(this, &ABNEntityPawn::ClientCallMoveEntityLeftRPC);
+        BNPaperFlipbookComponent->SocketToLookFor(MoveSpriteSocketName);
+        UpdateMoveAnimationRPC();
+    }
+}
+
+void ABNEntityPawn::AttemptToMoveRight()
+{
+    if (MoveEntityRightRPC_Validate())
+    {
+        BNPaperFlipbookComponent->OnFoundSocket.AddDynamic(this, &ABNEntityPawn::ClientCallMoveEntityRightRPC);
+        BNPaperFlipbookComponent->SocketToLookFor(MoveSpriteSocketName);
+        UpdateMoveAnimationRPC();
+    }
+}
+
+void ABNEntityPawn::AttemptToMoveUp()
+{
+    if (MoveEntityUpRPC_Validate())
+    {
+        BNPaperFlipbookComponent->OnFoundSocket.AddDynamic(this, &ABNEntityPawn::ClientCallMoveEntityUpRPC);
+        BNPaperFlipbookComponent->SocketToLookFor(MoveSpriteSocketName);
+        UpdateMoveAnimationRPC();
+    }
+}
+
+void ABNEntityPawn::AttemptToMoveDown()
+{
+    if (MoveEntityDownRPC_Validate())
+    {
+        BNPaperFlipbookComponent->OnFoundSocket.AddDynamic(this, &ABNEntityPawn::ClientCallMoveEntityDownRPC);
+        BNPaperFlipbookComponent->SocketToLookFor(MoveSpriteSocketName);
+        UpdateMoveAnimationRPC();
+    }
+}
+
+void ABNEntityPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
+{
+    if (CanEntityMove())
     {
         if (Value < 0)
         {
-            if (MoveEntityLeftRPC_Validate())
-            {
-                bCanMove = false;
-                UpdateMoveAnimationRPC();
-                UpdateMoveAnimationRPC_Implementation();
-                BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::ClientCallMoveEntityLeftRPC);
-            }
+            AttemptToMoveLeft();
         }
         else if (Value > 0)
         {
-            if (MoveEntityRightRPC_Validate())
-            {
-                bCanMove = false;
-                UpdateMoveAnimationRPC();
-                UpdateMoveAnimationRPC_Implementation();
-                BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::ClientCallMoveEntityRightRPC);
-            }
+            AttemptToMoveRight();
         }
     }
 }
 
 void ABNEntityPawn::AttemptToMovePlayerEntityVertically(const float Value)
 {
-    const UAbilitySystemComponent* GameplayAbilitySystemComponent = GetAbilitySystemComponent();
-    if (bCanMove && GameplayAbilitySystemComponent && !GameplayAbilitySystemComponent->HasMatchingGameplayTag(StopMovementGameplayTag))
+    if (CanEntityMove())
     {
         if (Value > 0)
         {
-            if (MoveEntityUpRPC_Validate())
-            {
-                bCanMove = false;
-                UpdateMoveAnimationRPC();
-                UpdateMoveAnimationRPC_Implementation();
-                BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::ClientCallMoveEntityUpRPC);
-            }
+            AttemptToMoveUp();
         }
         else if (Value < 0)
         {
-            if (MoveEntityDownRPC_Validate())
-            {
-                bCanMove = false;
-                UpdateMoveAnimationRPC();
-                UpdateMoveAnimationRPC_Implementation();
-                BNPaperFlipbookComponent->OnFinishedPlaying.AddDynamic(this, &ABNEntityPawn::ClientCallMoveEntityDownRPC);
-            }
+            AttemptToMoveDown();
         }
     }
 }
@@ -226,30 +246,30 @@ CurrentFlipbookAnimationTableInfoRow, BNPaperFlipbookComponent, IdleAnimationGam
 	}
 }
 
-void ABNEntityPawn::ClientCallMoveEntityLeftRPC()
+void ABNEntityPawn::ClientCallMoveEntityLeftRPC(FTransform SocketTransform)
 {
-	BNPaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityLeftRPC);
+    BNPaperFlipbookComponent->OnFoundSocket.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityLeftRPC);
 
 	MoveEntityLeftRPC();
 }
 
-void ABNEntityPawn::ClientCallMoveEntityRightRPC()
+void ABNEntityPawn::ClientCallMoveEntityRightRPC(FTransform SocketTransform)
 {
-	BNPaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityRightRPC);
+	BNPaperFlipbookComponent->OnFoundSocket.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityRightRPC);
 
 	MoveEntityRightRPC();
 }
 
-void ABNEntityPawn::ClientCallMoveEntityUpRPC()
+void ABNEntityPawn::ClientCallMoveEntityUpRPC(FTransform SocketTransform)
 {
-	BNPaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityUpRPC);
+	BNPaperFlipbookComponent->OnFoundSocket.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityUpRPC);
 
 	MoveEntityUpRPC();
 }
 
-void ABNEntityPawn::ClientCallMoveEntityDownRPC()
+void ABNEntityPawn::ClientCallMoveEntityDownRPC(FTransform SocketTransform)
 {
-	BNPaperFlipbookComponent->OnFinishedPlaying.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityDownRPC);
+	BNPaperFlipbookComponent->OnFoundSocket.RemoveDynamic(this, &ABNEntityPawn::ClientCallMoveEntityDownRPC);
 
 	MoveEntityDownRPC();
 }

@@ -23,11 +23,11 @@ class BATTLENETWORK_API ABNEntityPawn : public ABNBasePawn
 
 protected:
 
-	UPROPERTY(EditAnywhere, Category = "BN")
-	FVector3d SpriteOffset;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "BN")
-	TObjectPtr<UDataTable> FlipbookAnimationDataTable;
+    UPROPERTY(EditAnywhere, Category = "BN")
+    FVector3d SpriteOffset;
+
+    UPROPERTY(EditDefaultsOnly, Category = "BN")
+    TObjectPtr<UDataTable> FlipbookAnimationDataTable;
 	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UBNPaperFlipbookComponent> BNPaperFlipbookComponent;
@@ -59,10 +59,13 @@ protected:
     FGameplayTag MovementGameplayTag;
 
     UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
-    FGameplayTag StopMovementGameplayTag;
+    FGameplayTag AbilityGameplayTag;
 
     UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
     FGameplayTag IdleAnimationGameplayTag;
+
+    UPROPERTY(EditDefaultsOnly, Category = "BN|Socket Names")
+    FName MoveSpriteSocketName;
 
 	UPROPERTY()
 	bool bCanMove;
@@ -78,6 +81,13 @@ public:
 	virtual void UpdateAnimation(FGameplayTag AnimationTag);
 
 	void PlayAnimationSoundEffect() const;
+
+    bool CanEntityMove();
+
+    void AttemptToMoveLeft();
+    void AttemptToMoveRight();
+    void AttemptToMoveUp();
+    void AttemptToMoveDown();
 	
     // TODO: Will Re-work once I do movement based on socket instead of end of animation
     void AttemptToMovePlayerEntityHorizontally(const float Value);
@@ -138,16 +148,16 @@ protected:
 	void UpdateIdleAnimation();
 
 	UFUNCTION()
-	void ClientCallMoveEntityLeftRPC();
+	void ClientCallMoveEntityLeftRPC(FTransform SocketTransform);
 
 	UFUNCTION()
-	void ClientCallMoveEntityRightRPC();
+	void ClientCallMoveEntityRightRPC(FTransform SocketTransform);
 
 	UFUNCTION()
-	void ClientCallMoveEntityUpRPC();
+	void ClientCallMoveEntityUpRPC(FTransform SocketTransform);
 
 	UFUNCTION()
-	void ClientCallMoveEntityDownRPC();
+	void ClientCallMoveEntityDownRPC(FTransform SocketTransform);
 	
 	/*
 	 * OnRep_Notify
