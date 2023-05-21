@@ -86,6 +86,8 @@ public:
 
     void AttemptToMoveLeft();
     void AttemptToMoveRight();
+    void AttemptToMoveUp();
+    void AttemptToMoveDown();
 	
     // TODO: Will Re-work once I do movement based on socket instead of end of animation
     void AttemptToMovePlayerEntityHorizontally(const float Value);
@@ -152,10 +154,10 @@ protected:
 	void ClientCallMoveEntityRightRPC(FTransform SocketTransform);
 
 	UFUNCTION()
-	void ClientCallMoveEntityUpRPC();
+	void ClientCallMoveEntityUpRPC(FTransform SocketTransform);
 
 	UFUNCTION()
-	void ClientCallMoveEntityDownRPC();
+	void ClientCallMoveEntityDownRPC(FTransform SocketTransform);
 	
 	/*
 	 * OnRep_Notify
