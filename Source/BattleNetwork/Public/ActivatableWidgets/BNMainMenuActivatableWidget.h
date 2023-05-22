@@ -19,13 +19,7 @@ class BATTLENETWORK_API UBNMainMenuActivatableWidget : public UBNStackActivatabl
 protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UButton> ButtonCreateLocalMultiplayerGame;
-
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	TObjectPtr<UButton> ButtonCreateSinglePlayerGame;
-
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	TObjectPtr<UButton> ButtonFindGame;
 
     UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
     TObjectPtr<UButton> ButtonWhatIsNew;
@@ -55,12 +49,6 @@ private:
 	void SetInputModeToGameplay() const;
 
     void BindButtonWidgets();
-	
-	UFUNCTION()
-	void FindSessionWidgetFlow();
-
-	UFUNCTION()
-	void CreateLocalMultiplayerGame();
 
     UFUNCTION()
     void CreateSinglePlayerGame();

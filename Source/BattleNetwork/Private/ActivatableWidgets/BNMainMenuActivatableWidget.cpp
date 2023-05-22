@@ -18,15 +18,6 @@ void UBNMainMenuActivatableWidget::NativeConstruct()
 
 void UBNMainMenuActivatableWidget::BindButtonWidgets()
 {
-    if (IsValid(ButtonCreateLocalMultiplayerGame))
-    {
-        ButtonCreateLocalMultiplayerGame->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::CreateLocalMultiplayerGame);
-    }
-
-    if (IsValid(ButtonFindGame))
-    {
-        ButtonFindGame->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::FindSessionWidgetFlow);
-    }
 
     if (IsValid(ButtonCreateSinglePlayerGame))
     {
@@ -42,21 +33,6 @@ void UBNMainMenuActivatableWidget::BindButtonWidgets()
     {
         ButtonCredits->OnPressed.AddDynamic(this, &UBNMainMenuActivatableWidget::CreditsWidgetFlow);
     }
-}
-
-
-void UBNMainMenuActivatableWidget::FindSessionWidgetFlow()
-{
-	GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->FindSessions(10, true);
-	
-    AddWidgetToStack(FindSessionActivatableWidgetClass);
-}
-
-void UBNMainMenuActivatableWidget::CreateLocalMultiplayerGame()
-{
-	GetGameInstance()->GetSubsystem<UBNSessionSubsystem>()->CreateSession(2, true, MultiplayerMapName);
-
-	SetInputModeToGameplay();
 }
 
 void UBNMainMenuActivatableWidget::CreateSinglePlayerGame()
