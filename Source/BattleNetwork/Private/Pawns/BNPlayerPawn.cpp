@@ -36,6 +36,36 @@ void ABNPlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	BindASCInput();
 }
 
+void ABNPlayerPawn::AttemptToMovePlayerEntityHorizontally(const float Value)
+{
+    if (CanEntityMove())
+    {
+        if (Value < 0)
+        {
+            AttemptToMoveLeft();
+        }
+        else if (Value > 0)
+        {
+            AttemptToMoveRight();
+        }
+    }
+}
+
+void ABNPlayerPawn::AttemptToMovePlayerEntityVertically(const float Value)
+{
+    if (CanEntityMove())
+    {
+        if (Value > 0)
+        {
+            AttemptToMoveUp();
+        }
+        else if (Value < 0)
+        {
+            AttemptToMoveDown();
+        }
+    }
+}
+
 void ABNPlayerPawn::BindASCInput()
 {
 	if (!ASCInputBound && IsValid(AbilitySystemComponent) && IsValid(InputComponent))
