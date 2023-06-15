@@ -23,3 +23,8 @@ void ABNGameModeSinglePlayer::PostLogin(APlayerController* NewPlayer)
     ABNEntityPawn* Enemy = GridActor->CreateEntity(EnemyEntityTag, 4, 1);
     Enemy->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "GameHasEnded");
 }
+
+void ABNGameModeSinglePlayer::BeginPlay()
+{
+
+}
