@@ -40,6 +40,8 @@ private:
 
     int EnemiesAllowedOnGrid;
 
+    int CurrentEnemiesOnGrid;
+
 public:
 
     virtual void PostLogin(APlayerController* NewPlayer) override;

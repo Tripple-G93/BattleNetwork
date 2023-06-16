@@ -6,9 +6,11 @@
 #include "Actors/BNGridActor.h"
 #include "Attributes/BNBaseAttributeSet.h"
 #include "Controllers/BNPlayerController.h"
+#include "Math/RandomStream.h"
 #include "Pawns/BNEntityPawn.h"
 #include "Tables/BNEnemyAmountOnGridTable.h"
 #include "Tables/BNEnemyAmountTable.h"
+#include "Tables/BNEnemySpawnChanceTable.h"
 
 void ABNGameModeSinglePlayer::PostLogin(APlayerController* NewPlayer)
 {
@@ -21,9 +23,6 @@ void ABNGameModeSinglePlayer::PostLogin(APlayerController* NewPlayer)
     }
 
     CreatePlayer(NewPlayer, 1, 1);
-
-    ABNEntityPawn* Enemy = GridActor->CreateEntity(EnemyEntityTag, 4, 1);
-    Enemy->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "GameHasEnded");
 }
 
 int ABNGameModeSinglePlayer::GetCurrentRound() const
@@ -41,6 +40,23 @@ void ABNGameModeSinglePlayer::BeginPlay()
     SetCurrentEnemyAmountAndTableInfoRow();
 
     SetCurrentEnemyAmountOnGridTableInfoRow();
+
+    TArray<FBNEnemySpawnChanceTableInfoRow*> EnemySpawnChanceTableRows;
+    EnemySpawnChanceDataTable->GetAllRows<FBNEnemySpawnChanceTableInfoRow>("", EnemySpawnChanceTableRows);
+    while(CurrentEnemiesOnGrid < CurrentEnemyAmountOnGridTableInfoRow->EnemyAmountOnGrid)
+    {
+        for (FBNEnemySpawnChanceTableInfoRow* EnemySpawnChanceTableRow : EnemySpawnChanceTableRows)
+        {
+            int32 RandomInt = FMath::RandRange(1, 100);
+            if (RandomInt < EnemySpawnChanceTableRow->SpawnPercentChance)
+            {
+                ABNEntityPawn* EnemyEntityPawn = GridActor->CreateEnemyEntityAtRandomLocation(EnemySpawnChanceTableRow->EntityGameplayTag);
+                EnemyEntityPawn->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "GameHasEnded");
+
+                ++CurrentEnemiesOnGrid;
+            }
+        }
+    }
 }
 
 void ABNGameModeSinglePlayer::SetCurrentEnemyAmountAndTableInfoRow()

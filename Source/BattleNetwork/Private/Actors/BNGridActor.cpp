@@ -12,6 +12,7 @@
 #include <Engine/World.h>
 #include <GameFramework/SpringArmComponent.h>
 #include <Net/UnrealNetwork.h>
+#include "Math/RandomStream.h"
 
 
 ABNGridActor::ABNGridActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
@@ -175,7 +176,7 @@ float ABNGridActor::GetRightMostPanelXLocation()
 	return Grid[GridWidth - 1][0]->GetActorLocation().X + PanelSpacingWidth;	
 }
 
-ABNEntityPawn* ABNGridActor::CreateEntity(FGameplayTag EntityTypeTag, int XGridPosition, int YGridPosition)
+ABNEntityPawn* ABNGridActor::CreateEntityAtLocation(FGameplayTag EntityTypeTag, int XGridPosition, int YGridPosition)
 {
     ABNPanelActor* Panel = Grid[XGridPosition][YGridPosition];
     const FVector Location = Panel->GetActorLocation();
@@ -197,6 +198,46 @@ ABNEntityPawn* ABNGridActor::CreateEntity(FGameplayTag EntityTypeTag, int XGridP
     entityPawn->SetActorLocation(Location + entityPawn->GetSpriteOffset());
     entityPawn->SetActorRotation(Rotation);
     entityPawn->SetServerGridLocation(FBNGridLocation(XGridPosition, YGridPosition));
+    entityPawn->SetGridActorReference(this);
+
+    Panel->SetEntityPawn(entityPawn);
+
+    return entityPawn;
+}
+
+ABNEntityPawn* ABNGridActor::CreateEnemyEntityAtRandomLocation(FGameplayTag EntityTypeTag)
+{
+    int GridPositionX = FMath::RandRange(GridDividerIndex + 1, GridWidth - 1);
+    int GridPositionY = FMath::RandRange(0, GridHeight - 1);
+
+    if (Grid[GridPositionX][GridPositionY]->GetEntityPawn() != nullptr)
+    {
+        for (int i = GridDividerIndex + 1; i < GridWidth; ++i)
+        {
+            for (int j = 0; j < GridHeight - 1; ++j)
+            {
+                if (Grid[i][j]->GetEntityPawn() == nullptr)
+                {
+                    GridPositionX = i;
+                    GridPositionY = j;
+                    break;
+                }
+            }
+        }
+    }
+
+    ABNPanelActor* Panel = Grid[GridPositionX][GridPositionY];
+    const FVector Location = Panel->GetActorLocation();
+    FRotator Rotation = { 0, 0, 0 };
+    Rotation.Yaw = 180;
+
+    ABNEntityPawn* entityPawn = EntitySpawnerActor->GetEntityFromSpawner(EntityTypeTag);
+
+    entityPawn->SetTeamTag(Team2Tag);
+    entityPawn->SetActorHiddenInGame(false);
+    entityPawn->SetActorLocation(Location + entityPawn->GetSpriteOffset());
+    entityPawn->SetActorRotation(Rotation);
+    entityPawn->SetServerGridLocation(FBNGridLocation(GridPositionX, GridPositionY));
     entityPawn->SetGridActorReference(this);
 
     Panel->SetEntityPawn(entityPawn);

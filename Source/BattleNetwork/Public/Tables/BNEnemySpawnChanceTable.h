@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
+#include <GameplayTagContainer.h>
 #include "BNEnemySpawnChanceTable.generated.h"
 
 /**
@@ -16,4 +17,7 @@ struct FBNEnemySpawnChanceTableInfoRow : public FTableRowBase
 
 	UPROPERTY(EditDefaultsOnly)
 	int32 SpawnPercentChance;
+
+    UPROPERTY(EditDefaultsOnly)
+    FGameplayTag EntityGameplayTag;
 };
