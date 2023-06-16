@@ -6,6 +6,8 @@
 #include "GameModes/BNGameModeInitial.h"
 #include "BNGameModeSinglePlayer.generated.h"
 
+struct FBNEnemyAmountOnGridTableInfoRow;
+struct FBNEnemyAmountTableInfoRow;
 class UDataTable;
 
 /**
@@ -28,14 +30,32 @@ private:
     TObjectPtr<UDataTable> EnemyAmountOnGridPerRoundDataTable;
 
     UPROPERTY(EditDefaultsOnly, Category = "BN")
-    int StartingRound;
+    int CurrentRound;
+
+    FBNEnemyAmountTableInfoRow* CurrentEnemyAmountTableInfoRow;
+
+    FBNEnemyAmountOnGridTableInfoRow* CurrentEnemyAmountOnGridTableInfoRow;
+
+    int EnemiesRemaining;
+
+    int EnemiesAllowedOnGrid;
 
 public:
 
     virtual void PostLogin(APlayerController* NewPlayer) override;
 
+    int GetCurrentRound() const;
+
+    int GetEnemiesRemaining() const;
+
 protected:
 
     void BeginPlay() override;
+
+private:
+
+    void SetCurrentEnemyAmountAndTableInfoRow();
+
+    void SetCurrentEnemyAmountOnGridTableInfoRow();
 
 };
