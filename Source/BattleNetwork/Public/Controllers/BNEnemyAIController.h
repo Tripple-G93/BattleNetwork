@@ -31,7 +31,9 @@ public:
 
     ABNEnemyAIController(const FObjectInitializer& ObjectInitializer);
 
-    void RunOwnBehaviorTree();
+    void StartBehaviorTree();
+
+    void StopBehaviorTree();
 
 protected:
 

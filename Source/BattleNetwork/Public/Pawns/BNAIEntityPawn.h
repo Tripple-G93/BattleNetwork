@@ -29,6 +29,10 @@ public:
 
     ABNAIEntityPawn(const FObjectInitializer& ObjectInitializer);
 
+    void StartBehaviorTree();
+
+    void StopBehaviorTree();
+
 protected:
 
     virtual void BeginPlay() override;

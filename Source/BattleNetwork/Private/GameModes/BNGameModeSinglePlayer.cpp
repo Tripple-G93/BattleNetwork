@@ -8,6 +8,7 @@
 #include "Controllers/BNPlayerController.h"
 #include "Math/RandomStream.h"
 #include "Pawns/BNEntityPawn.h"
+#include "Pawns/BNAIEntityPawn.h"
 #include "Tables/BNEnemyAmountTable.h"
 #include "Tables/BNEnemySpawnChanceTable.h"
 
@@ -72,6 +73,11 @@ void ABNGameModeSinglePlayer::SpawnEnemiesOnGrid()
                 ABNEntityPawn* EnemyEntityPawn = GridActor->CreateEnemyEntityAtRandomLocation(EnemySpawnChanceTableRow->EntityGameplayTag);
                 EnemyEntityPawn->GetBaseAttributeSet()->GameModeDelegateHandle = EnemyEntityPawn->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "UpdateRoundStatus");
 
+                ABNAIEntityPawn* EnemyAIEnetityPawn = Cast<ABNAIEntityPawn>(EnemyEntityPawn);
+                if (ensure(EnemyAIEnetityPawn))
+                {
+                    EnemyAIEnetityPawn->StartBehaviorTree();
+                }
                 ++EnemiesRemainingOnGrid;
             }
         }
@@ -80,11 +86,7 @@ void ABNGameModeSinglePlayer::SpawnEnemiesOnGrid()
 
 void ABNGameModeSinglePlayer::UpdateRoundStatus(ABNEntityPawn* DeadEnemyEntity)
 {
-    // TODO: When we have a death animation we will actually want to play that first before we do this
-    DeadEnemyEntity->SetActorHiddenInGame(true);
-    DeadEnemyEntity->GetBaseAttributeSet()->OnPlayerDeathDelegate.Remove(DeadEnemyEntity->GetBaseAttributeSet()->GameModeDelegateHandle);
-    --EnemiesRemainingInRound;
-    --EnemiesRemainingOnGrid;
+    ProcessDeadEntity(DeadEnemyEntity);
 
     if (EnemiesRemainingInRound > 0)
     {
@@ -95,5 +97,23 @@ void ABNGameModeSinglePlayer::UpdateRoundStatus(ABNEntityPawn* DeadEnemyEntity)
         // Check if we will proceed to the next round or will end the game
         //if(CurrentRound <= )
     }
+
+}
+
+void ABNGameModeSinglePlayer::ProcessDeadEntity(ABNEntityPawn DeadEnemyEntity)
+{
+    // TODO: When we have a death animation we will actually want to play that first before we do this
+    DeadEnemyEntity->SetActorHiddenInGame(true);
+    // Reset the health of the enemy here
+    DeadEnemyEntity->GetBaseAttributeSet()->OnPlayerDeathDelegate.Remove(DeadEnemyEntity->GetBaseAttributeSet()->GameModeDelegateHandle);
+
+    ABNAIEntityPawn* EnemyAIEnetityPawn = Cast<ABNAIEntityPawn>(DeadEnemyEntity);
+    if (ensure(EnemyAIEnetityPawn))
+    {
+        EnemyAIEnetityPawn->StopBehaviorTree();
+    }
+
+    --EnemiesRemainingInRound;
+    --EnemiesRemainingOnGrid;
 
 }
