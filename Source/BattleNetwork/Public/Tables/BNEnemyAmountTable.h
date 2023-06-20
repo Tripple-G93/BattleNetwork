@@ -15,7 +15,10 @@ struct FBNEnemyAmountTableInfoRow : public FTableRowBase
 	GENERATED_BODY()
 
 	UPROPERTY(EditDefaultsOnly)
-	int32 EnemyAmount;
+	int32 EnemyAmountInRound;
+
+    UPROPERTY(EditDefaultsOnly)
+    int32 EnemyAmountAllowedOnGrid;
 
     UPROPERTY(EditDefaultsOnly)
 	int32 RoundThreshold;

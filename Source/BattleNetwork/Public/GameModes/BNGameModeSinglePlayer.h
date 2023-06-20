@@ -26,21 +26,14 @@ private:
     UPROPERTY(EditDefaultsOnly, Category = "BN|Data Table")
     TObjectPtr<UDataTable> EnemySpawnChanceDataTable;
 
-    UPROPERTY(EditDefaultsOnly, Category = "BN|Data Table")
-    TObjectPtr<UDataTable> EnemyAmountOnGridPerRoundDataTable;
-
     UPROPERTY(EditDefaultsOnly, Category = "BN")
     int CurrentRound;
 
     FBNEnemyAmountTableInfoRow* CurrentEnemyAmountTableInfoRow;
 
-    FBNEnemyAmountOnGridTableInfoRow* CurrentEnemyAmountOnGridTableInfoRow;
+    int EnemiesRemainingInRound;
 
-    int EnemiesRemaining;
-
-    int EnemiesAllowedOnGrid;
-
-    int CurrentEnemiesOnGrid;
+    int EnemiesRemainingOnGrid;
 
 public:
 
@@ -48,7 +41,7 @@ public:
 
     int GetCurrentRound() const;
 
-    int GetEnemiesRemaining() const;
+    int GetEnemiesRemainingInRound() const;
 
 protected:
 
@@ -58,6 +51,8 @@ private:
 
     void SetCurrentEnemyAmountAndTableInfoRow();
 
-    void SetCurrentEnemyAmountOnGridTableInfoRow();
+    void SpawnEnemiesOnGrid();
 
+    UFUNCTION()
+    void UpdateRoundStatus();
 };

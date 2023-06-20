@@ -9,10 +9,6 @@ void ABNEnemyAIController::BeginPlay()
 {
     Super::BeginPlay();
 
-    if (HasAuthority())
-    {
-        RunOwnBehaviorTree();
-    }
 }
 
 ABNEnemyAIController::ABNEnemyAIController(const FObjectInitializer& ObjectInitializer)

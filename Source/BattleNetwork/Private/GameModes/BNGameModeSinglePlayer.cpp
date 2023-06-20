@@ -30,33 +30,16 @@ int ABNGameModeSinglePlayer::GetCurrentRound() const
     return CurrentRound;
 }
 
-int ABNGameModeSinglePlayer::GetEnemiesRemaining() const
+int ABNGameModeSinglePlayer::GetEnemiesRemainingInRound() const
 {
-    return EnemiesRemaining;
+    return EnemiesRemainingInRound;
 }
 
 void ABNGameModeSinglePlayer::BeginPlay()
 {
     SetCurrentEnemyAmountAndTableInfoRow();
 
-    SetCurrentEnemyAmountOnGridTableInfoRow();
-
-    TArray<FBNEnemySpawnChanceTableInfoRow*> EnemySpawnChanceTableRows;
-    EnemySpawnChanceDataTable->GetAllRows<FBNEnemySpawnChanceTableInfoRow>("", EnemySpawnChanceTableRows);
-    while(CurrentEnemiesOnGrid < CurrentEnemyAmountOnGridTableInfoRow->EnemyAmountOnGrid)
-    {
-        for (FBNEnemySpawnChanceTableInfoRow* EnemySpawnChanceTableRow : EnemySpawnChanceTableRows)
-        {
-            int32 RandomInt = FMath::RandRange(1, 100);
-            if (RandomInt < EnemySpawnChanceTableRow->SpawnPercentChance)
-            {
-                ABNEntityPawn* EnemyEntityPawn = GridActor->CreateEnemyEntityAtRandomLocation(EnemySpawnChanceTableRow->EntityGameplayTag);
-                EnemyEntityPawn->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "GameHasEnded");
-
-                ++CurrentEnemiesOnGrid;
-            }
-        }
-    }
+    SpawnEnemiesOnGrid();
 }
 
 void ABNGameModeSinglePlayer::SetCurrentEnemyAmountAndTableInfoRow()
@@ -69,23 +52,48 @@ void ABNGameModeSinglePlayer::SetCurrentEnemyAmountAndTableInfoRow()
         if (CurrentRound <= EnemyAmountTableRow->RoundThreshold)
         {
             CurrentEnemyAmountTableInfoRow = EnemyAmountTableRow;
-            EnemiesRemaining = EnemyAmountTableRow->EnemyAmount;
+            EnemiesRemainingInRound = EnemyAmountTableRow->EnemyAmountInRound;
+            EnemiesRemainingOnGrid = 0;
             break;
         }
     }
 }
 
-void ABNGameModeSinglePlayer::SetCurrentEnemyAmountOnGridTableInfoRow()
+void ABNGameModeSinglePlayer::SpawnEnemiesOnGrid()
 {
-    TArray<FBNEnemyAmountOnGridTableInfoRow*> EnemyAmountOnGridTableRows;
-    EnemyAmountOnGridPerRoundDataTable->GetAllRows<FBNEnemyAmountOnGridTableInfoRow>("", EnemyAmountOnGridTableRows);
-
-    for (FBNEnemyAmountOnGridTableInfoRow* EnemyAmountOnGridTableRow : EnemyAmountOnGridTableRows)
+    TArray<FBNEnemySpawnChanceTableInfoRow*> EnemySpawnChanceTableRows;
+    EnemySpawnChanceDataTable->GetAllRows<FBNEnemySpawnChanceTableInfoRow>("", EnemySpawnChanceTableRows);
+    while (EnemiesRemainingOnGrid < CurrentEnemyAmountTableInfoRow->EnemyAmountAllowedOnGrid && EnemiesRemainingInRound > 0)
     {
-        if (CurrentRound <= EnemyAmountOnGridTableRow->RoundThreshold)
+        for (FBNEnemySpawnChanceTableInfoRow* EnemySpawnChanceTableRow : EnemySpawnChanceTableRows)
         {
-            CurrentEnemyAmountOnGridTableInfoRow = EnemyAmountOnGridTableRow;
-            break;
+            int32 RandomInt = FMath::RandRange(1, 100);
+            if (RandomInt < EnemySpawnChanceTableRow->SpawnPercentChance)
+            {
+                ABNEntityPawn* EnemyEntityPawn = GridActor->CreateEnemyEntityAtRandomLocation(EnemySpawnChanceTableRow->EntityGameplayTag);
+                EnemyEntityPawn->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "UpdateRoundStatus");
+
+                ++EnemiesRemainingOnGrid;
+            }
         }
     }
+}
+
+void ABNGameModeSinglePlayer::UpdateRoundStatus()
+{
+    // TODO: When we have a death animation we will actually want to play that first before we do this
+    this->SetActorHiddenInGame(true);
+    --EnemiesRemainingInRound;
+    --EnemiesRemainingOnGrid;
+
+    if (EnemiesRemainingInRound > 0)
+    {
+        SpawnEnemiesOnGrid();
+    }
+    else
+    {
+        // Check if we will proceed to the next round or will end the game
+        //if(CurrentRound <= )
+    }
+
 }

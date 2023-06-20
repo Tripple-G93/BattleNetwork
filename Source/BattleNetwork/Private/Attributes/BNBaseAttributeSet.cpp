@@ -100,8 +100,6 @@ void UBNBaseAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
 	DOREPLIFETIME_CONDITION_NOTIFY(UBNBaseAttributeSet, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UBNBaseAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UBNBaseAttributeSet, BulletDamage, COND_None, REPNOTIFY_Always);
