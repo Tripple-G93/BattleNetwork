@@ -132,6 +132,8 @@ public:
 	UFUNCTION(Server, Reliable, WithValidation)
 	void MoveEntityDownRPC();
 
+    void PostInitializeComponents() override;
+
 protected:
 
 	virtual void BeginPlay() override;

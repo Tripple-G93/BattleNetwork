@@ -181,6 +181,13 @@ void ABNEntityPawn::SetActorHiddenInGame(bool bNewHidden)
     }
 }
 
+void ABNEntityPawn::PostInitializeComponents()
+{
+    Super::PostInitializeComponents();
+
+    EntityWidgetSceneComponent->CreateEntityUserWidget();
+}
+
 /*
  * End Getters
  */
