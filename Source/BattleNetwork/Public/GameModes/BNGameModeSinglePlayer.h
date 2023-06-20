@@ -6,7 +6,6 @@
 #include "GameModes/BNGameModeInitial.h"
 #include "BNGameModeSinglePlayer.generated.h"
 
-struct FBNEnemyAmountOnGridTableInfoRow;
 struct FBNEnemyAmountTableInfoRow;
 class UDataTable;
 

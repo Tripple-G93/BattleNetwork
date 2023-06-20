@@ -8,7 +8,6 @@
 #include "Controllers/BNPlayerController.h"
 #include "Math/RandomStream.h"
 #include "Pawns/BNEntityPawn.h"
-#include "Tables/BNEnemyAmountOnGridTable.h"
 #include "Tables/BNEnemyAmountTable.h"
 #include "Tables/BNEnemySpawnChanceTable.h"
 
