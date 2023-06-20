@@ -28,4 +28,8 @@ public:
 	
 	void InitializeEntityUserWidget();
 
+    void ActivateEntityUserWidget();
+
+    void DeactivateEntityUserWidget();
+
 };

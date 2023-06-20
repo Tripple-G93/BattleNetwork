@@ -6,8 +6,9 @@
 #include "GameModes/BNGameModeInitial.h"
 #include "BNGameModeSinglePlayer.generated.h"
 
-struct FBNEnemyAmountTableInfoRow;
+class ABNEntityPawn;
 class UDataTable;
+struct FBNEnemyAmountTableInfoRow;
 
 /**
  * 
@@ -53,5 +54,5 @@ private:
     void SpawnEnemiesOnGrid();
 
     UFUNCTION()
-    void UpdateRoundStatus();
+    void UpdateRoundStatus(ABNEntityPawn* DeadEnemyEntity);
 };

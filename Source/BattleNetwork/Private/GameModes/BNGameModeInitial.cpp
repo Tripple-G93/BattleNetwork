@@ -53,8 +53,6 @@ void ABNGameModeInitial::CreatePlayer(APlayerController* NewPlayer, int XGridLoc
     NewPlayer->Possess(entityPawn);
     NewPlayer->SetViewTarget(GridActor);
 
-    entityPawn->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "GameHasEnded");
-
     PlayerPawn = entityPawn;
 }
 

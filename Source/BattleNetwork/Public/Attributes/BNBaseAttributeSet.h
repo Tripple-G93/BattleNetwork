@@ -14,7 +14,9 @@ GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerDeathDelegate, AController* Controller)
+class ABNEntityPawn;
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerDeathDelegate, ABNEntityPawn* EntityPawn)
 
 /**
  * 
@@ -32,6 +34,7 @@ protected:
 public:
 
 	FOnPlayerDeathDelegate OnPlayerDeathDelegate;
+    FDelegateHandle GameModeDelegateHandle;
 	
 	UBNBaseAttributeSet();
 

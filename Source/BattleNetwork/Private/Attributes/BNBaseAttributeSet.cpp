@@ -3,7 +3,7 @@
 
 #include "Attributes/BNBaseAttributeSet.h"
 
-#include "Pawns/BNBasePawn.h"
+#include "Pawns/BNEntityPawn.h"
 #include "Pawns/BNPlayerPawn.h"
 
 #include <GameplayEffect.h>
@@ -39,18 +39,18 @@ void UBNBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 	// Get the Target actor, which should be our owner
 	AActor* TargetActor = nullptr;
 	AController* TargetController = nullptr;
-	ABNBasePawn* TargetCharacter = nullptr;
+	ABNEntityPawn* TargetCharacter = nullptr;
 	if (Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid())
 	{
 		TargetActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
 		TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
-		TargetCharacter = Cast<ABNBasePawn>(TargetActor);
+		TargetCharacter = Cast<ABNEntityPawn>(TargetActor);
 	}
 
 	// Get the Source actor
 	AActor* SourceActor = nullptr;
 	AController* SourceController = nullptr;
-	ABNBasePawn* SourceCharacter = nullptr;
+	ABNEntityPawn* SourceCharacter = nullptr;
 	if (Source && Source->AbilityActorInfo.IsValid() && Source->AbilityActorInfo->AvatarActor.IsValid())
 	{
 		SourceActor = Source->AbilityActorInfo->AvatarActor.Get();
@@ -66,11 +66,11 @@ void UBNBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 		// Use the controller to find the source pawn
 		if (SourceController)
 		{
-			SourceCharacter = Cast<ABNBasePawn>(SourceController->GetPawn());
+			SourceCharacter = Cast<ABNEntityPawn>(SourceController->GetPawn());
 		}
 		else
 		{
-			SourceCharacter = Cast<ABNBasePawn>(SourceActor);
+			SourceCharacter = Cast<ABNEntityPawn>(SourceActor);
 		}
 
 		// Set the causer actor based on context if it's set
@@ -92,7 +92,7 @@ void UBNBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 	if(SourceController->GetLocalRole() == ROLE_Authority && GetHealth() <= 0 && IsPlayerEntity(SourceController) && !bIsPlayerDead)
 	{
 		bIsPlayerDead = true;
-		OnPlayerDeathDelegate.Broadcast(TargetController);
+		OnPlayerDeathDelegate.Broadcast(TargetCharacter);
 	}
 }
 

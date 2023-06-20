@@ -26,6 +26,21 @@ void UBNEntityWidgetSceneComponent::InitializeEntityUserWidget()
 		EntityUserWidget->SetAttachedComponent(this);
 		EntityUserWidget->InitializeWidgetWithAttributes();
 		EntityUserWidget->InitializeAttributeBindingsToWidget();
-		EntityUserWidget->AddToViewport();
 	}
+}
+
+void UBNEntityWidgetSceneComponent::ActivateEntityUserWidget()
+{
+    if (EntityUserWidget && EntityUserWidget->IsInViewport())
+    {
+        EntityUserWidget->AddToViewport();
+    }
+}
+
+void UBNEntityWidgetSceneComponent::DeactivateEntityUserWidget()
+{
+    if (EntityUserWidget && EntityUserWidget->IsInViewport())
+    {
+        EntityUserWidget->RemoveFromViewport();
+    }
 }

@@ -169,10 +169,15 @@ void ABNEntityPawn::SetActorHiddenInGame(bool bNewHidden)
     if (bNewHidden)
     {
         BoxComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+        EntityWidgetSceneComponent->DeactivateEntityUserWidget();
+        
     }
     else
     {
         BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
+        EntityWidgetSceneComponent->ActivateEntityUserWidget();
     }
 }
 

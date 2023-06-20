@@ -70,7 +70,7 @@ void ABNGameModeSinglePlayer::SpawnEnemiesOnGrid()
             if (RandomInt < EnemySpawnChanceTableRow->SpawnPercentChance)
             {
                 ABNEntityPawn* EnemyEntityPawn = GridActor->CreateEnemyEntityAtRandomLocation(EnemySpawnChanceTableRow->EntityGameplayTag);
-                EnemyEntityPawn->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "UpdateRoundStatus");
+                EnemyEntityPawn->GetBaseAttributeSet()->GameModeDelegateHandle = EnemyEntityPawn->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "UpdateRoundStatus");
 
                 ++EnemiesRemainingOnGrid;
             }
@@ -78,10 +78,11 @@ void ABNGameModeSinglePlayer::SpawnEnemiesOnGrid()
     }
 }
 
-void ABNGameModeSinglePlayer::UpdateRoundStatus()
+void ABNGameModeSinglePlayer::UpdateRoundStatus(ABNEntityPawn* DeadEnemyEntity)
 {
     // TODO: When we have a death animation we will actually want to play that first before we do this
-    this->SetActorHiddenInGame(true);
+    DeadEnemyEntity->SetActorHiddenInGame(true);
+    DeadEnemyEntity->GetBaseAttributeSet()->OnPlayerDeathDelegate.Remove(DeadEnemyEntity->GetBaseAttributeSet()->GameModeDelegateHandle);
     --EnemiesRemainingInRound;
     --EnemiesRemainingOnGrid;
 
