@@ -53,7 +53,7 @@ private:
 
     void SpawnEnemiesOnGrid();
 
-    void ProcessDeadEntity(ABNEntityPawn DeadEnemyEntity);
+    void ProcessDeadEntity(ABNEntityPawn* DeadEnemyEntity);
 
     UFUNCTION()
     void UpdateRoundStatus(ABNEntityPawn* DeadEnemyEntity);

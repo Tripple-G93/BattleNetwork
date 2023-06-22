@@ -71,7 +71,12 @@ void ABNGameModeSinglePlayer::SpawnEnemiesOnGrid()
             if (RandomInt < EnemySpawnChanceTableRow->SpawnPercentChance)
             {
                 ABNEntityPawn* EnemyEntityPawn = GridActor->CreateEnemyEntityAtRandomLocation(EnemySpawnChanceTableRow->EntityGameplayTag);
-                EnemyEntityPawn->GetBaseAttributeSet()->GameModeDelegateHandle = EnemyEntityPawn->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "UpdateRoundStatus");
+                EnemyEntityPawn->ResetAttribute();
+
+                if (!EnemyEntityPawn->GetBaseAttributeSet()->GameModeDelegateHandle.IsValid())
+                {
+                    EnemyEntityPawn->GetBaseAttributeSet()->GameModeDelegateHandle = EnemyEntityPawn->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "UpdateRoundStatus");
+                }
 
                 ABNAIEntityPawn* EnemyAIEnetityPawn = Cast<ABNAIEntityPawn>(EnemyEntityPawn);
                 if (ensure(EnemyAIEnetityPawn))
@@ -88,7 +93,7 @@ void ABNGameModeSinglePlayer::UpdateRoundStatus(ABNEntityPawn* DeadEnemyEntity)
 {
     ProcessDeadEntity(DeadEnemyEntity);
 
-    if (EnemiesRemainingInRound > 0)
+    if (EnemiesRemainingInRound > 0 && EnemiesRemainingInRound > EnemiesRemainingOnGrid)
     {
         SpawnEnemiesOnGrid();
     }
@@ -100,12 +105,12 @@ void ABNGameModeSinglePlayer::UpdateRoundStatus(ABNEntityPawn* DeadEnemyEntity)
 
 }
 
-void ABNGameModeSinglePlayer::ProcessDeadEntity(ABNEntityPawn DeadEnemyEntity)
+void ABNGameModeSinglePlayer::ProcessDeadEntity(ABNEntityPawn* DeadEnemyEntity)
 {
     // TODO: When we have a death animation we will actually want to play that first before we do this
     DeadEnemyEntity->SetActorHiddenInGame(true);
     // Reset the health of the enemy here
-    DeadEnemyEntity->GetBaseAttributeSet()->OnPlayerDeathDelegate.Remove(DeadEnemyEntity->GetBaseAttributeSet()->GameModeDelegateHandle);
+    //DeadEnemyEntity->GetBaseAttributeSet()->OnPlayerDeathDelegate.Remove(DeadEnemyEntity->GetBaseAttributeSet()->GameModeDelegateHandle);
 
     ABNAIEntityPawn* EnemyAIEnetityPawn = Cast<ABNAIEntityPawn>(DeadEnemyEntity);
     if (ensure(EnemyAIEnetityPawn))
