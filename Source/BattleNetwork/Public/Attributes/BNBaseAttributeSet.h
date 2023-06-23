@@ -16,7 +16,7 @@ GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
 class ABNEntityPawn;
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerDeathDelegate, ABNEntityPawn* EntityPawn)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerDeathDelegate, ABNEntityPawn*, EntityPawn);
 
 /**
  * 
@@ -34,7 +34,6 @@ protected:
 public:
 
 	FOnPlayerDeathDelegate OnPlayerDeathDelegate;
-    FDelegateHandle GameModeDelegateHandle;
 	
 	UBNBaseAttributeSet();
 
@@ -66,6 +65,8 @@ public:
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+    void ResetDeadState();
 
 protected:
 

@@ -59,6 +59,8 @@ void ABNEntityPawn::ResetAttribute()
     {
         FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*NewHandle.Data.Get());
     }
+
+    GetBaseAttributeSet()->ResetDeadState();
 }
 
 void ABNEntityPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

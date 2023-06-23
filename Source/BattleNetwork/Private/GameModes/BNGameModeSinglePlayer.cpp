@@ -73,10 +73,7 @@ void ABNGameModeSinglePlayer::SpawnEnemiesOnGrid()
                 ABNEntityPawn* EnemyEntityPawn = GridActor->CreateEnemyEntityAtRandomLocation(EnemySpawnChanceTableRow->EntityGameplayTag);
                 EnemyEntityPawn->ResetAttribute();
 
-                if (!EnemyEntityPawn->GetBaseAttributeSet()->GameModeDelegateHandle.IsValid())
-                {
-                    EnemyEntityPawn->GetBaseAttributeSet()->GameModeDelegateHandle = EnemyEntityPawn->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUFunction(this, "UpdateRoundStatus");
-                }
+                EnemyEntityPawn->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUniqueDynamic(this, &ABNGameModeSinglePlayer::UpdateRoundStatus);
 
                 ABNAIEntityPawn* EnemyAIEnetityPawn = Cast<ABNAIEntityPawn>(EnemyEntityPawn);
                 if (ensure(EnemyAIEnetityPawn))
@@ -109,6 +106,7 @@ void ABNGameModeSinglePlayer::ProcessDeadEntity(ABNEntityPawn* DeadEnemyEntity)
 {
     // TODO: When we have a death animation we will actually want to play that first before we do this
     DeadEnemyEntity->SetActorHiddenInGame(true);
+    DeadEnemyEntity->GetBaseAttributeSet()->OnPlayerDeathDelegate.RemoveDynamic(this, &ABNGameModeSinglePlayer::UpdateRoundStatus);
     // Reset the health of the enemy here
     //DeadEnemyEntity->GetBaseAttributeSet()->OnPlayerDeathDelegate.Remove(DeadEnemyEntity->GetBaseAttributeSet()->GameModeDelegateHandle);
 
