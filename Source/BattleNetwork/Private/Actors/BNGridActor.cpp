@@ -245,6 +245,13 @@ ABNEntityPawn* ABNGridActor::CreateEnemyEntityAtRandomLocation(FGameplayTag Enti
     return entityPawn;
 }
 
+void ABNGridActor::RemoveEntityFromGrid(const ABNEntityPawn* EntityPawn)
+{
+    FBNGridLocation GridLocation = EntityPawn->GetServerGridLocation();
+    ABNPanelActor* Panel = Grid[GridLocation.XIndex][GridLocation.YIndex];
+    Panel->SetEntityPawn(nullptr);
+}
+
 void ABNGridActor::SpawnPanel(const int32 XIndex, const int32 YIndex)
 {
 	const FVector Location(XIndex * PanelSpacingWidth, 0, YIndex * PanelSpacingHeight);
