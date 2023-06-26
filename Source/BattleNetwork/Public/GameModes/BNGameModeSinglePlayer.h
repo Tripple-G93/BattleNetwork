@@ -61,6 +61,8 @@ private:
 
     void StartRound();
 
+    void ProceedToNextRound();
+
     UFUNCTION()
     void UpdateRoundStatus(ABNEntityPawn* DeadEnemyEntity);
 };

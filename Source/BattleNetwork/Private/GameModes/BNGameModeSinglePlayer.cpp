@@ -38,7 +38,6 @@ int ABNGameModeSinglePlayer::GetEnemiesRemainingInRound() const
 void ABNGameModeSinglePlayer::BeginPlay()
 {
     CurrentEnemyAmountTableInfoRow = GetCurrentEnemyAmountTableInfoRow();
-
     if (ensure(CurrentEnemyAmountTableInfoRow))
     {
         StartRound();
@@ -51,6 +50,12 @@ void ABNGameModeSinglePlayer::StartRound()
     EnemiesRemainingOnGrid = 0;
 
     SpawnEnemiesOnGrid();
+}
+
+void ABNGameModeSinglePlayer::ProceedToNextRound()
+{
+    ++CurrentRound;
+    StartRound();
 }
 
 FBNEnemyAmountTableInfoRow* ABNGameModeSinglePlayer::GetCurrentEnemyAmountTableInfoRow()
@@ -101,9 +106,7 @@ void ABNGameModeSinglePlayer::UpdateRoundStatus(ABNEntityPawn* DeadEnemyEntity)
     {
         if (CurrentRound <= CurrentEnemyAmountTableInfoRow->RoundThreshold)
         {
-            // Function called proceed to next round
-            ++CurrentRound;
-            StartRound();
+            ProceedToNextRound();
         }
         else
         {
@@ -112,8 +115,7 @@ void ABNGameModeSinglePlayer::UpdateRoundStatus(ABNEntityPawn* DeadEnemyEntity)
             CurrentEnemyAmountTableInfoRow = GetCurrentEnemyAmountTableInfoRow();
             if (CurrentEnemyAmountTableInfoRow != nullptr)
             {
-                ++CurrentRound;
-                StartRound();
+                ProceedToNextRound();
             }
             else
             {
