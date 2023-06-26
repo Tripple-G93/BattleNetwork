@@ -4,6 +4,7 @@
 #include "Pawns/BNEntityPawn.h"
 
 #include "Actors/BNGridActor.h"
+#include "ActorComponents/BNAbilitySystemComponent.h"
 #include "ActorComponents/BNPaperFlipbookComponent.h"
 #include "Attributes/BNBaseAttributeSet.h"
 #include "Objects/BNUtilityStatics.h"
@@ -15,6 +16,9 @@
 #include <Components/SceneComponent.h>
 #include <Net/UnrealNetwork.h>
 #include <Sound/SoundCue.h>
+
+// TODO Will probably keep but this is temporary way to reset attribute
+#include <GameplayEffectTypes.h>
 
 ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -42,6 +46,21 @@ ABNEntityPawn::ABNEntityPawn(const FObjectInitializer& ObjectInitializer) : Supe
 	SpriteOffset.Z = 0;
 	
 	bCanMove = true;
+}
+
+void ABNEntityPawn::ResetAttribute()
+{
+    // Can run on Server and Client
+    FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+    EffectContext.AddSourceObject(this);
+
+    FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(DefaultAttributes, 1 /* TODO BN: GetCharacterLevel()*/, EffectContext);
+    if (NewHandle.IsValid())
+    {
+        FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*NewHandle.Data.Get());
+    }
+
+    GetBaseAttributeSet()->ResetDeadState();
 }
 
 void ABNEntityPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -169,11 +188,23 @@ void ABNEntityPawn::SetActorHiddenInGame(bool bNewHidden)
     if (bNewHidden)
     {
         BoxComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+        EntityWidgetSceneComponent->DeactivateEntityUserWidget();
+        
     }
     else
     {
         BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
+        EntityWidgetSceneComponent->ActivateEntityUserWidget();
     }
+}
+
+void ABNEntityPawn::PostInitializeComponents()
+{
+    Super::PostInitializeComponents();
+
+    EntityWidgetSceneComponent->CreateEntityUserWidget();
 }
 
 /*

@@ -108,7 +108,11 @@ public:
 
 	float GetRightMostPanelXLocation();
 
-    ABNEntityPawn* CreateEntity(FGameplayTag EntityTypeTag, int XGridPosition, int YGridPosition);
+    ABNEntityPawn* CreateEntityAtLocation(FGameplayTag EntityTypeTag, int XGridPosition, int YGridPosition);
+
+    ABNEntityPawn* CreateEnemyEntityAtRandomLocation(FGameplayTag EntityTypeTag);
+
+    void RemoveEntityFromGrid(const ABNEntityPawn* EntityPawn);
 	
 protected:
 	

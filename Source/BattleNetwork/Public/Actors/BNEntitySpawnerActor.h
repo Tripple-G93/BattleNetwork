@@ -24,7 +24,7 @@ protected:
     UPROPERTY(EditAnywhere, Category = "BN|Spawner")
     TMap<FGameplayTag, int> SpawnableEntityAmount;
 
-    TArray<ABNEntityPawn*> Entities;
+    TMap <FGameplayTag, TArray<ABNEntityPawn*>> EntityMap;
 
 public:	
 	// Sets default values for this actor's properties

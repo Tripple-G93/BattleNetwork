@@ -57,6 +57,11 @@ protected:
     UFUNCTION()
 	void GameHasEnded(AController* Controller);
 
+    UFUNCTION()
+    void PlayerHasLostGame(ABNEntityPawn* DeadPlayerEntity);
+
+    void PlayerWonGame();
+
     void SpawnGridActor();
 
     void SpawnObjectPool();

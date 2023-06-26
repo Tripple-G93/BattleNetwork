@@ -5,6 +5,7 @@
 
 #include "ActorComponents/BNAbilitySystemComponent.h"
 #include "Attributes/BNBaseAttributeSet.h"
+#include "Controllers/BNEnemyAIController.h"
 
 ABNAIEntityPawn::ABNAIEntityPawn(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -26,6 +27,24 @@ ABNAIEntityPawn::ABNAIEntityPawn(const FObjectInitializer& ObjectInitializer) : 
 
     // Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = false;
+}
+
+void ABNAIEntityPawn::StartBehaviorTree()
+{
+     ABNEnemyAIController* EnemyAIController = Cast<ABNEnemyAIController>(GetController());
+     if (ensure(EnemyAIController))
+     {
+         EnemyAIController->StartBehaviorTree();
+     }
+}
+
+void ABNAIEntityPawn::StopBehaviorTree()
+{
+    ABNEnemyAIController* EnemyAIController = Cast<ABNEnemyAIController>(GetController());
+    if (ensure(EnemyAIController))
+    {
+        EnemyAIController->StopBehaviorTree();
+    }
 }
 
 void ABNAIEntityPawn::BeginPlay()

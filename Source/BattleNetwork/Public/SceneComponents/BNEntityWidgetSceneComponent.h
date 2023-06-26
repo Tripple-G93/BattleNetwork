@@ -22,10 +22,18 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "BN|UI")
 	TSubclassOf<UUserWidget> EntityUserWidgetClass;
 
+    bool IsInitialized;
+
 public:	
 
 	UBNEntityWidgetSceneComponent();
 	
+    void CreateEntityUserWidget();
+
 	void InitializeEntityUserWidget();
+
+    void ActivateEntityUserWidget();
+
+    void DeactivateEntityUserWidget();
 
 };

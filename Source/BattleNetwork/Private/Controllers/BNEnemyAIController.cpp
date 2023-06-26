@@ -4,15 +4,12 @@
 #include "Controllers/BNEnemyAIController.h"
 
 #include <BehaviorTree/BlackboardComponent.h>
+#include <AIModule/Classes/BehaviorTree/BehaviorTreeComponent.h>
 
 void ABNEnemyAIController::BeginPlay()
 {
     Super::BeginPlay();
 
-    if (HasAuthority())
-    {
-        RunOwnBehaviorTree();
-    }
 }
 
 ABNEnemyAIController::ABNEnemyAIController(const FObjectInitializer& ObjectInitializer)
@@ -20,7 +17,7 @@ ABNEnemyAIController::ABNEnemyAIController(const FObjectInitializer& ObjectIniti
     TimeRemainingToAttackName = "TimeRemainingToAttack";
 }
 
-void ABNEnemyAIController::RunOwnBehaviorTree()
+void ABNEnemyAIController::StartBehaviorTree()
 {
     if (ensure(BehaviorTree))
     {
@@ -28,4 +25,16 @@ void ABNEnemyAIController::RunOwnBehaviorTree()
     }
 
     GetBlackboardComponent()->SetValueAsFloat(TimeRemainingToAttackName, 2.5);
+}
+
+void ABNEnemyAIController::StopBehaviorTree()
+{
+    if (ensure(BehaviorTree))
+    {
+        UBehaviorTreeComponent* BehaviorTreeComponent = Cast<UBehaviorTreeComponent>(BrainComponent);
+        if (BehaviorTreeComponent != nullptr)
+        {
+            BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
+        }
+    }
 }

@@ -74,6 +74,8 @@ public:
 
 	ABNEntityPawn(const FObjectInitializer& ObjectInitializer);
 
+    void ResetAttribute();
+
 	void FlipEntity();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -131,6 +133,8 @@ public:
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void MoveEntityDownRPC();
+
+    void PostInitializeComponents() override;
 
 protected:
 
