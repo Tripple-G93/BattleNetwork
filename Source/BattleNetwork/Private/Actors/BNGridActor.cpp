@@ -226,23 +226,7 @@ ABNEntityPawn* ABNGridActor::CreateEnemyEntityAtRandomLocation(FGameplayTag Enti
         }
     }
 
-    ABNPanelActor* Panel = Grid[GridPositionX][GridPositionY];
-    const FVector Location = Panel->GetActorLocation();
-    FRotator Rotation = { 0, 0, 0 };
-    Rotation.Yaw = 180;
-
-    ABNEntityPawn* entityPawn = EntitySpawnerActor->GetEntityFromSpawner(EntityTypeTag);
-
-    entityPawn->SetTeamTag(Team2Tag);
-    entityPawn->SetActorHiddenInGame(false);
-    entityPawn->SetActorLocation(Location + entityPawn->GetSpriteOffset());
-    entityPawn->SetActorRotation(Rotation);
-    entityPawn->SetServerGridLocation(FBNGridLocation(GridPositionX, GridPositionY));
-    entityPawn->SetGridActorReference(this);
-
-    Panel->SetEntityPawn(entityPawn);
-
-    return entityPawn;
+    return CreateEntityAtLocation(EntityTypeTag, GridPositionX, GridPositionY);
 }
 
 void ABNGridActor::RemoveEntityFromGrid(const ABNEntityPawn* EntityPawn)
