@@ -31,6 +31,10 @@ private:
 
     FBNEnemyAmountTableInfoRow* CurrentEnemyAmountTableInfoRow;
 
+    FName CurrentEnemyAmountTableInfoRowName = "NewRow_";
+
+    int CurrentEnemyAmountTableInfoRowNumber = 0;
+
     int EnemiesRemainingInRound;
 
     int EnemiesRemainingOnGrid;
@@ -49,11 +53,13 @@ protected:
 
 private:
 
-    void SetCurrentEnemyAmountAndTableInfoRow();
+    FBNEnemyAmountTableInfoRow* GetCurrentEnemyAmountTableInfoRow();
 
     void SpawnEnemiesOnGrid();
 
     void ProcessDeadEntity(ABNEntityPawn* DeadEnemyEntity);
+
+    void StartRound();
 
     UFUNCTION()
     void UpdateRoundStatus(ABNEntityPawn* DeadEnemyEntity);

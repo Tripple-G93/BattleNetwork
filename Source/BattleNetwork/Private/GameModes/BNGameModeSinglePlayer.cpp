@@ -37,26 +37,29 @@ int ABNGameModeSinglePlayer::GetEnemiesRemainingInRound() const
 
 void ABNGameModeSinglePlayer::BeginPlay()
 {
-    SetCurrentEnemyAmountAndTableInfoRow();
+    CurrentEnemyAmountTableInfoRow = GetCurrentEnemyAmountTableInfoRow();
+
+    if (ensure(CurrentEnemyAmountTableInfoRow))
+    {
+        StartRound();
+    }
+}
+
+void ABNGameModeSinglePlayer::StartRound()
+{
+    EnemiesRemainingInRound = CurrentEnemyAmountTableInfoRow->EnemyAmountInRound;
+    EnemiesRemainingOnGrid = 0;
 
     SpawnEnemiesOnGrid();
 }
 
-void ABNGameModeSinglePlayer::SetCurrentEnemyAmountAndTableInfoRow()
+FBNEnemyAmountTableInfoRow* ABNGameModeSinglePlayer::GetCurrentEnemyAmountTableInfoRow()
 {
-    TArray<FBNEnemyAmountTableInfoRow*> EnemyAmountTableRows;
-    EnemyAmountPerRoundDataTable->GetAllRows<FBNEnemyAmountTableInfoRow>("", EnemyAmountTableRows);
+    FString TableRowString = CurrentEnemyAmountTableInfoRowName.ToString() + FString::FromInt(CurrentEnemyAmountTableInfoRowNumber);
 
-    for (FBNEnemyAmountTableInfoRow* EnemyAmountTableRow : EnemyAmountTableRows)
-    {
-        if (CurrentRound <= EnemyAmountTableRow->RoundThreshold)
-        {
-            CurrentEnemyAmountTableInfoRow = EnemyAmountTableRow;
-            EnemiesRemainingInRound = EnemyAmountTableRow->EnemyAmountInRound;
-            EnemiesRemainingOnGrid = 0;
-            break;
-        }
-    }
+    FName TableRowName = FName(*TableRowString);
+
+    return EnemyAmountPerRoundDataTable->FindRow<FBNEnemyAmountTableInfoRow>(TableRowName, "", false);
 }
 
 void ABNGameModeSinglePlayer::SpawnEnemiesOnGrid()
@@ -94,12 +97,14 @@ void ABNGameModeSinglePlayer::UpdateRoundStatus(ABNEntityPawn* DeadEnemyEntity)
     {
         SpawnEnemiesOnGrid();
     }
-    else
+    else if(EnemiesRemainingOnGrid == 0)
     {
-        // Check if we will proceed to the next round or will end the game
-        //if(CurrentRound <= )
+        if (CurrentRound <= CurrentEnemyAmountTableInfoRow->RoundThreshold)
+        {
+            ++CurrentRound;
+            StartRound();
+        }
     }
-
 }
 
 void ABNGameModeSinglePlayer::ProcessDeadEntity(ABNEntityPawn* DeadEnemyEntity)
