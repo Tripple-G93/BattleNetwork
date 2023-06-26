@@ -101,8 +101,24 @@ void ABNGameModeSinglePlayer::UpdateRoundStatus(ABNEntityPawn* DeadEnemyEntity)
     {
         if (CurrentRound <= CurrentEnemyAmountTableInfoRow->RoundThreshold)
         {
+            // Function called proceed to next round
             ++CurrentRound;
             StartRound();
+        }
+        else
+        {
+            ++CurrentEnemyAmountTableInfoRowNumber;
+
+            CurrentEnemyAmountTableInfoRow = GetCurrentEnemyAmountTableInfoRow();
+            if (CurrentEnemyAmountTableInfoRow != nullptr)
+            {
+                ++CurrentRound;
+                StartRound();
+            }
+            else
+            {
+                PlayerWonGame();
+            }
         }
     }
 }

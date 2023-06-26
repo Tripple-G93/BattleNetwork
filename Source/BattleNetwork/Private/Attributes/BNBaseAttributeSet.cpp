@@ -89,7 +89,7 @@ void UBNBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
 	}
 
-	if(SourceController->GetLocalRole() == ROLE_Authority && GetHealth() <= 0 && IsPlayerEntity(SourceController) && !bIsPlayerDead)
+	if(SourceController->GetLocalRole() == ROLE_Authority && GetHealth() <= 0 && !bIsPlayerDead)
 	{
 		bIsPlayerDead = true;
 		OnPlayerDeathDelegate.Broadcast(TargetCharacter);

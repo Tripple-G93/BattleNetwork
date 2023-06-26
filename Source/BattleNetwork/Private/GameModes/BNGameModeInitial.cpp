@@ -54,6 +54,7 @@ void ABNGameModeInitial::CreatePlayer(APlayerController* NewPlayer, int XGridLoc
     NewPlayer->SetViewTarget(GridActor);
 
     PlayerPawn = entityPawn;
+    PlayerPawn->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUniqueDynamic(this, &ABNGameModeInitial::PlayerHasLostGame);
 }
 
 void ABNGameModeInitial::GameHasEnded(AController* Controller)
@@ -81,6 +82,17 @@ void ABNGameModeInitial::GameHasEnded(AController* Controller)
             Cast<ABNPlayerController>(PlayerControllers[index])->DisplayLossResultUI();
         }
     }
+}
+
+void ABNGameModeInitial::PlayerWonGame()
+{
+    Cast<ABNPlayerController>(PlayerControllers[0])->DisplayWinResultUI();
+}
+
+void ABNGameModeInitial::PlayerHasLostGame(ABNEntityPawn* DeadPlayerEntity)
+{
+    Cast<ABNPlayerController>(PlayerControllers[0])->DisplayLossResultUI();
+    DeadPlayerEntity->GetBaseAttributeSet()->OnPlayerDeathDelegate.RemoveDynamic(this, &ABNGameModeInitial::PlayerHasLostGame);
 }
 
 TObjectPtr<ABNProjectilePool> ABNGameModeInitial::GetBulletProjectilePool()
