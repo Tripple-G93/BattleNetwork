@@ -142,5 +142,4 @@ void ABNGameModeSinglePlayer::ProcessDeadEntity(ABNEntityPawn* DeadEnemyEntity)
 
     --EnemiesRemainingInRound;
     --EnemiesRemainingOnGrid;
-
 }
