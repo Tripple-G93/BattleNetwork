@@ -29,11 +29,12 @@ private:
     UPROPERTY(EditDefaultsOnly, Category = "BN")
     int CurrentRound;
 
+    UPROPERTY(EditDefaultsOnly, Category = "BN")
+    int CurrentEnemyAmountTableInfoRowNumber = 0;
+
     FBNEnemyAmountTableInfoRow* CurrentEnemyAmountTableInfoRow;
 
     FName CurrentEnemyAmountTableInfoRowName = "NewRow_";
-
-    int CurrentEnemyAmountTableInfoRowNumber = 0;
 
     int EnemiesRemainingInRound;
 
