@@ -7,6 +7,8 @@
 
 #include <Net/UnrealNetwork.h>
 
+static TAutoConsoleVariable<bool> CVarEnableGameMusic(TEXT("bn.EnableGameMusic"), false, TEXT("Enable Game Music"), ECVF_Cheat);
+
 ABNBasePlayerController::ABNBasePlayerController()
 {
     GameMusicAudioComponent = CreateDefaultSubobject<UBNGameMusicAudioComponent>(TEXT("GameMusicAudioComponent"));
@@ -16,7 +18,7 @@ ABNBasePlayerController::ABNBasePlayerController()
 // Client Implementation
 void ABNBasePlayerController::PlayGameMusic_Implementation(FGameplayTag GameMusicGameplayTag)
 {
-    if (GameMusicAudioComponent)
+    if (GameMusicAudioComponent && CVarEnableGameMusic.GetValueOnGameThread())
     {
         GameMusicAudioComponent->PlayGameMusic(GameMusicGameplayTag);
     }
@@ -25,7 +27,7 @@ void ABNBasePlayerController::PlayGameMusic_Implementation(FGameplayTag GameMusi
 // Client Implementation
 void ABNBasePlayerController::RandomlyPlayGameMusic_Implementation()
 {
-    if (GameMusicAudioComponent)
+    if (GameMusicAudioComponent && CVarEnableGameMusic.GetValueOnGameThread())
     {
         GameMusicAudioComponent->RandomlyPlayGameMusic();
     }
