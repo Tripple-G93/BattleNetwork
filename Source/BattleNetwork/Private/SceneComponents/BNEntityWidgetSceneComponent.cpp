@@ -49,6 +49,6 @@ void UBNEntityWidgetSceneComponent::DeactivateEntityUserWidget()
 {
     if (EntityUserWidget->IsInViewport())
     {
-        EntityUserWidget->RemoveFromViewport();
+        EntityUserWidget->RemoveFromParent();
     }
 }
