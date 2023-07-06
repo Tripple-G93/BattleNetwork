@@ -61,6 +61,11 @@ void ABNEntityPawn::ResetAttribute()
     }
 
     GetBaseAttributeSet()->ResetDeadState();
+
+    if (GetAbilitySystemComponent()->HasMatchingGameplayTag(DeathGameplayTag))
+    {
+        GetAbilitySystemComponent()->RemoveLooseGameplayTag(DeathGameplayTag);
+    }
 }
 
 void ABNEntityPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -141,6 +146,11 @@ void ABNEntityPawn::AttemptToMoveDown()
 void ABNEntityPawn::EntityDied()
 {
     SetActorHiddenInGame(true);
+
+    if (!GetAbilitySystemComponent()->HasMatchingGameplayTag(DeathGameplayTag))
+    {
+        GetAbilitySystemComponent()->AddLooseGameplayTag(DeathGameplayTag);
+    }
 }
 
 /*

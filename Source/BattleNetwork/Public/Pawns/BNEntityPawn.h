@@ -62,7 +62,11 @@ protected:
     FGameplayTag AbilityGameplayTag;
 
     UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
+    FGameplayTag DeathGameplayTag;
+
+    UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
     FGameplayTag IdleAnimationGameplayTag;
+
 
     UPROPERTY(EditDefaultsOnly, Category = "BN|Socket Names")
     FName MoveSpriteSocketName;
