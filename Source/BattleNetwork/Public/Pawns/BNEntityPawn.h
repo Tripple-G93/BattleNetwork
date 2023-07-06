@@ -91,6 +91,8 @@ public:
     void AttemptToMoveUp();
     void AttemptToMoveDown();
 
+    virtual void EntityDied();
+
 	/*
 	 * Setters
 	 */

@@ -33,6 +33,7 @@ public:
 
     void StopBehaviorTree();
 
+    virtual void EntityDied() override;
 protected:
 
     virtual void BeginPlay() override;

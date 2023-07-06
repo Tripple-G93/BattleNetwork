@@ -29,7 +29,7 @@ class BATTLENETWORK_API UBNBaseAttributeSet : public UAttributeSet
 protected:
 
 	// Server variable only
-	bool bIsPlayerDead;
+	bool bIsEntityDead;
 	
 public:
 

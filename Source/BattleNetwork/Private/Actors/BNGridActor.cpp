@@ -183,6 +183,8 @@ ABNEntityPawn* ABNGridActor::CreateEntityAtLocation(FGameplayTag EntityTypeTag, 
 
     ABNEntityPawn* entityPawn = EntitySpawnerActor->GetEntityFromSpawner(EntityTypeTag);
 
+    Panel->SetEntityPawn(entityPawn);
+
     FRotator Rotation;
     if (XGridPosition >= GridWidth / 2)
     {
@@ -199,8 +201,6 @@ ABNEntityPawn* ABNGridActor::CreateEntityAtLocation(FGameplayTag EntityTypeTag, 
     entityPawn->SetActorRotation(Rotation);
     entityPawn->SetServerGridLocation(FBNGridLocation(XGridPosition, YGridPosition));
     entityPawn->SetGridActorReference(this);
-
-    Panel->SetEntityPawn(entityPawn);
 
     return entityPawn;
 }

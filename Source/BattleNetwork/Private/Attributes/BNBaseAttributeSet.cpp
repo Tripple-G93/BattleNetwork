@@ -3,6 +3,7 @@
 
 #include "Attributes/BNBaseAttributeSet.h"
 
+#include "Pawns/BNAIEntityPawn.h"
 #include "Pawns/BNEntityPawn.h"
 #include "Pawns/BNPlayerPawn.h"
 
@@ -12,7 +13,7 @@
 
 UBNBaseAttributeSet::UBNBaseAttributeSet()
 {
-	bIsPlayerDead = false;
+	bIsEntityDead = false;
 }
 
 void UBNBaseAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -89,9 +90,12 @@ void UBNBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
 	}
 
-	if(SourceController->GetLocalRole() == ROLE_Authority && GetHealth() <= 0 && !bIsPlayerDead)
+	if(SourceController->GetLocalRole() == ROLE_Authority && GetHealth() <= 0 && !bIsEntityDead)
 	{
-		bIsPlayerDead = true;
+        bIsEntityDead = true;
+
+        TargetCharacter->EntityDied();
+
 		OnPlayerDeathDelegate.Broadcast(TargetCharacter);
 	}
 }
@@ -108,7 +112,7 @@ void UBNBaseAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 
 void UBNBaseAttributeSet::ResetDeadState()
 {
-    bIsPlayerDead = false;
+    bIsEntityDead = false;
 }
 
 void UBNBaseAttributeSet::AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute,

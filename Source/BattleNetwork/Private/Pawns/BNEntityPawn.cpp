@@ -138,6 +138,11 @@ void ABNEntityPawn::AttemptToMoveDown()
     }
 }
 
+void ABNEntityPawn::EntityDied()
+{
+    SetActorHiddenInGame(true);
+}
+
 /*
  * Setters
  */
