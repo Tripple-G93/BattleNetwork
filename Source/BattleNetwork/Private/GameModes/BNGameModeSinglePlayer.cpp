@@ -16,10 +16,11 @@ void ABNGameModeSinglePlayer::PostLogin(APlayerController* NewPlayer)
 {
     Super::PostLogin(NewPlayer);
 
-    ABNBasePlayerController* BasePlayerController = Cast<ABNBasePlayerController>(NewPlayer);
-    if (BasePlayerController)
+    ABNPlayerController* BNPlayerController = Cast<ABNPlayerController>(NewPlayer);
+    if (BNPlayerController)
     {
-        BasePlayerController->RandomlyPlayGameMusic();
+        BNPlayerController->RandomlyPlayGameMusic();
+        BNPlayerController->CreateHud();
     }
 
     CreatePlayer(NewPlayer, 1, 1);
@@ -48,6 +49,10 @@ void ABNGameModeSinglePlayer::StartRound()
 {
     EnemiesRemainingInRound = CurrentEnemyAmountTableInfoRow->EnemyAmountInRound;
     EnemiesRemainingOnGrid = 0;
+
+    ABNPlayerController* BNPlayerController = Cast<ABNPlayerController>(PlayerControllers[0]);
+    BNPlayerController->UpdateHudRound(CurrentRound);
+    BNPlayerController->UpdateHudEnemiesRemaining(EnemiesRemainingInRound);
 
     SpawnEnemiesOnGrid();
 }
@@ -132,6 +137,8 @@ void ABNGameModeSinglePlayer::ProcessDeadEntity(ABNEntityPawn* DeadEnemyEntity)
 
     DeadEnemyEntity->GetBaseAttributeSet()->OnPlayerDeathDelegate.RemoveDynamic(this, &ABNGameModeSinglePlayer::UpdateRoundStatus);
 
+    // TODO: Want to update this to have the ai entity be in charge of turning off it's own behavior tree and removing it from the grid before the broadcast to stop the ai from moving right after it has died but before we stop the behavior tree
+    // Want to also have it responsible for turning itself itself invisible instead of having the game mode responsible for it. 
     ABNAIEntityPawn* EnemyAIEnetityPawn = Cast<ABNAIEntityPawn>(DeadEnemyEntity);
     if (ensure(EnemyAIEnetityPawn))
     {
@@ -142,4 +149,7 @@ void ABNGameModeSinglePlayer::ProcessDeadEntity(ABNEntityPawn* DeadEnemyEntity)
 
     --EnemiesRemainingInRound;
     --EnemiesRemainingOnGrid;
+
+    ABNPlayerController* BNPlayerController = Cast<ABNPlayerController>(PlayerControllers[0]);
+    BNPlayerController->UpdateHudEnemiesRemaining(EnemiesRemainingInRound);
 }
