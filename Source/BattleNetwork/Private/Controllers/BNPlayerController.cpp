@@ -4,6 +4,7 @@
 #include "Controllers/BNPlayerController.h"
 
 #include "ActorComponents/BNAbilitySystemComponent.h"
+#include "ActivatableWidgets/BNCommonActivatableWidgetHud.h"
 #include "ActivatableWidgets/BNGameResultActivatableWidget.h"
 #include "PlayerStates/BNPlayerState.h"
 
@@ -32,6 +33,25 @@ void ABNPlayerController::DisplayWinResultUI_Implementation()
 void ABNPlayerController::DisplayLossResultUI_Implementation()
 {
 	CreateResultWidget(LossResultText);
+}
+
+void ABNPlayerController::CreateHud_Implementation()
+{
+    if (ensure(HudActivatableWidgetClass) && HudActivatableWidget == nullptr)
+    {
+        HudActivatableWidget = CreateWidget<UBNCommonActivatableWidgetHud>(GetWorld(), HudActivatableWidgetClass);
+        HudActivatableWidget->AddToViewport();
+    }
+}
+
+void ABNPlayerController::UpdateHudRound_Implementation(int CurrentRound)
+{
+    HudActivatableWidget->UpdateRoundText(CurrentRound);
+}
+
+void ABNPlayerController::UpdateHudEnemiesRemaining_Implementation(int EnemiesRemaining)
+{
+    HudActivatableWidget->UpdateEnemiesRemainingText(EnemiesRemaining);
 }
 
 void ABNPlayerController::SetInputModeUI()

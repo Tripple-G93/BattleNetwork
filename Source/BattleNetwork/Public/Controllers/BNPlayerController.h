@@ -8,6 +8,7 @@
 #include "BNPlayerController.generated.h"
 
 class UCommonActivatableWidget;
+class UBNCommonActivatableWidgetHud;
 class UBNGameResultActivatableWidget;
 
 /**
@@ -30,6 +31,11 @@ protected:
 	UPROPERTY(BlueprintReadWrite, Category = "BN|UI|Result")
 	TObjectPtr<UBNGameResultActivatableWidget> ResultActivatableWidget;
 
+    UPROPERTY(EditDefaultsOnly, Category = "BN|UI|Hud")
+    TSubclassOf<UCommonActivatableWidget> HudActivatableWidgetClass;
+
+    TObjectPtr<UBNCommonActivatableWidgetHud> HudActivatableWidget;
+
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 	FText WinResultText;
 
@@ -43,6 +49,15 @@ public:
 
 	UFUNCTION(Client, Reliable)
 	void DisplayLossResultUI();
+
+    UFUNCTION(Client, Reliable)
+    void CreateHud();
+
+    UFUNCTION(Client, Reliable)
+    void UpdateHudRound(int CurrentRound);
+
+    UFUNCTION(Client, Reliable)
+    void UpdateHudEnemiesRemaining(int EnemiesRemaining);
 
 private:
 	
