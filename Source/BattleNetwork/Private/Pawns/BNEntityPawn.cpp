@@ -153,6 +153,11 @@ void ABNEntityPawn::EntityDied()
     }
 }
 
+bool ABNEntityPawn::IsEntityDead()
+{
+    return GetAbilitySystemComponent()->HasMatchingGameplayTag(DeathGameplayTag);
+}
+
 /*
  * Setters
  */
@@ -202,17 +207,27 @@ void ABNEntityPawn::SetActorHiddenInGame(bool bNewHidden)
 
     if (bNewHidden)
     {
-        BoxComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+        DisableCollision();
 
         EntityWidgetSceneComponent->DeactivateEntityUserWidget();
         
     }
     else
     {
-        BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+        EnableCollision();
 
         EntityWidgetSceneComponent->ActivateEntityUserWidget();
     }
+}
+
+void ABNEntityPawn::EnableCollision()
+{
+    BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+}
+
+void ABNEntityPawn::DisableCollision()
+{
+    BoxComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void ABNEntityPawn::PostInitializeComponents()

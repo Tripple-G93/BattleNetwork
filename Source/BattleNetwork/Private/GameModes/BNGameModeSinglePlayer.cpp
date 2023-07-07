@@ -83,6 +83,8 @@ void ABNGameModeSinglePlayer::SpawnEnemiesOnGrid()
             int32 RandomInt = FMath::RandRange(1, 100);
             if (RandomInt < EnemySpawnChanceTableRow->SpawnPercentChance)
             {
+                ++EnemiesRemainingOnGrid;
+
                 ABNEntityPawn* EnemyEntityPawn = GridActor->CreateEnemyEntityAtRandomLocation(EnemySpawnChanceTableRow->EntityGameplayTag);
                 EnemyEntityPawn->ResetAttribute();
 
@@ -93,7 +95,6 @@ void ABNGameModeSinglePlayer::SpawnEnemiesOnGrid()
                 {
                     EnemyAIEnetityPawn->StartBehaviorTree();
                 }
-                ++EnemiesRemainingOnGrid;
             }
         }
     }

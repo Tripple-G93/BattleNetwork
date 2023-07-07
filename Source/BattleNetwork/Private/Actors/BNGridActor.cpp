@@ -151,6 +151,7 @@ void ABNGridActor::MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXInd
 	ABNPanelActor* PanelActor = Grid[NewXIndex][NewYIndex];
 	if(PanelActor)
 	{
+        EntityPawn->DisableCollision();
 		const FBNGridLocation GridLocation = EntityPawn->GetServerGridLocation();
 	
 		const int32 OldXIndex = GridLocation.XIndex;
@@ -163,6 +164,7 @@ void ABNGridActor::MoveEntityToNewPanel(ABNEntityPawn* EntityPawn, int32 NewXInd
 		EntityPawn->SetActorLocation(NewLocation + EntityPawn->GetSpriteOffset());
 	
 		EntityPawn->SetServerGridLocation(FBNGridLocation(NewXIndex, NewYIndex));
+        EntityPawn->EnableCollision();
 	}
 }
 
@@ -196,11 +198,11 @@ ABNEntityPawn* ABNGridActor::CreateEntityAtLocation(FGameplayTag EntityTypeTag, 
         entityPawn->SetTeamTag(Team1Tag);
     }
 
-    entityPawn->SetActorHiddenInGame(false);
     entityPawn->SetActorLocation(Location + entityPawn->GetSpriteOffset());
     entityPawn->SetActorRotation(Rotation);
     entityPawn->SetServerGridLocation(FBNGridLocation(XGridPosition, YGridPosition));
     entityPawn->SetGridActorReference(this);
+    entityPawn->SetActorHiddenInGame(false);
 
     return entityPawn;
 }

@@ -97,6 +97,14 @@ public:
 
     virtual void EntityDied();
 
+    bool IsEntityDead();
+
+    void SetActorHiddenInGame(bool bNewHidden) override;
+
+    void EnableCollision();
+
+    void DisableCollision();
+
 	/*
 	 * Setters
 	 */
@@ -118,8 +126,6 @@ public:
 	FBNGridLocation GetServerGridLocation() const;
 
 	UBNPaperFlipbookComponent* GetBNPaperFlipbookComponent();
-
-    void SetActorHiddenInGame(bool bNewHidden) override;
 
      /*
 	 * Server
