@@ -81,11 +81,11 @@ void ABNGameModeSinglePlayer::SpawnEnemiesOnGrid()
         for (FBNEnemySpawnChanceTableInfoRow* EnemySpawnChanceTableRow : EnemySpawnChanceTableRows)
         {
             int32 RandomInt = FMath::RandRange(1, 100);
-            if (RandomInt < EnemySpawnChanceTableRow->SpawnPercentChance)
+            if (RandomInt <= EnemySpawnChanceTableRow->SpawnPercentChance)
             {
-                ABNEntityPawn* EnemyEntityPawn = GridActor->CreateEnemyEntityAtRandomLocation(EnemySpawnChanceTableRow->EntityGameplayTag);
-                EnemyEntityPawn->ResetAttribute();
+                ++EnemiesRemainingOnGrid;
 
+                ABNEntityPawn* EnemyEntityPawn = GridActor->CreateEnemyEntityAtRandomLocation(EnemySpawnChanceTableRow->EntityGameplayTag);
                 EnemyEntityPawn->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUniqueDynamic(this, &ABNGameModeSinglePlayer::UpdateRoundStatus);
 
                 ABNAIEntityPawn* EnemyAIEnetityPawn = Cast<ABNAIEntityPawn>(EnemyEntityPawn);
@@ -93,7 +93,10 @@ void ABNGameModeSinglePlayer::SpawnEnemiesOnGrid()
                 {
                     EnemyAIEnetityPawn->StartBehaviorTree();
                 }
-                ++EnemiesRemainingOnGrid;
+
+                EnemyEntityPawn->ResetAttribute();
+
+                break;
             }
         }
     }
@@ -132,19 +135,9 @@ void ABNGameModeSinglePlayer::UpdateRoundStatus(ABNEntityPawn* DeadEnemyEntity)
 
 void ABNGameModeSinglePlayer::ProcessDeadEntity(ABNEntityPawn* DeadEnemyEntity)
 {
-    // TODO: When we have a death animation we will actually want to play that first before we do this
-    DeadEnemyEntity->SetActorHiddenInGame(true);
-
     DeadEnemyEntity->GetBaseAttributeSet()->OnPlayerDeathDelegate.RemoveDynamic(this, &ABNGameModeSinglePlayer::UpdateRoundStatus);
 
-    // TODO: Want to update this to have the ai entity be in charge of turning off it's own behavior tree and removing it from the grid before the broadcast to stop the ai from moving right after it has died but before we stop the behavior tree
-    // Want to also have it responsible for turning itself itself invisible instead of having the game mode responsible for it. 
-    ABNAIEntityPawn* EnemyAIEnetityPawn = Cast<ABNAIEntityPawn>(DeadEnemyEntity);
-    if (ensure(EnemyAIEnetityPawn))
-    {
-        EnemyAIEnetityPawn->StopBehaviorTree();
-    }
-
+    // TODO: When there is a proper death flow for the entity we will want it to be responsible for removing itself from the grid
     GridActor->RemoveEntityFromGrid(DeadEnemyEntity);
 
     --EnemiesRemainingInRound;

@@ -27,9 +27,6 @@ class BATTLENETWORK_API UBNBaseAttributeSet : public UAttributeSet
 	GENERATED_BODY()
 
 protected:
-
-	// Server variable only
-	bool bIsPlayerDead;
 	
 public:
 
@@ -65,8 +62,6 @@ public:
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-    void ResetDeadState();
 
 protected:
 

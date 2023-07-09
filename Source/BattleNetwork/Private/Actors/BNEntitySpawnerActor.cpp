@@ -40,19 +40,24 @@ void ABNEntitySpawnerActor::SpawnEntities()
         EntityMap[EntityAmount.Key].Reserve(EntityAmount.Value);
         for (int i = 0; i < EntityAmount.Value; ++i)
         {
-            SpawnEntity(EntityAmount.Key);
+            SpawnEntity(EntityAmount.Key, i);
         }
     }
 }
 
-void ABNEntitySpawnerActor::SpawnEntity(FGameplayTag EntityTag)
+void ABNEntitySpawnerActor::SpawnEntity(FGameplayTag EntityTag, int Index)
 {
     if (ensure(SpawnableEntityDataTable))
     {
         FBNSpawnableEntityTableInfoRow* Row = SpawnableEntityDataTable->FindRow<FBNSpawnableEntityTableInfoRow>(EntityTag.GetTagName(), TEXT("Trying to spawn an entity"));
         if (ensure(Row))
         {
-            ABNEntityPawn* NewEntity = GetWorld()->SpawnActor<ABNEntityPawn>(Row->EntityPawn);
+            FVector Location(100.f * Index, 0.f, 0.f);
+            FRotator Rotation(0.f, 0.0f, 0.f);
+            FVector Scale(1.f, 1.f, 1.f);
+            FTransform SpawnTransform(Rotation, Location, Scale);
+
+            ABNEntityPawn* NewEntity = GetWorld()->SpawnActor<ABNEntityPawn>(Row->EntityPawn, SpawnTransform);
             if (ensure(NewEntity))
             {
                 NewEntity->SetActorHiddenInGame(true);

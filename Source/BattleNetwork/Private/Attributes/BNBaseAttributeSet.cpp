@@ -12,7 +12,6 @@
 
 UBNBaseAttributeSet::UBNBaseAttributeSet()
 {
-	bIsPlayerDead = false;
 }
 
 void UBNBaseAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -89,9 +88,10 @@ void UBNBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 		SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
 	}
 
-	if(SourceController->GetLocalRole() == ROLE_Authority && GetHealth() <= 0 && !bIsPlayerDead)
+	if(SourceController->GetLocalRole() == ROLE_Authority && GetHealth() <= 0 && !TargetCharacter->IsEntityDead())
 	{
-		bIsPlayerDead = true;
+        TargetCharacter->EntityDied();
+
 		OnPlayerDeathDelegate.Broadcast(TargetCharacter);
 	}
 }
@@ -104,11 +104,6 @@ void UBNBaseAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 	DOREPLIFETIME_CONDITION_NOTIFY(UBNBaseAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UBNBaseAttributeSet, BulletDamage, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UBNBaseAttributeSet, SpeedPercentRate, COND_None, REPNOTIFY_Always);
-}
-
-void UBNBaseAttributeSet::ResetDeadState()
-{
-    bIsPlayerDead = false;
 }
 
 void UBNBaseAttributeSet::AdjustAttributeForMaxChange(FGameplayAttributeData& AffectedAttribute,

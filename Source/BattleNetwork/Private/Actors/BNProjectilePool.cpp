@@ -56,11 +56,16 @@ void ABNProjectilePool::SpawnProjectiles()
         Projectiles[ProjectileTypeGameplayTag].Reserve(PoolSize);
         for (int32 i = 0; i < PoolSize; ++i)
         {
+            FVector Location(100.f * i, 0.f, 0.f);
+            FRotator Rotation(0.f, 0.0f, 0.f);
+            FVector Scale(1.f, 1.f, 1.f);
+            FTransform SpawnTransform(Rotation, Location, Scale);
+
             FActorSpawnParameters SpawnParameters;
             SpawnParameters.Owner = this;
             UWorld* World = GetWorld();
 
-            Projectiles[ProjectileTypeGameplayTag].Add(World->SpawnActor<ABNProjectile>(ProjectileClass, SpawnParameters));
+            Projectiles[ProjectileTypeGameplayTag].Add(World->SpawnActor<ABNProjectile>(ProjectileClass, SpawnTransform, SpawnParameters));
             Projectiles[ProjectileTypeGameplayTag][i]->SetProjectileTypeGameplayTag(ProjectileTypeGameplayTag);
             Projectiles[ProjectileTypeGameplayTag][i]->SetActorHiddenInGame(true);
         }

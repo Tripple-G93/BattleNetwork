@@ -62,7 +62,11 @@ protected:
     FGameplayTag AbilityGameplayTag;
 
     UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
+    FGameplayTag DeathGameplayTag;
+
+    UPROPERTY(EditDefaultsOnly, Category = "BN|Gameplay Tags")
     FGameplayTag IdleAnimationGameplayTag;
+
 
     UPROPERTY(EditDefaultsOnly, Category = "BN|Socket Names")
     FName MoveSpriteSocketName;
@@ -91,6 +95,16 @@ public:
     void AttemptToMoveUp();
     void AttemptToMoveDown();
 
+    virtual void EntityDied();
+
+    bool IsEntityDead();
+
+    void SetActorHiddenInGame(bool bNewHidden) override;
+
+    void EnableCollision();
+
+    void DisableCollision();
+
 	/*
 	 * Setters
 	 */
@@ -112,8 +126,6 @@ public:
 	FBNGridLocation GetServerGridLocation() const;
 
 	UBNPaperFlipbookComponent* GetBNPaperFlipbookComponent();
-
-    void SetActorHiddenInGame(bool bNewHidden) override;
 
      /*
 	 * Server

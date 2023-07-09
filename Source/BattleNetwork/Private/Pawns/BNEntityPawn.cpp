@@ -60,7 +60,12 @@ void ABNEntityPawn::ResetAttribute()
         FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*NewHandle.Data.Get());
     }
 
-    GetBaseAttributeSet()->ResetDeadState();
+    if (GetAbilitySystemComponent()->HasMatchingGameplayTag(DeathGameplayTag))
+    {
+        GetAbilitySystemComponent()->RemoveLooseGameplayTag(DeathGameplayTag);
+    }
+
+    EnableCollision();
 }
 
 void ABNEntityPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -138,6 +143,23 @@ void ABNEntityPawn::AttemptToMoveDown()
     }
 }
 
+void ABNEntityPawn::EntityDied()
+{
+    DisableCollision();
+
+    SetActorHiddenInGame(true);
+
+    if (!GetAbilitySystemComponent()->HasMatchingGameplayTag(DeathGameplayTag))
+    {
+        GetAbilitySystemComponent()->AddLooseGameplayTag(DeathGameplayTag);
+    }
+}
+
+bool ABNEntityPawn::IsEntityDead()
+{
+    return GetAbilitySystemComponent()->HasMatchingGameplayTag(DeathGameplayTag);
+}
+
 /*
  * Setters
  */
@@ -187,17 +209,23 @@ void ABNEntityPawn::SetActorHiddenInGame(bool bNewHidden)
 
     if (bNewHidden)
     {
-        BoxComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
         EntityWidgetSceneComponent->DeactivateEntityUserWidget();
         
     }
     else
     {
-        BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-
         EntityWidgetSceneComponent->ActivateEntityUserWidget();
     }
+}
+
+void ABNEntityPawn::EnableCollision()
+{
+    BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+}
+
+void ABNEntityPawn::DisableCollision()
+{
+    BoxComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void ABNEntityPawn::PostInitializeComponents()

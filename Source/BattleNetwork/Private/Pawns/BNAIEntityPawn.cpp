@@ -47,6 +47,13 @@ void ABNAIEntityPawn::StopBehaviorTree()
     }
 }
 
+void ABNAIEntityPawn::EntityDied()
+{
+    Super::EntityDied();
+
+    StopBehaviorTree();
+}
+
 void ABNAIEntityPawn::BeginPlay()
 {
     Super::BeginPlay();
