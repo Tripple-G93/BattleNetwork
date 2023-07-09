@@ -3,7 +3,6 @@
 
 #include "Attributes/BNBaseAttributeSet.h"
 
-#include "Pawns/BNAIEntityPawn.h"
 #include "Pawns/BNEntityPawn.h"
 #include "Pawns/BNPlayerPawn.h"
 
