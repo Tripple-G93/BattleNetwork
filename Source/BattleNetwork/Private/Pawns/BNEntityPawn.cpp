@@ -60,8 +60,6 @@ void ABNEntityPawn::ResetAttribute()
         FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*NewHandle.Data.Get());
     }
 
-    GetBaseAttributeSet()->ResetDeadState();
-
     if (GetAbilitySystemComponent()->HasMatchingGameplayTag(DeathGameplayTag))
     {
         GetAbilitySystemComponent()->RemoveLooseGameplayTag(DeathGameplayTag);
