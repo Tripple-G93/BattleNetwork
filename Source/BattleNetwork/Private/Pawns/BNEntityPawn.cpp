@@ -66,6 +66,8 @@ void ABNEntityPawn::ResetAttribute()
     {
         GetAbilitySystemComponent()->RemoveLooseGameplayTag(DeathGameplayTag);
     }
+
+    EnableCollision();
 }
 
 void ABNEntityPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -145,6 +147,8 @@ void ABNEntityPawn::AttemptToMoveDown()
 
 void ABNEntityPawn::EntityDied()
 {
+    DisableCollision();
+
     SetActorHiddenInGame(true);
 
     if (!GetAbilitySystemComponent()->HasMatchingGameplayTag(DeathGameplayTag))
@@ -207,15 +211,11 @@ void ABNEntityPawn::SetActorHiddenInGame(bool bNewHidden)
 
     if (bNewHidden)
     {
-        DisableCollision();
-
         EntityWidgetSceneComponent->DeactivateEntityUserWidget();
         
     }
     else
     {
-        EnableCollision();
-
         EntityWidgetSceneComponent->ActivateEntityUserWidget();
     }
 }

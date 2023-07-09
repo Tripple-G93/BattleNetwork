@@ -81,13 +81,11 @@ void ABNGameModeSinglePlayer::SpawnEnemiesOnGrid()
         for (FBNEnemySpawnChanceTableInfoRow* EnemySpawnChanceTableRow : EnemySpawnChanceTableRows)
         {
             int32 RandomInt = FMath::RandRange(1, 100);
-            if (RandomInt < EnemySpawnChanceTableRow->SpawnPercentChance)
+            if (RandomInt <= EnemySpawnChanceTableRow->SpawnPercentChance)
             {
                 ++EnemiesRemainingOnGrid;
 
                 ABNEntityPawn* EnemyEntityPawn = GridActor->CreateEnemyEntityAtRandomLocation(EnemySpawnChanceTableRow->EntityGameplayTag);
-                EnemyEntityPawn->ResetAttribute();
-
                 EnemyEntityPawn->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUniqueDynamic(this, &ABNGameModeSinglePlayer::UpdateRoundStatus);
 
                 ABNAIEntityPawn* EnemyAIEnetityPawn = Cast<ABNAIEntityPawn>(EnemyEntityPawn);
@@ -95,6 +93,10 @@ void ABNGameModeSinglePlayer::SpawnEnemiesOnGrid()
                 {
                     EnemyAIEnetityPawn->StartBehaviorTree();
                 }
+
+                EnemyEntityPawn->ResetAttribute();
+
+                break;
             }
         }
     }

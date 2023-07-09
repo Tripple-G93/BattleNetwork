@@ -36,7 +36,7 @@ public:
 
 protected:
 
-    void SpawnEntity(FGameplayTag EntityTag);
+    void SpawnEntity(FGameplayTag EntityTag, int Index);
 
     int GetStartEntitiesIndex(FGameplayTag EntityTag);
     
