@@ -96,6 +96,8 @@ void ABNGameModeSinglePlayer::SpawnEnemiesOnGrid()
 
                 EnemyEntityPawn->ResetAttribute();
 
+                EnemyEntityPawn->SetActorEnableCollision(true);
+
                 break;
             }
         }

@@ -55,6 +55,7 @@ void ABNGameModeInitial::CreatePlayer(APlayerController* NewPlayer, int XGridLoc
 
     PlayerPawn = entityPawn;
     PlayerPawn->GetBaseAttributeSet()->OnPlayerDeathDelegate.AddUniqueDynamic(this, &ABNGameModeInitial::PlayerHasLostGame);
+    PlayerPawn->SetActorEnableCollision(true);
 }
 
 void ABNGameModeInitial::GameHasEnded(AController* Controller)

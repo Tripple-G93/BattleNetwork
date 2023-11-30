@@ -56,7 +56,7 @@ void ABNProjectilePool::SpawnProjectiles()
         Projectiles[ProjectileTypeGameplayTag].Reserve(PoolSize);
         for (int32 i = 0; i < PoolSize; ++i)
         {
-            FVector Location(100.f * i, 0.f, 0.f);
+            FVector Location(0.f, 5.f * i, 100.f);
             FRotator Rotation(0.f, 0.0f, 0.f);
             FVector Scale(1.f, 1.f, 1.f);
             FTransform SpawnTransform(Rotation, Location, Scale);

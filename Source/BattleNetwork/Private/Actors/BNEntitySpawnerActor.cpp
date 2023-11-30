@@ -52,7 +52,7 @@ void ABNEntitySpawnerActor::SpawnEntity(FGameplayTag EntityTag, int Index)
         FBNSpawnableEntityTableInfoRow* Row = SpawnableEntityDataTable->FindRow<FBNSpawnableEntityTableInfoRow>(EntityTag.GetTagName(), TEXT("Trying to spawn an entity"));
         if (ensure(Row))
         {
-            FVector Location(100.f * Index, 0.f, 0.f);
+            FVector Location(0.f, 5.f * Index, 100.f);
             FRotator Rotation(0.f, 0.0f, 0.f);
             FVector Scale(1.f, 1.f, 1.f);
             FTransform SpawnTransform(Rotation, Location, Scale);
@@ -61,6 +61,7 @@ void ABNEntitySpawnerActor::SpawnEntity(FGameplayTag EntityTag, int Index)
             if (ensure(NewEntity))
             {
                 NewEntity->SetActorHiddenInGame(true);
+                NewEntity->SetActorEnableCollision(false);
                 EntityMap[EntityTag].Add(NewEntity);
             }
         }
